@@ -1,0 +1,23 @@
+{
+  "name": "karuta-sanguosha",
+  "version": "0.1.0",
+  "description": "Sanguosha (Karuta Extension)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takashiro/karuta-sanguosha.git"
+  },
+  "keywords": [
+    "karuta",
+    "sanguosha"
+  ],
+  "author": "Kazuichi Takashiro",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/takashiro/karuta-sanguosha/issues"
+  },
+  "homepage": "https://github.com/takashiro/karuta-sanguosha#readme"
+}
