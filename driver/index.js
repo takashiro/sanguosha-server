@@ -11,10 +11,10 @@ class GameDriver {
 		this.capacity = 8;
 	}
 
-	start() {
+	async start() {
 		this.room.broadcast(cmd.StartGame);
 		this.arrangeSeats();
-		this.arrangeGenerals();
+		await this.arrangeGenerals();
 	}
 
 	arrangeSeats() {
@@ -37,7 +37,7 @@ class GameDriver {
 		this.room.broadcast(cmd.ArrangeSeats, args);
 	}
 
-	arrangeGenerals() {
+	async arrangeGenerals() {
 		let generals = [];
 
 		const Collections = require('../collection');
@@ -50,18 +50,44 @@ class GameDriver {
 		shuffle(generals);
 		generals = generals.splice(0, candidateNum * players.length);
 
-		let parts = players.map(player => ({player: player, candidates: []}));
+		let sessions = players.map(player => ({
+			player: player,
+			candidates: [],
+			selected: [],
+		}));
 		for (let i = 0, j = 0; i < generals.length; i++) {
-			let part = parts[j];
-			part.candidates.push(generals[i]);
+			let session = sessions[j];
+			session.candidates.push(generals[i]);
 			j++;
-			if (j >= parts.length) {
+			if (j >= sessions.length) {
 				j = 0;
 			}
 		}
 
-		for (let {player, candidates} of parts) {
-			player.askForGeneral(candidates, 2);
+		let replies = [];
+		for (let s of sessions) {
+			replies.push(
+				s.player.askForGeneral(s.candidates, {
+					timeout: 5, //TO-DO: make this longer
+					num: 2,
+					sameKingdom: true,
+					forced: true,
+				})
+				.then(generals => {
+					s.selected = generals;
+				})
+			);
+		}
+
+		await Promise.all(replies);
+		for (let s of sessions) {
+			let player = s.player;
+			let headGeneral = s.selected[0];
+			let deputyGeneral = s.selected[1];
+			player.setHeadGeneral(headGeneral);
+			player.broadcastProperty('headGeneral', headGeneral.name());
+			player.setDeputyGeneral(deputyGeneral);
+			player.broadcastProperty('deputyGeneral', deputyGeneral.name());
 		}
 	}
 

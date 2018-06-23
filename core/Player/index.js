@@ -11,6 +11,9 @@ class Player {
 
 		this._seat = 0;
 		this._phase = Phase.Invalid;
+
+		this._headGeneral = null;
+		this._deputyGeneral = null;
 	}
 
 	hp() {
@@ -75,6 +78,22 @@ class Player {
 
 	setPhase(phase) {
 		this._phase = phase;
+	}
+
+	headGeneral() {
+		return this._headGeneral;
+	}
+
+	setHeadGeneral(general) {
+		this._headGeneral = general;
+	}
+
+	deputyGeneral() {
+		return this._deputyGeneral;
+	}
+
+	setDeputyGeneral(general) {
+		this._deputyGeneral = general;
 	}
 
 }
