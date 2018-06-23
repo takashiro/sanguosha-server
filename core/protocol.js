@@ -9,6 +9,7 @@ const cmd = new Enum(
 	'ArrangeSeats',
 	'ChooseGeneral',
 	'UpdatePlayer',
+	'ToBattle',
 );
 
 module.exports = cmd;

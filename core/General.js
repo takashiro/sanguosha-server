@@ -71,6 +71,13 @@ class General {
 		return this._skills;
 	}
 
+	toJSON() {
+		return {
+			kingdom: this.kingdom(),
+			name: this.name(),
+		};
+	}
+
 }
 
 module.exports = General;

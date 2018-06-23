@@ -15,6 +15,7 @@ class GameDriver {
 		this.room.broadcast(cmd.StartGame);
 		this.arrangeSeats();
 		await this.arrangeGenerals();
+		this.room.broadcast(cmd.ToBattle);
 	}
 
 	arrangeSeats() {
@@ -85,9 +86,9 @@ class GameDriver {
 			let headGeneral = s.selected[0];
 			let deputyGeneral = s.selected[1];
 			player.setHeadGeneral(headGeneral);
-			player.broadcastProperty('headGeneral', headGeneral.name());
+			player.broadcastProperty('headGeneral', headGeneral.toJSON());
 			player.setDeputyGeneral(deputyGeneral);
-			player.broadcastProperty('deputyGeneral', deputyGeneral.name());
+			player.broadcastProperty('deputyGeneral', deputyGeneral.toJSON());
 		}
 	}
 
