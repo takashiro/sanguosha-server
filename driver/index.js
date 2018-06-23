@@ -89,6 +89,16 @@ class GameDriver {
 			player.broadcastProperty('headGeneral', headGeneral.toJSON());
 			player.setDeputyGeneral(deputyGeneral);
 			player.broadcastProperty('deputyGeneral', deputyGeneral.toJSON());
+
+			let hp = headGeneral.headMaxHp() + deputyGeneral.deputyMaxHp();
+			if (hp & 1) {
+				player.halfHp = true;
+			}
+			hp = Math.floor(hp / 2);
+			player.setHp(hp);
+			player.setMaxHp(hp);
+			player.broadcastProperty('maxHp', hp);
+			player.broadcastProperty('hp', hp);
 		}
 	}
 
