@@ -1,7 +1,7 @@
 
-const {defineEnum} = require('../util');
+const Enum = require('../Enum');
 
-module.exports = defineEnum(
+module.exports = new Enum(
 	'Invalid',
 
 	'RoundStart',
