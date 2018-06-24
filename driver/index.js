@@ -32,7 +32,7 @@ class GameDriver {
 			args.push({
 				uid: player.user.id,
 				seat: player.seat,
-				name: 'Seat ' + player.seat,
+				name: player.user.name,
 			});
 		}
 		this.room.broadcast(cmd.ArrangeSeats, args);
