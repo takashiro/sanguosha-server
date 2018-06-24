@@ -8,11 +8,12 @@ let collectionDirs = fs.readdirSync(collectionDir);
 
 let collections = [];
 for (let dir of collectionDirs) {
-	if (dir === 'index.js') {
+	let fullPath = path.resolve(__dirname, dir);
+	let stat = fs.statSync(fullPath);
+	if (!stat.isDirectory()) {
 		continue;
 	}
 
-	let fullPath = path.resolve(__dirname, dir);
 	try {
 		let collection = require(fullPath);
 		collections.push(collection);
