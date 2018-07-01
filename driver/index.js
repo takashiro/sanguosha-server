@@ -1,5 +1,6 @@
 
 const cmd = require('../core/protocol');
+const CardArea = require('../core/CardArea');
 const ServerPlayer = require('./ServerPlayer');
 const {shuffle} = require('../core/util');
 
@@ -9,6 +10,10 @@ class GameDriver {
 		this.room = room;
 		this.players = [];
 		this.capacity = 8;
+
+		this.cards = [null];
+		this.drawPile = new CardArea(CardArea.Type.DrawPile);
+		this.discardPile = new CardArea(CardArea.Type.DiscardPile);
 	}
 
 	async start() {
@@ -16,6 +21,7 @@ class GameDriver {
 		this.arrangeSeats();
 		await this.arrangeGenerals();
 		this.room.broadcast(cmd.ToBattle);
+		this.arrangeCards();
 	}
 
 	arrangeSeats() {
@@ -40,10 +46,9 @@ class GameDriver {
 
 	async arrangeGenerals() {
 		let generals = [];
-
-		const Collections = require('../collection');
-		for (let Collection of Collections) {
-			generals.push(...Collection.generals);
+		const collections = require('../collection');
+		for (let collection of collections) {
+			generals.push(...collection.generals);
 		}
 
 		let candidateNum = 7;
@@ -100,6 +105,56 @@ class GameDriver {
 			player.broadcastProperty('maxHp', hp);
 			player.broadcastProperty('hp', hp);
 		}
+	}
+
+	arrangeCards() {
+		this.loadCards();
+
+		// Load draw pile
+		this.drawPile.cards = this.cards.slice(1);
+		shuffle(this.drawPile.cards);
+
+		// Initialize hand cards
+		for (let player of this.players) {
+			this.drawCards(player, 4);
+		}
+	}
+
+	loadCards() {
+		// Load cards
+		const collections = require('../collection');
+		for (let collection of collections) {
+			this.cards.push(...collection.createCards());
+		}
+
+		// Assign card id
+		for (let i = 1; i < this.cards.length; i++) {
+			this.cards[i]._id = i;
+		}
+	}
+
+	drawCards(player, num) {
+		let cards = [];
+		for (let i = 0; i < num; i++) {
+			cards.push(this.drawPile.takeFirst());
+		}
+
+		for (let card of cards) {
+			player.handArea.add(card);
+		}
+
+		let movePath = {
+			from: this.drawPile.toJSON(),
+			to: player.handArea.toJSON(),
+		};
+		player.user.send(cmd.MoveCards, {
+			...movePath,
+			cards: cards.map(card => card.toJSON())
+		});
+		this.room.broadcastExcept(player.user, cmd.MoveCards, {
+			...movePath,
+			cardNum: cards.length,
+		});
 	}
 
 }

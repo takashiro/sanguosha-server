@@ -10,6 +10,7 @@ const cmd = new Enum(
 	'ChooseGeneral',
 	'UpdatePlayer',
 	'ToBattle',
+	'MoveCards',
 );
 
 module.exports = cmd;

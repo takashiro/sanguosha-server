@@ -115,8 +115,27 @@ class CardArea {
 		return this.cards.find(condition);
 	}
 
+	/**
+	 * The number of cards in this area
+	 * @return {number}
+	 */
 	get size() {
 		return this.cards.length;
+	}
+
+	/**
+	 * Convert this area (without cards) into JSON
+	 * @return {object}
+	 */
+	toJSON() {
+		let json = {type: this.type};
+		if (this.owner) {
+			json.owner = this.owner.user.id;
+		}
+		if (this.name) {
+			json.name = this.name;
+		}
+		return json;
 	}
 }
 
