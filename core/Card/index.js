@@ -24,6 +24,47 @@ class Card {
 	}
 
 	/**
+	 * Card id
+	 * @return {number}
+	 */
+	id() {
+		return this._id;
+	}
+
+	/**
+	 * Card name
+	 * @return {string}
+	 */
+	name() {
+		return this._name;
+	}
+
+	/**
+	 * Card suit
+	 * @return {Card.Suit}
+	 */
+	suit() {
+		return this._suit;
+	}
+
+	/**
+	 * Card number
+	 * @return {number}
+	 */
+	number() {
+		return this._number;
+	}
+
+	/**
+	 * Card color
+	 * @return {Card.Color}
+	 */
+	color() {
+		return this._color;
+	}
+
+
+	/**
 	 * Check if the selected players are feasible
 	 * @param {Player[]} selected
 	 * @param {Player} source
@@ -90,6 +131,19 @@ class Card {
 	 * @param {GameDriver} driver
 	 */
 	complete(driver) {
+	}
+
+	/**
+	 * Convert this card to JSON
+	 * @return {object}
+	 */
+	toJSON() {
+		return {
+			id: this._id,
+			name: this._name,
+			suit: this._suit,
+			number: this._number,
+		};
 	}
 
 }
