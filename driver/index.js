@@ -2,6 +2,7 @@
 const cmd = require('../core/protocol');
 const CardArea = require('../core/CardArea');
 const ServerPlayer = require('./ServerPlayer');
+const GameEvent = require('./GameEvent');
 const {shuffle} = require('../core/util');
 
 class GameDriver {
@@ -14,14 +15,14 @@ class GameDriver {
 		this.cards = [null];
 		this.drawPile = new CardArea(CardArea.Type.DrawPile);
 		this.discardPile = new CardArea(CardArea.Type.DiscardPile);
+
+		this._handlers = new Map;
 	}
 
-	async start() {
+	start() {
 		this.room.broadcast(cmd.StartGame);
 		this.arrangeSeats();
-		await this.arrangeGenerals();
-		this.room.broadcast(cmd.ToBattle);
-		this.arrangeCards();
+		this.trigger(GameEvent.StartGame);
 	}
 
 	arrangeSeats() {
@@ -78,8 +79,7 @@ class GameDriver {
 					num: 2,
 					sameKingdom: true,
 					forced: true,
-				})
-				.then(generals => {
+				}).then(generals => {
 					s.selected = generals;
 				})
 			);
@@ -155,6 +155,33 @@ class GameDriver {
 			...movePath,
 			cardNum: cards.length,
 		});
+	}
+
+	register(event, handler) {
+		let handlers = this._handlers.get(event);
+		if (!handlers) {
+			handlers = [];
+			this._handlers.set(event, handlers);
+		}
+
+		handlers.push(handler);
+	}
+
+	async trigger(event, player = null, data = null) {
+		let handlers = this._handlers.get(event);
+		if (!handlers) {
+			return;
+		}
+
+		let triggerable_handlers = handlers.filter(handler => handler.triggerable(this, player, data));
+		for (let handler of triggerable_handlers) {
+			if (await handler.cost(this, player, data)) {
+				let prevented = await handler.effect(this, player, data);
+				if (prevented) {
+					break;
+				}
+			}
+		}
 	}
 
 }
