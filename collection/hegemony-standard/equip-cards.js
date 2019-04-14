@@ -44,7 +44,7 @@ module.exports = function () { return [
 	new DefensiveHorseCard('shadow-runner', Suit.Spade, 5),
 	new DefensiveHorseCard('hex-mark', Suit.Club, 5),
 	new DefensiveHorseCard('yellow-flash', Suit.Heart, 13),
-    new OffensiveHorseCard('red-hare', Suit.Heart, 5),
+	new OffensiveHorseCard('red-hare', Suit.Heart, 5),
 	new OffensiveHorseCard('ferghana', Suit.Spade, 13),
 	new OffensiveHorseCard('violet', Suit.Diamond, 13),
 ]; };

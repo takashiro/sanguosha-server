@@ -90,7 +90,7 @@ class Card {
 	 * @param {Player} source
 	 * @return {boolean}
 	 */
-    isAvailable(source) {
+	isAvailable(source) {
 		return true;
 	}
 
