@@ -4,7 +4,7 @@
   "description": "Sanguosha (Karuta Extension)",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "eslint . && mocha"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/takashiro/karuta-sanguosha#readme",
   "devDependencies": {
+    "eslint": "^5.16.0",
     "mocha": "^6.1.3"
   }
 }
