@@ -1,10 +1,10 @@
 
-const Enum = require('../Enum');
+const Type = {
+	Invalid: 0,
 
-module.exports = new Enum(
-	'Invalid',
+	Basic: 1,
+	Trick: 2,
+	Equip: 3,
+};
 
-	'Basic',
-	'Trick',
-	'Equip',
-);
+module.exports = Type;

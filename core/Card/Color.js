@@ -1,9 +1,9 @@
 
-const Enum = require('../Enum');
+const Color = {
+	None: 0,
 
-module.exports = new Enum(
-	'None',
+	Red: 1,
+	Black: 2,
+};
 
-	'Red',
-	'Black',
-);
+module.exports = Color;

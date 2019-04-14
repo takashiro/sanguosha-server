@@ -1,17 +1,17 @@
 
-const Enum = require('../Enum');
+const Type = {
+	Unknown: 0,
+	
+	Hand: 1,
+	Equip: 2,
+	DelayedTrick: 3,
+	Judge: 4,
 
-module.exports = new Enum(
-	'Unknown',
+	DrawPile: 5,
+	DiscardPile: 6,
+	Special: 7,
+	Table: 8,
+	Wugu: 9,
+};
 
-	'Hand',
-	'Equip',
-	'DelayedTrick',
-	'Judge',
-
-	'DrawPile',
-	'DiscardPile',
-	'Special',
-	'Table',
-	'Wugu',
-);
+module.exports = Type;

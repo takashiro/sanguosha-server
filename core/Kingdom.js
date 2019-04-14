@@ -1,14 +1,13 @@
 
+const Kingdom = {
+	Unknown: 0,
 
-const Enum = require('./Enum');
+	Wei: 1,
+	Wu: 2,
+	Shu: 3,
+	Qun: 4,
 
-module.exports = new Enum(
-	'Unknown',
+	God: 5,
+};
 
-	'Wei',
-	'Wu',
-	'Shu',
-	'Qun',
-
-	'God',
-);
+module.exports = Kingdom;

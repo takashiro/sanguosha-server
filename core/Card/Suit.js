@@ -1,11 +1,11 @@
 
-const Enum = require('../Enum');
+const Suit = {
+	None: 0,
 
-module.exports = new Enum(
-	'None',
+	Spade: 1,
+	Heart: 2,
+	Club: 3,
+	Diamond: 4,
+};
 
-	'Spade',
-	'Heart',
-	'Club',
-	'Diamond',
-);
+module.exports = Suit;

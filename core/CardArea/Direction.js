@@ -1,8 +1,9 @@
 
-const Enum = require('../Enum');
+const Direction = {
+	Undefined: 0,
 
-module.exports = new Enum(
-	'Undefined',
-	'Top',
-	'Bottom',
-);
+	Top: 1,
+	Bottom: 2,
+};
+
+module.exports = Direction;

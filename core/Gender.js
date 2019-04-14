@@ -1,10 +1,10 @@
 
-const Enum = require('./Enum');
+const Gender = {
+	Unknown: 0,
 
-module.exports = new Enum(
-	'Unknown',
+	Male: 1,
+	Female: 2,
+	Neuter: 3,
+};
 
-	'Male',
-	'Female',
-	'Neuter',
-);
+module.exports = Gender;

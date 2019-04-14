@@ -1,17 +1,17 @@
 
-const Enum = require('../Enum');
+const Phase = {
+	Invalid: 0,
 
-module.exports = new Enum(
-	'Invalid',
+	RoundStart: 1,
 
-	'RoundStart',
+	Start: 2,
+	Judge: 3,
+	Draw: 4,
+	Play: 5,
+	Discard: 6,
+	Finish: 7,
 
-	'Start',
-	'Judge',
-	'Draw',
-	'Play',
-	'Discard',
-	'Finish',
+	Inactive: 8,
+};
 
-	'Inactive',
-);
+module.exports = Phase;
