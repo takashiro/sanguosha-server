@@ -35,13 +35,14 @@ class ServerPlayer extends Player {
 				}))
 			}, options.timeout * 1000);
 		} catch (error) {
+			console.error(error);
 		}
 
 		let chosen_generals = [];
 		if (reply && reply instanceof Array) {
 			for (let id of reply) {
 				if (id >= 0 && id < generals.length) {
-					chosen_generals.push(generals[i]);
+					chosen_generals.push(generals[id]);
 				}
 			}
 		}
