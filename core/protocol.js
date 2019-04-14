@@ -1,10 +1,9 @@
 
-
-const net = require('../../../core/protocol');
 const Enum = require('./Enum');
 
 const cmd = new Enum(
-	...net.enums,
+	'Invalid',
+
 	'StartGame',
 	'ArrangeSeats',
 	'ChooseGeneral',
