@@ -134,6 +134,14 @@ class Card {
 	}
 
 	/**
+	 * Check if this is a virtual card
+	 * @return {boolean}
+	 */
+	isVirtual() {
+		return this._id <= 0;
+	}
+
+	/**
 	 * Convert this card to JSON
 	 * @return {object}
 	 */
