@@ -29,6 +29,7 @@
 			"error",
 			"always"
 		],
+		"keyword-spacing": "error",
 		"no-unused-vars": "off",
 		"no-console": "off"
     }
