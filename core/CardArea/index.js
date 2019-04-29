@@ -1,3 +1,4 @@
+
 const Type = require('./Type');
 const Direction = require('./Direction');
 
