@@ -15,6 +15,10 @@ class ServerPlayer extends Player {
 		this.judgeArea = new CardArea(CardArea.Type.Judge, this);
 	}
 
+	get id() {
+		return this.user ? this.user.id : 0;
+	}
+
 	async askForGeneral(generals, options = {}) {
 		options = Object.assign({
 			timeout: 40,
