@@ -1,7 +1,7 @@
 
 const Player = require('../core/Player');
 const CardArea = require('../core/CardArea');
-const cmd = require('../core/protocol');
+const cmd = require('../cmd');
 
 class ServerPlayer extends Player {
 

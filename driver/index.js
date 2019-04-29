@@ -1,5 +1,5 @@
 
-const cmd = require('../core/protocol');
+const cmd = require('../cmd');
 const CardArea = require('../core/CardArea');
 const ServerPlayer = require('./ServerPlayer');
 const GameEvent = require('./GameEvent');
