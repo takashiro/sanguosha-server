@@ -3,6 +3,13 @@ const Player = require('../core/Player');
 const CardArea = require('../core/CardArea');
 const cmd = require('../cmd');
 
+const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
+	timeout: 40,
+	num: 1,
+	sameKingdom: false,
+	forced: true,
+};
+
 class ServerPlayer extends Player {
 
 	constructor(user) {
@@ -20,12 +27,10 @@ class ServerPlayer extends Player {
 	}
 
 	async askForGeneral(generals, options = {}) {
-		options = Object.assign({
-			timeout: 40,
-			num: 1,
-			sameKingdom: false,
-			forced: true,
-		}, options);
+		options = {
+			...CHOOSE_GENERAL_DEFAULT_OPTIONS,
+			...options
+		};
 
 		let reply = [];
 		try {
@@ -42,17 +47,17 @@ class ServerPlayer extends Player {
 			console.error(error);
 		}
 
-		let chosen_generals = [];
+		let chosenGenerals = [];
 		if (reply && reply instanceof Array) {
 			for (let id of reply) {
 				if (id >= 0 && id < generals.length) {
-					chosen_generals.push(generals[id]);
+					chosenGenerals.push(generals[id]);
 				}
 			}
 		}
 
-		if (options.forced && chosen_generals.length < options.num && generals.length >= options.num) {
-			let available_generals = generals;
+		if (options.forced && chosenGenerals.length < options.num && generals.length >= options.num) {
+			let availableGenerals = generals;
 			if (options.sameKingdom && options.num > 1) {
 				let kingdoms = new Map;
 				for (let general of generals) {
@@ -64,28 +69,27 @@ class ServerPlayer extends Player {
 					}
 				}
 
-				let available_kingdoms = [];
+				let availableKingdoms = [];
 				for (let [_, alliances] of kingdoms) {
 					if (alliances.length >= options.num) {
-						available_kingdoms.push(alliances);
+						availableKingdoms.push(alliances);
 					}
 				}
 
-				let index = Math.floor(Math.random() * available_kingdoms.length);
-				available_generals = available_kingdoms[index];
+				let index = Math.floor(Math.random() * availableKingdoms.length);
+				availableGenerals = availableKingdoms[index];
 			}
 
 			do {
-				let index = Math.floor(Math.random() * available_generals.length);
-				let chosen = available_generals[index];
-				if (chosen_generals.indexOf(chosen) < 0
-					&& chosen_generals.every) {
-					chosen_generals.push(chosen);
+				let index = Math.floor(Math.random() * availableGenerals.length);
+				let chosen = availableGenerals[index];
+				if (chosenGenerals.indexOf(chosen) < 0) {
+					chosenGenerals.push(chosen);
 				}
-			} while (chosen_generals.length < options.num);
+			} while (chosenGenerals.length < options.num);
 		}
 
-		return chosen_generals;
+		return chosenGenerals;
 	}
 
 	updateProperty(prop, value) {
