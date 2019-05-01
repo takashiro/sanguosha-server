@@ -26,6 +26,10 @@ class ServerPlayer extends Player {
 		return this.user ? this.user.id : 0;
 	}
 
+	get name() {
+		return this.user ? this.user.name : '';
+	}
+
 	async askForGeneral(generals, options = {}) {
 		options = {
 			...CHOOSE_GENERAL_DEFAULT_OPTIONS,

@@ -4,7 +4,7 @@
   "description": "Sanguosha (Karuta Extension)",
   "main": "index.js",
   "scripts": {
-    "test": "eslint . && mocha"
+    "test": "eslint . && mocha test"
   },
   "repository": {
     "type": "git",
