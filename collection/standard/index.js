@@ -6,6 +6,10 @@ const shu = require('./list/shu');
 const wu = require('./list/wu');
 const qun = require('./list/qun');
 
+const basic = require('./list/basic');
+const equip = require('./list/equip');
+const trick = require('./list/trick');
+
 class StandardCollection extends Collection {
 
 	constructor() {
@@ -18,6 +22,14 @@ class StandardCollection extends Collection {
 			...shu,
 			...wu,
 			...qun,
+		];
+	}
+
+	createCards() {
+		return [
+			...basic(),
+			...equip(),
+			...trick(),
 		];
 	}
 

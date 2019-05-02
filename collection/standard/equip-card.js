@@ -18,10 +18,10 @@ class Axe extends WeaponCard {
 
 }
 
-class Spear extends WeaponCard {
+class SerpentSpear extends WeaponCard {
 
 	constructor(suit, number) {
-		super('spear', suit, number);
+		super('serpent-spear', suit, number);
 	}
 
 }
@@ -58,6 +58,22 @@ class FrostSword extends WeaponCard {
 
 }
 
+class GreenDragonCrescentBlade extends WeaponCard {
+
+	constructor(suit, number) {
+		super('green-dragon-crescent-blade', suit, number);
+	}
+
+}
+
+class Halberd extends WeaponCard {
+
+	constructor(suit, number) {
+		super('halberd', suit, number);
+	}
+
+}
+
 class EightDiagram extends ArmorCard {
 
 	constructor(suit, number) {
@@ -77,11 +93,13 @@ class RenwangShield extends ArmorCard {
 module.exports = {
 	KylinBow,
 	Axe,
-	Spear,
+	SerpentSpear,
 	QinggangSword,
 	Crossbow,
 	YinyangSword,
 	FrostSword,
+	GreenDragonCrescentBlade,
+	Halberd,
 
 	EightDiagram,
 	RenwangShield,

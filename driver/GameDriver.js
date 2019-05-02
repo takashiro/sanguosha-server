@@ -38,6 +38,14 @@ class GameDriver extends EventDriver {
 		return generals;
 	}
 
+	createCards() {
+		const cards = [];
+		for (const col of this.collections) {
+			cards.push(...col.createCards());
+		}
+		return cards;
+	}
+
 }
 
 module.exports = GameDriver;

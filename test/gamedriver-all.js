@@ -18,4 +18,9 @@ describe('GameDriver', function () {
 		const generals = driver.createGenerals();
 		assert(generals.length === 25);
 	});
+
+	it('creates cards', function () {
+		const cards = driver.createCards();
+		assert(cards.length > 0);
+	});
 });
