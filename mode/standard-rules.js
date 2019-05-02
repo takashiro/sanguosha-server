@@ -26,6 +26,8 @@ class StandardGameRule extends BasicGameRule {
 		await this.prepareSeats(driver);
 		await this.prepareGenerals(driver);
 		await this.prepareCards(driver);
+
+		this.proceed(driver);
 	}
 
 	prepareRoles(driver) {

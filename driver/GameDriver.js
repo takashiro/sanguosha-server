@@ -19,9 +19,10 @@ class GameDriver extends EventDriver {
 		this.discardPile = new CardArea(CardArea.Type.DiscardPile);
 	}
 
-	start() {
+	async start() {
+		super.start();
 		this.room.broadcast(cmd.StartGame);
-		this.trigger(GameEvent.StartGame);
+		await this.trigger(GameEvent.StartGame);
 	}
 
 	loadCollection(name) {

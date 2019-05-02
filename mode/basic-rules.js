@@ -7,11 +7,13 @@ const Phase = require('../core/Player/Phase');
 const PhaseChangeStruct = require('../driver/PhaseChangeStruct');
 
 const shuffle = require('../util/shuffle');
+const delay = require('../util/delay');
 
 class BasicGameRule extends GameRule {
 
 	constructor() {
 		super(GameEvent.StartGame);
+		this.idle = 1000;
 	}
 
 	preparePlayers(driver) {
@@ -68,10 +70,26 @@ class BasicGameRule extends GameRule {
 			await driver.trigger(GameEvent.ProceedPhase, player, data);
 
 			await driver.trigger(GameEvent.EndPhase, player, data);
+
+			await delay(this.idle);
 		}
 
 		player.setPhase(Phase.Inactive);
 		player.broadcastProperty('phase', Phase.Inactive);
+	}
+
+	async proceed(driver) {
+		let i = 0;
+		const players = driver.players;
+		while (driver.isRunning()) {
+			const player = players[i];
+			await this.activatePlayer(driver, player);
+
+			i++;
+			if (i >= players.length) {
+				i = 0;
+			}
+		}
 	}
 
 }

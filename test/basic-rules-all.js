@@ -18,10 +18,17 @@ describe('BasicGameRule', function () {
 				res.args = args;
 			}
 		},
+		stop() {
+			this.finished = true;
+		},
+		isRunning() {
+			return !this.finished;
+		},
 		trigger() {},
 	};
 
 	const rule = new BasicGameRule;
+	rule.idle = 0;
 
 	it('prepares players', function () {
 		rule.preparePlayers(driver);
@@ -53,5 +60,32 @@ describe('BasicGameRule', function () {
 			assert(phases[i] === i + 1);
 		}
 		assert(phases[6] === 0);
+	});
+
+	it('proceeds the game', async function () {
+		const phases = [];
+		const setPhase = function (phase) {
+			phases.push(phase);
+			if (phases.length >= 14) {
+				driver.stop();
+			}
+		};
+
+		const players = driver.players;
+		for (const player of players) {
+			player.setPhase = setPhase;
+		}
+
+		await rule.proceed(driver);
+		for (const player of players) {
+			delete player.setPhase;
+		}
+
+		for (let i = 0; i < 6; i++) {
+			assert(phases[i] === i + 1);
+			assert(phases[7 + i] === i + 1);
+		}
+		assert(phases[6] === 0);
+		assert(phases[13] === 0);
 	});
 });
