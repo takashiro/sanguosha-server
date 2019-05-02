@@ -22,5 +22,6 @@ describe('GameDriver', function () {
 	it('creates cards', function () {
 		const cards = driver.createCards();
 		assert(cards.length > 0);
+		assert(cards.every(card => card.id() > 0));
 	});
 });

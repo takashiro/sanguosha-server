@@ -43,6 +43,11 @@ class GameDriver extends EventDriver {
 		for (const col of this.collections) {
 			cards.push(...col.createCards());
 		}
+
+		for (let i = 0; i < cards.length; i++) {
+			cards[i]._id = i + 1;
+		}
+
 		return cards;
 	}
 
