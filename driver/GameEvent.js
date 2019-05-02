@@ -3,9 +3,11 @@ const GameEvent = {
 	Invalid: 0,
 
 	StartGame: 1,
-	StartPhase: 2,
-	ProceedPhase: 3,
-	EndPhase: 4,
+	EndGame: 2,
+
+	StartPhase: 3,
+	ProceedPhase: 4,
+	EndPhase: 5,
 };
 
 module.exports = GameEvent;
