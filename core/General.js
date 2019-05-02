@@ -8,7 +8,7 @@ class General {
 		this._maxHp = maxHp;
 		this._gender = gender;
 
-		this._lord = false;
+		this._emperor = false;
 		this._hidden = false;
 
 		this._headExtraMaxHp = 0;
@@ -39,8 +39,12 @@ class General {
 		return this.gender;
 	}
 
-	isLord() {
-		return this._lord;
+	setEmperor(emperor) {
+		this._emperor = emperor;
+	}
+
+	isEmperor() {
+		return this._emperor;
 	}
 
 	isHidden() {

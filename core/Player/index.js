@@ -87,6 +87,14 @@ class Player {
 		this._role = role;
 	}
 
+	general() {
+		return this._headGeneral;
+	}
+
+	setGeneral(general) {
+		this._headGeneral = general;
+	}
+
 	headGeneral() {
 		return this._headGeneral;
 	}

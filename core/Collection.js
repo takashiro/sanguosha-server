@@ -3,7 +3,10 @@ class Collection {
 
 	constructor(name) {
 		this.name = name;
-		this.generals = [];
+	}
+
+	createGenerals() {
+		return [];
 	}
 
 	createCards() {
