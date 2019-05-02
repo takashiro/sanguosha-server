@@ -1,6 +1,4 @@
 
-const Phase = require('./Phase');
-
 class Player {
 
 	constructor() {
@@ -10,8 +8,9 @@ class Player {
 		this._dying = false;
 
 		this._seat = 0;
-		this._phase = Phase.Invalid;
+		this._phase = 0;
 
+		this._role = 0;
 		this._headGeneral = null;
 		this._deputyGeneral = null;
 	}
@@ -80,6 +79,14 @@ class Player {
 		this._phase = phase;
 	}
 
+	role() {
+		return this._role;
+	}
+
+	setRole(role) {
+		this._role = role;
+	}
+
 	headGeneral() {
 		return this._headGeneral;
 	}
@@ -97,7 +104,5 @@ class Player {
 	}
 
 }
-
-Player.Phase = Phase;
 
 module.exports = Player;
