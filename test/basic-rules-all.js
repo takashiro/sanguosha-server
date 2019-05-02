@@ -2,7 +2,9 @@
 const assert = require('assert');
 
 const cmd = require('../cmd');
-const {BasicGameRule} = require('../mode/basic-rules');
+const std = require('../mode/basic-rules');
+
+const Phase = require('../core/Player/Phase');
 
 describe('BasicGameRule', function () {
 	const res = {};
@@ -27,7 +29,7 @@ describe('BasicGameRule', function () {
 		trigger() {},
 	};
 
-	const rule = new BasicGameRule;
+	const rule = new std.BasicGameRule;
 	rule.idle = 0;
 
 	it('prepares players', function () {
@@ -87,5 +89,25 @@ describe('BasicGameRule', function () {
 		}
 		assert(phases[6] === 0);
 		assert(phases[13] === 0);
+	});
+});
+
+describe('PhaseRule', function () {
+	const rule = new std.PhaseRule;
+
+	it('draws 2 cards', async function () {
+		const player = {};
+
+		const driver = {
+			trigger() {},
+			drawCards(target, num) {
+				assert(target === player);
+				assert(num === 2);
+			}
+		};
+
+		await rule.effect(driver, player, {
+			to: Phase.Draw
+		});
 	});
 });

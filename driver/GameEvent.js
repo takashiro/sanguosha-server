@@ -8,6 +8,8 @@ const GameEvent = {
 	StartPhase: 3,
 	ProceedPhase: 4,
 	EndPhase: 5,
+
+	DrawNCards: 6,
 };
 
 module.exports = GameEvent;

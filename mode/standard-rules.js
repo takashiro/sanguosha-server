@@ -1,7 +1,6 @@
 
 const {BasicGameRule} = require('./basic-rules');
 
-const cmd = require('../cmd');
 const Role = require('../core/Player/Role');
 const shuffle = require('../util/shuffle');
 const randsub = require('../util/randsub');
