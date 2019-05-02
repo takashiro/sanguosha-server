@@ -84,6 +84,15 @@ class CardArea {
 	}
 
 	/**
+	 * Get the first N cards and remove them from this area
+	 * @param {number} num
+	 * @return {Card[]}
+	 */
+	shift(num) {
+		return this.cards.splice(0, num);
+	}
+
+	/**
 	 * Get the last card
 	 * @return {Card}
 	 */
@@ -97,6 +106,14 @@ class CardArea {
 	 */
 	takeLast() {
 		return this.cards.pop();
+	}
+
+	/**
+	 * Get the last N cards and remove them from this area
+	 * @param {number} num
+	 */
+	pop(num) {
+		return this.cards.splice(this.cards.length - num, num);
 	}
 
 	/**

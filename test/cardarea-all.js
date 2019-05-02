@@ -76,4 +76,26 @@ describe('CardArea', function () {
 		assert(area.size === 0);
 		assert(!area.has(1));
 	});
+
+	it('shifts N cards', function () {
+		area.add(1, CardArea.Direction.Top);
+		area.add(2, CardArea.Direction.Top);
+		area.add(3, CardArea.Direction.Top);
+
+		const tops = area.shift(3);
+		assert(tops[0] === 3);
+		assert(tops[1] === 2);
+		assert(tops[2] === 1);
+	});
+
+	it('pops N cards', function () {
+		area.add(1);
+		area.add(2);
+		area.add(3);
+
+		const bottoms = area.shift(3);
+		assert(bottoms[0] === 1);
+		assert(bottoms[1] === 2);
+		assert(bottoms[2] === 3);
+	});
 });
