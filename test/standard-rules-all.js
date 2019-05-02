@@ -1,8 +1,10 @@
 
 const assert = require('assert');
+const GameDriver = require('../driver');
 const {StandardGameStartRule} = require('../mode/standard-rules');
 
 const Role = require('../core/Player/Role');
+const randsub = require('../util/randsub');
 
 function countArray(arr, condition) {
 	let count = 0;
@@ -15,14 +17,28 @@ function countArray(arr, condition) {
 }
 
 describe('Standard Mode - GameStartRule', function () {
-	const driver = {
-		room: {
-			broadcast() {},
-			users: [],
-		},
-	};
+	const driver = new GameDriver({
+		broadcast() {},
+		users: [],
+	});
+
+	const candidateDuplicates = [];
+
+	class User {
+
+		constructor(i) {
+			this.id = i;
+			this.name = 'user' + i;
+		}
+
+		request(command, options) {
+			candidateDuplicates.push(...options.generals.map(general => general.name));
+			return Math.floor(Math.random() * options.generals.length);
+		}
+
+	}
 	for (let i = 1; i <= 8; i++) {
-		driver.room.users.push({id: i, name: 'user' + i});
+		driver.room.users.push(new User(i));
 	}
 
 	const rule = new StandardGameStartRule;
@@ -52,5 +68,19 @@ describe('Standard Mode - GameStartRule', function () {
 
 	it('prepares seats', function () {
 		rule.prepareSeats(driver);
+	});
+
+	it('prepares generals', async function () {
+		await rule.prepareGenerals(driver);
+	});
+
+	it('checks candidate duplicates', function () {
+		candidateDuplicates.splice(0, 5);
+		for (let i = 0; i < candidateDuplicates.length; i++) {
+			const name = candidateDuplicates[i];
+			for (let j = i + 1; j < candidateDuplicates.length; j++) {
+				assert(candidateDuplicates[j] !== name);
+			}
+		}
 	});
 });
