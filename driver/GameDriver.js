@@ -30,6 +30,14 @@ class GameDriver extends EventDriver {
 		this.collections.push(collection);
 	}
 
+	createGenerals() {
+		const generals = [];
+		for (const col of this.collections) {
+			generals.push(...col.createGenerals());
+		}
+		return generals;
+	}
+
 }
 
 module.exports = GameDriver;

@@ -13,4 +13,9 @@ describe('GameDriver', function () {
 		const generals = col.createGenerals();
 		assert(generals.length === 25);
 	});
+
+	it('creates generals', function () {
+		const generals = driver.createGenerals();
+		assert(generals.length === 25);
+	});
 });
