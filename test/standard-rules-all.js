@@ -3,8 +3,8 @@ const assert = require('assert');
 const GameDriver = require('../driver');
 const {StandardGameStartRule} = require('../mode/standard-rules');
 
+const cmd = require('../cmd');
 const Role = require('../core/Player/Role');
-const randsub = require('../util/randsub');
 
 function countArray(arr, condition) {
 	let count = 0;
@@ -19,6 +19,7 @@ function countArray(arr, condition) {
 describe('Standard Mode - GameStartRule', function () {
 	const driver = new GameDriver({
 		broadcast() {},
+		broadcastExcept() {},
 		users: [],
 	});
 
@@ -31,9 +32,16 @@ describe('Standard Mode - GameStartRule', function () {
 			this.name = 'user' + i;
 		}
 
-		request(command, options) {
-			candidateDuplicates.push(...options.generals.map(general => general.name));
-			return Math.floor(Math.random() * options.generals.length);
+		send(command, args) {
+		}
+
+		request(command, args) {
+			if (command === cmd.ChooseGeneral) {
+				candidateDuplicates.push(...args.generals.map(general => general.name));
+				return Math.floor(Math.random() * args.generals.length);
+			} else if (command === cmd.MoveCards) {
+				console.log(args);
+			}
 		}
 
 	}
@@ -81,6 +89,14 @@ describe('Standard Mode - GameStartRule', function () {
 			for (let j = i + 1; j < candidateDuplicates.length; j++) {
 				assert(candidateDuplicates[j] !== name);
 			}
+		}
+	});
+
+	it('prepares cards', async function () {
+		await rule.prepareCards(driver);
+
+		for (const player of driver.players) {
+			assert(player.handArea.size === 4);
 		}
 	});
 });

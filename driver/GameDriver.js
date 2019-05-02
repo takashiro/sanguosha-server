@@ -15,7 +15,6 @@ class GameDriver extends EventDriver {
 
 		this.collections = [];
 
-		this.cards = [];
 		this.drawPile = new CardArea(CardArea.Type.DrawPile);
 		this.discardPile = new CardArea(CardArea.Type.DiscardPile);
 	}
@@ -44,6 +43,51 @@ class GameDriver extends EventDriver {
 			cards.push(...col.createCards());
 		}
 		return cards;
+	}
+
+	resetDrawPile(cards) {
+		this.drawPile.cards = cards;
+	}
+
+	drawCards(player, num) {
+		const cards = this.drawPile.shift(num);
+		//TO-DO: Shuffle and shift more cards if there are insufficient cards.
+
+		for (const card of cards) {
+			player.handArea.add(card);
+		}
+
+		this.broadcastCardMove(cards, this.drawPile, player.handArea, {openTo: player});
+	}
+
+	broadcastCardMove(cards, from, to, options = null) {
+		if (!this.room) {
+			return;
+		}
+
+		const movePath = {
+			from: from.toJSON(),
+			to: to.toJSON(),
+		};
+
+		if (options && options.openTo) {
+			const user = options.openTo.user;
+			user.send(cmd.MoveCards, {
+				...movePath,
+				cards: cards.map(card => card.toJSON())
+			});
+			this.room.broadcastExcept(user, cmd.MoveCards, {
+				...movePath,
+				cardNum: cards.length,
+			});
+		} else {
+			if (options && options.open) {
+				movePath.cards = cards.map(card => card.toJSON());
+			} else {
+				movePath.cardNum = cards.length;
+			}
+			this.room.broadcast(cmd.MoveCards, movePath);
+		}
 	}
 
 }

@@ -4,6 +4,8 @@ const GameEvent = require('../driver/GameEvent');
 const GameRule = require('../driver/GameRule');
 const ServerPlayer = require('../driver/ServerPlayer');
 
+const shuffle = require('../util/shuffle');
+
 class GameStartRule extends GameRule {
 
 	constructor() {
@@ -31,6 +33,16 @@ class GameStartRule extends GameRule {
 			seat: player.seat,
 			name: player.name,
 		})));
+	}
+
+	prepareCards(driver) {
+		const cards = driver.createCards();
+		shuffle(cards);
+		driver.resetDrawPile(cards);
+
+		for (const player of driver.players) {
+			driver.drawCards(player, 4);
+		}
 	}
 
 }
