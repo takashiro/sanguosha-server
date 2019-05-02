@@ -3,10 +3,12 @@ const cmd = require('../cmd');
 const GameEvent = require('../driver/GameEvent');
 const GameRule = require('../driver/GameRule');
 const ServerPlayer = require('../driver/ServerPlayer');
+const Phase = require('../core/Player/Phase');
+const PhaseChangeStruct = require('../driver/PhaseChangeStruct');
 
 const shuffle = require('../util/shuffle');
 
-class GameStartRule extends GameRule {
+class BasicGameRule extends GameRule {
 
 	constructor() {
 		super(GameEvent.StartGame);
@@ -45,8 +47,35 @@ class GameStartRule extends GameRule {
 		}
 	}
 
+	async activatePlayer(driver, player) {
+		const phases = [
+			Phase.Start,
+			Phase.Judge,
+			Phase.Draw,
+			Phase.Play,
+			Phase.Discard,
+			Phase.End,
+		];
+
+		for (const phase of phases) {
+			const data = new PhaseChangeStruct(player, player.phase(), phase);
+			if (await driver.trigger(GameEvent.StartPhase, player, data)) {
+				continue;
+			}
+
+			player.setPhase(data.to);
+			player.broadcastProperty('phase', data.to);
+			await driver.trigger(GameEvent.ProceedPhase, player, data);
+
+			await driver.trigger(GameEvent.EndPhase, player, data);
+		}
+
+		player.setPhase(Phase.Inactive);
+		player.broadcastProperty('phase', Phase.Inactive);
+	}
+
 }
 
 module.exports = {
-	GameStartRule
+	BasicGameRule,
 };

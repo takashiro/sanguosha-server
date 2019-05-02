@@ -18,7 +18,7 @@ class EventDriver {
 	async trigger(event, player = null, data = null) {
 		const listners = this._listeners.get(event);
 		if (!listners) {
-			return;
+			return false;
 		}
 
 		const triggerableListeners = listners.filter(handler => handler.triggerable(this, player, data));
@@ -26,10 +26,12 @@ class EventDriver {
 			if (await listener.cost(this, player, data)) {
 				const prevented = await listener.effect(this, player, data);
 				if (prevented) {
-					break;
+					return true;
 				}
 			}
 		}
+
+		return false;
 	}
 
 }

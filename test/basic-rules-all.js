@@ -2,9 +2,9 @@
 const assert = require('assert');
 
 const cmd = require('../cmd');
-const {GameStartRule} = require('../mode/basic-rules');
+const {BasicGameRule} = require('../mode/basic-rules');
 
-describe('GameStartRule', function () {
+describe('BasicGameRule', function () {
 	const res = {};
 	const driver = {
 		room: {
@@ -17,10 +17,11 @@ describe('GameStartRule', function () {
 				res.command = command;
 				res.args = args;
 			}
-		}
+		},
+		trigger() {},
 	};
 
-	const rule = new GameStartRule;
+	const rule = new BasicGameRule;
 
 	it('prepares players', function () {
 		rule.preparePlayers(driver);
@@ -37,5 +38,20 @@ describe('GameStartRule', function () {
 	it('prepares seats', function () {
 		rule.prepareSeats(driver);
 		assert(res.command === cmd.ArrangeSeats);
+	});
+
+	it('activates a player', async function () {
+		const player = driver.players[0];
+		const phases = [];
+		player.setPhase = function (phase) {
+			phases.push(phase);
+		};
+		await rule.activatePlayer(driver, player);
+		delete player.setPhase;
+
+		for (let i = 0; i < 6; i++) {
+			assert(phases[i] === i + 1);
+		}
+		assert(phases[6] === 0);
 	});
 });

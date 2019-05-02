@@ -1,17 +1,13 @@
 
 const Phase = {
-	Invalid: 0,
+	Inactive: 0,
 
-	RoundStart: 1,
-
-	Start: 2,
-	Judge: 3,
-	Draw: 4,
-	Play: 5,
-	Discard: 6,
-	Finish: 7,
-
-	Inactive: 8,
+	Start: 1,
+	Judge: 2,
+	Draw: 3,
+	Play: 4,
+	Discard: 5,
+	End: 6,
 };
 
 module.exports = Phase;

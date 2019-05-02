@@ -1,5 +1,5 @@
 
-const {GameStartRule} = require('./basic-rules');
+const {BasicGameRule} = require('./basic-rules');
 
 const cmd = require('../cmd');
 const Role = require('../core/Player/Role');
@@ -12,7 +12,7 @@ function fillArray(arr, value, n) {
 	}
 }
 
-class StandardGameStartRule extends GameStartRule {
+class StandardGameRule extends BasicGameRule {
 
 	constructor() {
 		super();
@@ -103,5 +103,5 @@ class StandardGameStartRule extends GameStartRule {
 }
 
 module.exports = {
-	StandardGameStartRule,
+	StandardGameRule,
 };

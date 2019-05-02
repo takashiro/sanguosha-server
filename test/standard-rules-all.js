@@ -1,7 +1,7 @@
 
 const assert = require('assert');
 const GameDriver = require('../driver');
-const {StandardGameStartRule} = require('../mode/standard-rules');
+const {StandardGameRule} = require('../mode/standard-rules');
 
 const cmd = require('../cmd');
 const Role = require('../core/Player/Role');
@@ -49,7 +49,7 @@ describe('Standard Mode - GameStartRule', function () {
 		driver.room.users.push(new User(i));
 	}
 
-	const rule = new StandardGameStartRule;
+	const rule = new StandardGameRule;
 
 	it('prepares players', function () {
 		rule.preparePlayers(driver);
