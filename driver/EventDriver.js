@@ -12,7 +12,7 @@ class EventDriver {
 		this._state = State.Starting;
 	}
 
-	isFinished() {
+	isStopped() {
 		return this._state === State.Stopped;
 	}
 
@@ -39,7 +39,7 @@ class EventDriver {
 	}
 
 	async trigger(event, player = null, data = null) {
-		if (this.isFinished()) {
+		if (this.isStopped()) {
 			return false;
 		}
 
