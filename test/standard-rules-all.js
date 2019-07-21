@@ -76,6 +76,17 @@ describe('Standard Mode - GameStartRule', function () {
 
 	it('prepares seats', function () {
 		rule.prepareSeats(driver);
+
+		const seats = [];
+		for (const player of driver.players) {
+			seats.push(player.seat());
+			assert(player.seat() > 0);
+		}
+
+		seats.sort();
+		for (let i = 0; i < seats.length; i++) {
+			assert(seats[i] === i + 1);
+		}
 	});
 
 	it('prepares generals', async function () {

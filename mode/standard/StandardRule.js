@@ -95,7 +95,7 @@ class StandardRule extends BasicRule {
 	}
 
 	async prepareGeneral(player, generals) {
-		const offset = this.candidateGeneralNum * (player.seat - 2);
+		const offset = this.candidateGeneralNum * (player.seat() - 2);
 		const candidates = generals.slice(offset, offset + this.candidateGeneralNum);
 		const res = await player.askForGeneral(candidates, {num: 1});
 		player.setGeneral(res[0]);

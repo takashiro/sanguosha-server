@@ -1,5 +1,6 @@
 
 const assert = require('assert');
+const sinon = require('sinon');
 
 const cmd = require('../cmd');
 
@@ -9,7 +10,10 @@ const PhaseRule = require('../mode/basic/PhaseRule');
 const Phase = require('../core/Player/Phase');
 
 describe('Basic Rule', function () {
-	const res = {};
+	this.afterEach(function () {
+		sinon.restore();
+	});
+
 	const driver = {
 		room: {
 			users: [
@@ -17,10 +21,7 @@ describe('Basic Rule', function () {
 				{id: 2, name: 'user2'},
 			],
 
-			broadcast(command, args) {
-				res.command = command;
-				res.args = args;
-			}
+			broadcast: sinon.fake()
 		},
 		stop() {
 			this.finished = true;
@@ -48,7 +49,12 @@ describe('Basic Rule', function () {
 
 	it('prepares seats', function () {
 		rule.prepareSeats(driver);
-		assert(res.command === cmd.ArrangeSeats);
+		const players = driver.players.map(player => ({
+			uid: player.id,
+			seat: player.seat(),
+			name: player.name,
+		}));
+		sinon.assert.calledWith(driver.room.broadcast, cmd.ArrangeSeats, players);
 	});
 
 	it('activates a player', async function () {

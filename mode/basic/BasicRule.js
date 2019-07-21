@@ -28,13 +28,13 @@ class BasicRule extends GameRule {
 
 		let seat = 1;
 		for (const player of players) {
-			player.seat = seat;
+			player.setSeat(seat);
 			seat++;
 		}
 
 		driver.room.broadcast(cmd.ArrangeSeats, players.map(player => ({
 			uid: player.id,
-			seat: player.seat,
+			seat: player.seat(),
 			name: player.name,
 		})));
 	}
