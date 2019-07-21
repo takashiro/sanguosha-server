@@ -1,9 +1,19 @@
 
 const assert = require('assert');
+const sinon = require('sinon');
+
 const GameDriver = require('../driver');
+const GameEvent = require('../driver/GameEvent');
 
 describe('GameDriver', function () {
-	const driver = new GameDriver;
+	this.afterEach(function () {
+		sinon.restore();
+	});
+
+	const room = {
+		broadcast: sinon.fake(),
+	};
+	const driver = new GameDriver(room);
 
 	it('loads the standard collection', function () {
 		driver.loadCollection('standard');
@@ -23,5 +33,10 @@ describe('GameDriver', function () {
 		const cards = driver.createCards();
 		assert(cards.length > 0);
 		assert(cards.every(card => card.id() > 0));
+	});
+
+	it('starts game', async function () {
+		await driver.start();
+		sinon.assert.calledWith(room.broadcast, GameEvent.StartGame);
 	});
 });
