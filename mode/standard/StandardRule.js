@@ -1,9 +1,9 @@
 
-const {BasicGameRule} = require('./basic-rules');
+const BasicRule = require('../basic/BasicRule');
 
-const Role = require('../core/Player/Role');
-const shuffle = require('../util/shuffle');
-const randsub = require('../util/randsub');
+const Role = require('../../core/Player/Role');
+const shuffle = require('../../util/shuffle');
+const randsub = require('../../util/randsub');
 
 function fillArray(arr, value, n) {
 	for (let i = 0; i < n; i++) {
@@ -11,7 +11,7 @@ function fillArray(arr, value, n) {
 	}
 }
 
-class StandardGameRule extends BasicGameRule {
+class StandardRule extends BasicRule {
 
 	constructor() {
 		super();
@@ -103,6 +103,4 @@ class StandardGameRule extends BasicGameRule {
 
 }
 
-module.exports = {
-	StandardGameRule,
-};
+module.exports = StandardRule;

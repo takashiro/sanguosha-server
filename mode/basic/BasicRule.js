@@ -1,15 +1,15 @@
 
-const cmd = require('../cmd');
-const GameEvent = require('../driver/GameEvent');
-const GameRule = require('../driver/GameRule');
-const ServerPlayer = require('../driver/ServerPlayer');
-const Phase = require('../core/Player/Phase');
-const PhaseChangeStruct = require('../driver/PhaseChangeStruct');
+const GameRule = require('../../driver/GameRule');
 
-const shuffle = require('../util/shuffle');
-const delay = require('../util/delay');
+const cmd = require('../../cmd');
+const Phase = require('../../core/Player/Phase');
+const GameEvent = require('../../driver/GameEvent');
+const ServerPlayer = require('../../driver/ServerPlayer');
+const PhaseChangeStruct = require('../../driver/PhaseChangeStruct');
+const shuffle = require('../../util/shuffle');
+const delay = require('../../util/delay');
 
-class BasicGameRule extends GameRule {
+class BasicRule extends GameRule {
 
 	constructor() {
 		super(GameEvent.StartGame);
@@ -94,31 +94,4 @@ class BasicGameRule extends GameRule {
 
 }
 
-class PhaseRule extends GameRule {
-
-	constructor() {
-		super(GameEvent.ProceedPhase);
-	}
-
-	async effect(driver, player, data) {
-		switch (data.to) {
-		case Phase.Draw:
-			await this.drawCards(driver, player);
-			break;
-		}
-	}
-
-	async drawCards(driver, player) {
-		const data = {
-			num: 2
-		};
-		await driver.trigger(GameEvent.DrawNCards, player, data);
-		await driver.drawCards(player, data.num);
-	}
-
-}
-
-module.exports = {
-	BasicGameRule,
-	PhaseRule,
-};
+module.exports = BasicRule;

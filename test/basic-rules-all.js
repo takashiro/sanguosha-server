@@ -2,11 +2,13 @@
 const assert = require('assert');
 
 const cmd = require('../cmd');
-const std = require('../mode/basic-rules');
+
+const BasicRule = require('../mode/basic/BasicRule');
+const PhaseRule = require('../mode/basic/PhaseRule');
 
 const Phase = require('../core/Player/Phase');
 
-describe('BasicGameRule', function () {
+describe('Basic Rule', function () {
 	const res = {};
 	const driver = {
 		room: {
@@ -29,7 +31,7 @@ describe('BasicGameRule', function () {
 		trigger() {},
 	};
 
-	const rule = new std.BasicGameRule;
+	const rule = new BasicRule;
 	rule.idle = 0;
 
 	it('prepares players', function () {
@@ -92,8 +94,8 @@ describe('BasicGameRule', function () {
 	});
 });
 
-describe('PhaseRule', function () {
-	const rule = new std.PhaseRule;
+describe('Phase Rule', function () {
+	const rule = new PhaseRule;
 
 	it('draws 2 cards', async function () {
 		const player = {};
