@@ -2,6 +2,8 @@
 const defaultConfig = require('./config');
 const GameDriver = require('./driver');
 
+const actions = require('./core/actions');
+
 class KarutaDriver extends GameDriver {
 
 	/**
@@ -21,8 +23,8 @@ class KarutaDriver extends GameDriver {
 		return this.config;
 	}
 
-	get actions() {
-		return require('./core/actions');
+	getAction(command) {
+		return actions.get(command);
 	}
 
 }
