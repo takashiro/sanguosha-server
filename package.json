@@ -22,6 +22,7 @@
   "homepage": "https://github.com/takashiro/karuta-sanguosha#readme",
   "devDependencies": {
     "eslint": "^5.16.0",
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.0",
+    "sinon": "^7.3.2"
   }
 }
