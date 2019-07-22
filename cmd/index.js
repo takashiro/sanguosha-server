@@ -8,6 +8,7 @@ const cmd = {
 	UpdatePlayer: 4,
 	ToBattle: 5,
 	MoveCards: 6,
+	UseCard: 7,
 };
 
 module.exports = cmd;

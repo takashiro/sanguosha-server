@@ -66,6 +66,29 @@ class GameDriver extends EventDriver {
 		this.broadcastCardMove(cards, this.drawPile, player.handArea, {openTo: player});
 	}
 
+	/**
+	 * A player uses a card.
+	 * @param {CardUseStruct} use
+	 * @return {boolean}
+	 */
+	useCard(use) {
+		if (!use.from || !use.card) {
+			return false;
+		}
+
+		const card = use.card;
+		card.onUse(this, use);
+
+		if (!use.from) {
+			return false;
+		}
+
+		this.room.broadcast(cmd.UseCard, use.toJSON());
+
+		card.use(this, use);
+		return true;
+	}
+
 	broadcastCardMove(cards, from, to, options = null) {
 		if (!this.room) {
 			return;
