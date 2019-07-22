@@ -1,6 +1,11 @@
 
 class CardUseStruct {
 
+	/**
+	 *
+	 * @param {Player} from
+	 * @param {Card} card
+	 */
 	constructor(from, card) {
 		this.from = from;
 		this.card = card;
