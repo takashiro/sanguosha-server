@@ -1,5 +1,5 @@
 {
-  "name": "karuta-sanguosha",
+  "name": "@karuta/sanguosha",
   "version": "0.1.0",
   "description": "Sanguosha (Karuta Extension)",
   "main": "index.js",
