@@ -17,7 +17,7 @@ class BasicRule extends GameRule {
 	}
 
 	preparePlayers(driver) {
-		const users = driver.room.users;
+		const users = driver.getUsers();
 
 		const players = users.map(user => new ServerPlayer(user));
 		driver.players = players;

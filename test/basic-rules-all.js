@@ -3,6 +3,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 
 const cmd = require('../cmd');
+const GameEvent =  require('../driver/GameEvent');
 
 const BasicRule = require('../mode/basic/BasicRule');
 const PhaseRule = require('../mode/basic/PhaseRule');
@@ -14,15 +15,16 @@ describe('Basic Rule', function () {
 		sinon.restore();
 	});
 
+	const users = [
+		{id: 1, name: 'user1'},
+		{id: 2, name: 'user2'},
+	];
+
 	const driver = {
 		room: {
-			users: [
-				{id: 1, name: 'user1'},
-				{id: 2, name: 'user2'},
-			],
-
 			broadcast: sinon.fake()
 		},
+		getUsers() { return users; },
 		stop() {
 			this.finished = true;
 		},
@@ -35,11 +37,14 @@ describe('Basic Rule', function () {
 	const rule = new BasicRule;
 	rule.idle = 0;
 
+	it('binds to start event', function () {
+		assert(rule.event === GameEvent.StartGame);
+	});
+
 	it('prepares players', function () {
 		rule.preparePlayers(driver);
 
 		const players = driver.players;
-		const users = driver.room.users;
 		assert(players.length === users.length);
 		for (let i = 0; i < players.length; i++) {
 			assert(players[i].id === users[i].id);

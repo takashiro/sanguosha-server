@@ -25,6 +25,10 @@ class GameDriver extends EventDriver {
 		await this.trigger(GameEvent.StartGame);
 	}
 
+	getUsers() {
+		return this.room ? this.room.getUsers() : [];
+	}
+
 	loadCollection(name) {
 		const collection = require('../collection/' + name);
 		this.collections.push(collection);

@@ -1,6 +1,8 @@
 
 const assert = require('assert');
 const GameDriver = require('../driver');
+const GameEvent =  require('../driver/GameEvent');
+
 const StandardRule = require('../mode/standard/StandardRule');
 
 const cmd = require('../cmd');
@@ -17,10 +19,12 @@ function countArray(arr, condition) {
 }
 
 describe('Standard Mode - GameStartRule', function () {
+	const users = [];
+
 	const driver = new GameDriver({
 		broadcast() {},
 		broadcastExcept() {},
-		users: [],
+		getUsers() { return users; },
 	});
 
 	const candidateDuplicates = [];
@@ -46,10 +50,14 @@ describe('Standard Mode - GameStartRule', function () {
 
 	}
 	for (let i = 1; i <= 8; i++) {
-		driver.room.users.push(new User(i));
+		users.push(new User(i));
 	}
 
 	const rule = new StandardRule;
+
+	it('binds to start event', function () {
+		assert(rule.event === GameEvent.StartGame);
+	});
 
 	it('prepares players', function () {
 		rule.preparePlayers(driver);

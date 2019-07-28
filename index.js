@@ -1,5 +1,5 @@
 
-const defaultConfig = require('./config');
+const defaultConfig = require('./config.default.json');
 const GameDriver = require('./driver');
 
 const actions = require('./core/actions');

@@ -29,6 +29,11 @@ class EventDriver {
 	}
 
 	register(listener) {
+		if (!listener.event) {
+			console.error('Failed to register undefined event handler');
+			return;
+		}
+
 		let handlers = this._listeners.get(listener.event);
 		if (!handlers) {
 			handlers = [];
