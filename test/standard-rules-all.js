@@ -99,6 +99,10 @@ describe('Standard Mode - GameStartRule', function () {
 
 	it('prepares generals', async function () {
 		await rule.prepareGenerals(driver);
+		for (const player of driver.players) {
+			const general = player.general();
+			assert(general);
+		}
 	});
 
 	it('checks candidate duplicates', function () {

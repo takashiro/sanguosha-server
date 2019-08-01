@@ -11,6 +11,7 @@ class Player {
 		this._phase = 0;
 
 		this._role = 0;
+		this._kingdom = 0;
 		this._headGeneral = null;
 		this._deputyGeneral = null;
 	}
@@ -85,6 +86,14 @@ class Player {
 
 	setRole(role) {
 		this._role = role;
+	}
+
+	kingdom() {
+		return this._kingdom;
+	}
+
+	setKingdom(kingdom) {
+		this._kingdom = kingdom;
 	}
 
 	general() {

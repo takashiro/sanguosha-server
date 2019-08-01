@@ -79,6 +79,8 @@ class BasicRule extends GameRule {
 	}
 
 	async proceed(driver) {
+		driver.room.broadcast(cmd.ToBattle);
+
 		let i = 0;
 		const players = driver.players;
 		while (driver.isRunning()) {

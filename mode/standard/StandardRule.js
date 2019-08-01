@@ -25,7 +25,6 @@ class StandardRule extends BasicRule {
 		await this.prepareSeats(driver);
 		await this.prepareGenerals(driver);
 		await this.prepareCards(driver);
-
 		this.proceed(driver);
 	}
 
@@ -53,6 +52,7 @@ class StandardRule extends BasicRule {
 
 		for (let i = 0; i < roles.length; i++) {
 			players[i].setRole(roles[i]);
+			players[i].updateProperty('role', roles[i]);
 		}
 	}
 
@@ -65,6 +65,8 @@ class StandardRule extends BasicRule {
 		const emperor = players.find(player => player.role() === Role.Emperor);
 		await this.prepareEmperor(emperor, generals);
 		const emperorGeneral = emperor.general();
+		emperor.setKingdom(emperorGeneral.kingdom());
+		emperor.broadcastProperty('kingdom', emperor.kingdom());
 		emperor.broadcastProperty('general', emperorGeneral.toJSON());
 
 		// Remove the Emperor's general from the candidate list
@@ -80,7 +82,12 @@ class StandardRule extends BasicRule {
 		const others = players.filter(player => player.role() !== Role.Emperor);
 		await Promise.all(others.map(player => this.prepareGeneral(player, generals)));
 		for (const player of others) {
-			player.broadcastProperty('general', player.general().toJSON());
+			const general = player.general();
+			if (general) {
+				player.setKingdom(general.kingdom());
+				player.broadcastProperty('kingdom', player.kingdom());
+				player.broadcastProperty('general', general.toJSON());
+			}
 		}
 	}
 
