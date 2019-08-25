@@ -78,9 +78,11 @@ class BasicRule extends GameRule {
 		player.broadcastProperty('phase', Phase.Inactive);
 	}
 
-	async proceed(driver) {
+	prepareBattleField(driver) {
 		driver.room.broadcast(cmd.ToBattle);
+	}
 
+	async proceed(driver) {
 		let i = 0;
 		const players = driver.players;
 		while (driver.isRunning()) {

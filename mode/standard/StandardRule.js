@@ -24,8 +24,9 @@ class StandardRule extends BasicRule {
 		await this.prepareRoles(driver);
 		await this.prepareSeats(driver);
 		await this.prepareGenerals(driver);
+		await this.prepareBattleField(driver);
 		await this.prepareCards(driver);
-		this.proceed(driver);
+		await this.proceed(driver);
 	}
 
 	prepareRoles(driver) {

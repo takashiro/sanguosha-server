@@ -19,12 +19,12 @@ function createEquipCards() {
 		new std.EightDiagram(Suit.Spade, 2),
 		new std.EightDiagram(Suit.Club, 2),
 
-		new DefensiveHorseCard('jueying', Suit.Spade, 5),
-		new DefensiveHorseCard('dilu', Suit.Club, 5),
-		new DefensiveHorseCard('zhuahuangfeidian', Suit.Heart, 13),
-		new OffensiveHorseCard('chitu', Suit.Heart, 5),
-		new OffensiveHorseCard('dayuan', Suit.Spade, 13),
-		new OffensiveHorseCard('zixing', Suit.Diamond, 13),
+		new DefensiveHorseCard('shadow-runner', Suit.Spade, 5),
+		new DefensiveHorseCard('hex-mark', Suit.Club, 5),
+		new DefensiveHorseCard('yellow-flash', Suit.Heart, 13),
+		new OffensiveHorseCard('red-hare', Suit.Heart, 5),
+		new OffensiveHorseCard('ferghana', Suit.Spade, 13),
+		new OffensiveHorseCard('violet', Suit.Diamond, 13),
 	];
 }
 
