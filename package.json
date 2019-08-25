@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/takashiro/karuta-sanguosha.git"
+    "url": "git+https://github.com/takashiro/yoka-sanguosha.git"
   },
   "keywords": [
     "karuta",
@@ -17,9 +17,9 @@
   "author": "Kazuichi Takashiro",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/takashiro/karuta-sanguosha/issues"
+    "url": "https://github.com/takashiro/yoka-sanguosha/issues"
   },
-  "homepage": "https://github.com/takashiro/karuta-sanguosha#readme",
+  "homepage": "https://github.com/takashiro/yoka-sanguosha#readme",
   "devDependencies": {
     "eslint": "^5.16.0",
     "mocha": "^6.2.0",
