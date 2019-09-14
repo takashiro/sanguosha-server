@@ -1,5 +1,5 @@
 
 module.exports = [
 	require('./StandardRule'),
-	require('./DrawPhaseRule'),
+	require('../basic/PhaseRule'),
 ];
