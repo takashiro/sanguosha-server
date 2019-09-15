@@ -99,14 +99,29 @@ class StandardRule extends BasicRule {
 		candidates.push(...randsub(others, 2));
 
 		const res = await player.askForGeneral(candidates, {num: 1});
-		player.setGeneral(res[0]);
+		const general = res[0];
+		player.setGeneral(general);
+
+		const hp = general.maxHp() + 1;
+		player.setMaxHp(hp);
+		player.setHp(hp);
+		player.broadcastProperty('maxHp', hp);
+		player.broadcastProperty('hp', hp);
 	}
 
 	async prepareGeneral(player, generals) {
 		const offset = this.candidateGeneralNum * (player.seat() - 2);
 		const candidates = generals.slice(offset, offset + this.candidateGeneralNum);
 		const res = await player.askForGeneral(candidates, {num: 1});
-		player.setGeneral(res[0]);
+
+		const general = res[0];
+		player.setGeneral(general);
+
+		const hp = general.maxHp();
+		player.setMaxHp(hp);
+		player.setHp(hp);
+		player.broadcastProperty('maxHp', hp);
+		player.broadcastProperty('hp', hp);
 	}
 
 }
