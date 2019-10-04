@@ -59,6 +59,11 @@ class GameDriver extends EventDriver {
 		this.drawPile.cards = cards;
 	}
 
+	/**
+	 * Make player draw N cards
+	 * @param {Player} player
+	 * @param {number} num
+	 */
 	drawCards(player, num) {
 		const cards = this.drawPile.shift(num);
 		//TO-DO: Shuffle and shift more cards if there are insufficient cards.
@@ -68,6 +73,21 @@ class GameDriver extends EventDriver {
 		}
 
 		this.broadcastCardMove(cards, this.drawPile, player.handArea, {openTo: player});
+	}
+
+	/**
+	 * Move cards and broadcast to clients
+	 * @param {Card[]} cards
+	 * @param {CardArea} from
+	 * @param {CardArea} to
+	 * @param {object=} options
+	 */
+	moveCards(cards, from, to, options) {
+		cards = cards.filter(card => from.remove(card));
+		for (const card of cards) {
+			to.add(card);
+		}
+		this.broadcastCardMove(cards, from, to, options);
 	}
 
 	/**
