@@ -35,7 +35,6 @@
 		"class-methods-use-this": "off",
 		"no-param-reassign": "off",
 		"no-continue": "off",
-		"max-classes-per-file": "off",
 		"no-console": "off"
     }
 }

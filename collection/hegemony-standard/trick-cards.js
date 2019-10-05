@@ -4,10 +4,10 @@ const Suit = require('../../core/Card/Suit');
 const std = require('../standard/trick-card');
 const mnv = require('../maneuvering/card');
 
-const HegNullification = require('./trick/HegNullification');
-const Ease = require('./trick/Ease');
-const Scout = require('./trick/Scout');
-const Ally = require('./trick/Ally');
+const HegNullification = require('./HegNullification');
+const Ease = require('./Ease');
+const Scout = require('./Scout');
+const Ally = require('./Ally');
 
 module.exports = function () {
 	return [

@@ -1,4 +1,4 @@
-const WeaponCard = require('../../WeaponCard');
+const WeaponCard = require('../WeaponCard');
 
 class Triblade extends WeaponCard {
 	constructor(suit, number) {

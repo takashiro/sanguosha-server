@@ -1,4 +1,4 @@
-const TrickCard = require('../../TrickCard');
+const TrickCard = require('../TrickCard');
 
 class HegNullification extends TrickCard {
 	constructor(suit, number) {

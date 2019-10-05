@@ -3,8 +3,8 @@ const Suit = require('../../core/Card/Suit');
 const std = require('../standard/equip-card');
 const mnv = require('../maneuvering/card');
 
-const WuliuSword = require('./equip/WuliuSword');
-const Triblade = require('./equip/Triblade');
+const WuliuSword = require('./WuliuSword');
+const Triblade = require('./Triblade');
 const DefensiveHorseCard = require('../DefensiveHorseCard');
 const OffensiveHorseCard = require('../OffensiveHorseCard');
 
