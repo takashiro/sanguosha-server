@@ -27,6 +27,7 @@
 		"prefer-arrow-callback": "off",
 		"func-names": "off",
 		"no-await-in-loop": "off",
+		"no-underscore-dangle": "off",
 		"no-console": "off"
     }
 }
