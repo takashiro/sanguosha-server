@@ -15,18 +15,18 @@ HegemonyStandard.generals = [
 	...qun,
 ];
 
-const create_basic_cards = require('./basic-cards');
-const create_equip_cards = require('./equip-cards');
-const create_trick_cards = require('./trick-cards');
+const createBasicCards = require('./basic-cards');
+const createEquipCards = require('./equip-cards');
+const createTrickCards = require('./trick-cards');
 
 HegemonyStandard.createCards = function () {
-	const basic_cards = create_basic_cards();
-	const equip_cards = create_equip_cards();
-	const trick_cards = create_trick_cards();
+	const basicCards = createBasicCards();
+	const equipCards = createEquipCards();
+	const trickCards = createTrickCards();
 	return [
-		...basic_cards,
-		...equip_cards,
-		...trick_cards,
+		...basicCards,
+		...equipCards,
+		...trickCards,
 	];
 };
 

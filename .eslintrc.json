@@ -36,7 +36,6 @@
 		"no-param-reassign": "off",
 		"no-continue": "off",
 		"max-classes-per-file": "off",
-		"camelcase": "off",
 		"no-console": "off"
     }
 }
