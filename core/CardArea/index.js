@@ -26,7 +26,7 @@ class CardArea {
 			return false;
 		}
 
-		if (direction == Direction.Top) {
+		if (direction === Direction.Top) {
 			this.cards.unshift(card);
 		} else {
 			this.cards.push(card);
