@@ -7,12 +7,13 @@ function randsub(arr, num) {
 	const flag = new Array(arr.length);
 
 	const res = [];
-	while (num) {
-		let i = Math.floor(Math.random() * arr.length);
+	let j = num;
+	while (j) {
+		const i = Math.floor(Math.random() * arr.length);
 		if (!flag[i]) {
 			res.push(arr[i]);
 			flag[i] = true;
-			num--;
+			j--;
 		}
 	}
 

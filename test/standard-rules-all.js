@@ -1,7 +1,7 @@
 
 const assert = require('assert');
 const GameDriver = require('../driver');
-const GameEvent =  require('../driver/GameEvent');
+const GameEvent = require('../driver/GameEvent');
 
 const StandardRule = require('../mode/standard/StandardRule');
 
