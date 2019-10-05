@@ -1,23 +1,8 @@
 
-const BasicCard = require('../BasicCard');
+const Strike = require('./Strike');
+const Dodge = require('./Dodge');
+const Peach = require('./Peach');
 
-class Strike extends BasicCard {
-	constructor(suit, number) {
-		super('strike', suit, number);
-	}
-}
-
-class Dodge extends BasicCard {
-	constructor(suit, number) {
-		super('dodge', suit, number);
-	}
-}
-
-class Peach extends BasicCard {
-	constructor(suit, number) {
-		super('peach', suit, number);
-	}
-}
 
 module.exports = {
 	Strike,

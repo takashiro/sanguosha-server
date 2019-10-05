@@ -1,4 +1,4 @@
-const { Strike } = require('../standard/basic-card');
+const Strike = require('../standard/Strike');
 
 class FireStrike extends Strike {
 	constructor(suit, number) {
