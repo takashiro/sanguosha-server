@@ -1,4 +1,3 @@
-
 const assert = require('assert');
 const sinon = require('sinon');
 
@@ -10,13 +9,13 @@ const Player = require('../core/Player');
 const GameDriver = require('../driver');
 const CardUseStruct = require('../driver/CardUseStruct');
 
-describe('GameDriver - Use Card', function () {
+describe('GameDriver#useCard()', function () {
 	this.afterEach(function () {
 		sinon.restore();
 	});
 
 	const room = {
-		broadcast: sinon.fake(),
+		broadcast: sinon.spy(),
 	};
 	const driver = new GameDriver(room);
 
@@ -28,17 +27,14 @@ describe('GameDriver - Use Card', function () {
 
 	it('proceed card effects', function () {
 		const card = new Card();
-		card.onUse = sinon.fake();
-		card.use = sinon.fake();
+		card.onUse = sinon.spy();
+		card.use = sinon.spy();
 
 		const use = new CardUseStruct(new Player(), card);
 		driver.useCard(use);
 
-		sinon.assert.calledOnce(card.onUse);
-		sinon.assert.calledWith(card.onUse, driver, use);
-		sinon.assert.calledOnce(room.broadcast);
-		sinon.assert.calledWith(room.broadcast, cmd.UseCard, use.toJSON());
-		sinon.assert.calledOnce(card.use);
-		sinon.assert.calledWith(card.use, driver, use);
+		assert(card.onUse.calledOnceWith(driver, use));
+		assert(room.broadcast.calledOnceWith(cmd.UseCard, use.toJSON()));
+		assert(card.use.calledOnceWith(driver, use));
 	});
 });

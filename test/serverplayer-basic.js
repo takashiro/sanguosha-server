@@ -4,7 +4,7 @@ const ServerPlayer = require('../driver/ServerPlayer');
 
 const CardAreaType = require('../core/CardArea/Type');
 
-describe('ServerPlayer - Basic', function () {
+describe('ServerPlayer', function () {
 	const player = new ServerPlayer();
 
 	it('has user id', function () {
