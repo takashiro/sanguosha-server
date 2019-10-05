@@ -8,7 +8,7 @@ const generals = [];
 const huatuo = new General('huatuo', Kingdom.Qun, 3, Gender.Male);
 generals.push(huatuo);
 
-const lvbu = new General('lvbu', Kingdom.Qun, 5, Gender.Male);
+const lvbu = new General('lvbu', Kingdom.Qun, 4, Gender.Male);
 generals.push(lvbu);
 
 const diaochan = new General('diaochan', Kingdom.Qun, 3, Gender.Female);
