@@ -3,7 +3,6 @@ const Type = require('./Type');
 const Direction = require('./Direction');
 
 class CardArea {
-
 	/**
 	 * @param {Type} type
 	 * @param {Player} owner
@@ -42,7 +41,7 @@ class CardArea {
 	 * @return {boolean} true iff this card exists and is removed
 	 */
 	remove(card) {
-		let pos = this.cards.indexOf(card);
+		const pos = this.cards.indexOf(card);
 		if (pos >= 0) {
 			this.cards.splice(pos, 1);
 			return true;
@@ -63,7 +62,7 @@ class CardArea {
 	 * @return {Card}
 	 */
 	rand() {
-		let index = Math.floor(Math.random() * this.cards.length);
+		const index = Math.floor(Math.random() * this.cards.length);
 		return this.cards[index];
 	}
 
@@ -146,7 +145,7 @@ class CardArea {
 	 * @return {object}
 	 */
 	toJSON() {
-		let json = {type: this.type};
+		const json = { type: this.type };
 		if (this.owner) {
 			json.owner = this.owner.user.id;
 		}

@@ -1,6 +1,5 @@
 
 class Player {
-
 	constructor() {
 		this._hp = 0;
 		this._maxHp = 0;
@@ -119,7 +118,6 @@ class Player {
 	setDeputyGeneral(general) {
 		this._deputyGeneral = general;
 	}
-
 }
 
 module.exports = Player;

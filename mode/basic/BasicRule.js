@@ -10,7 +10,6 @@ const shuffle = require('../../util/shuffle');
 const delay = require('../../util/delay');
 
 class BasicRule extends GameRule {
-
 	constructor() {
 		super(GameEvent.StartGame);
 		this.idle = 1000;
@@ -19,12 +18,12 @@ class BasicRule extends GameRule {
 	preparePlayers(driver) {
 		const users = driver.getUsers();
 
-		const players = users.map(user => new ServerPlayer(user));
+		const players = users.map((user) => new ServerPlayer(user));
 		driver.players = players;
 	}
 
 	prepareSeats(driver) {
-		const players = driver.players;
+		const { players } = driver;
 
 		let seat = 1;
 		for (const player of players) {
@@ -32,7 +31,7 @@ class BasicRule extends GameRule {
 			seat++;
 		}
 
-		driver.room.broadcast(cmd.ArrangeSeats, players.map(player => ({
+		driver.room.broadcast(cmd.ArrangeSeats, players.map((player) => ({
 			uid: player.id,
 			seat: player.seat(),
 			name: player.name,
@@ -84,7 +83,7 @@ class BasicRule extends GameRule {
 
 	async proceed(driver) {
 		let i = 0;
-		const players = driver.players;
+		const { players } = driver;
 		while (driver.isRunning()) {
 			const player = players[i];
 			await this.activatePlayer(driver, player);
@@ -95,7 +94,6 @@ class BasicRule extends GameRule {
 			}
 		}
 	}
-
 }
 
 module.exports = BasicRule;

@@ -6,15 +6,14 @@ const Type = require('./Type');
 function convertSuitToColor(suit) {
 	if (suit === Suit.Spade || suit === Suit.Club) {
 		return Color.Black;
-	} else if (suit === Suit.Heart || suit === Suit.Diamond) {
-		return Color.Red;
-	} else {
-		return Color.None;
 	}
+	if (suit === Suit.Heart || suit === Suit.Diamond) {
+		return Color.Red;
+	}
+	return Color.None;
 }
 
 class Card {
-
 	constructor(name, suit, number) {
 		this._id = 0;
 		this._name = name;
@@ -153,7 +152,6 @@ class Card {
 			number: this._number,
 		};
 	}
-
 }
 
 Card.Suit = Suit;

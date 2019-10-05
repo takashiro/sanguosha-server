@@ -11,7 +11,6 @@ const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 };
 
 class ServerPlayer extends Player {
-
 	constructor(user) {
 		super();
 		this.user = user;
@@ -33,7 +32,7 @@ class ServerPlayer extends Player {
 	async askForGeneral(generals, options = {}) {
 		options = {
 			...CHOOSE_GENERAL_DEFAULT_OPTIONS,
-			...options
+			...options,
 		};
 
 		let reply = [];
@@ -45,15 +44,15 @@ class ServerPlayer extends Player {
 					id: i,
 					kingdom: general.kingdom(),
 					name: general.name(),
-				}))
+				})),
 			}, options.timeout * 1000);
 		} catch (error) {
 			console.error(error);
 		}
 
-		let chosenGenerals = [];
+		const chosenGenerals = [];
 		if (reply && reply instanceof Array) {
-			for (let id of reply) {
+			for (const id of reply) {
 				if (id >= 0 && id < generals.length) {
 					chosenGenerals.push(generals[id]);
 				}
@@ -63,9 +62,9 @@ class ServerPlayer extends Player {
 		if (options.forced && chosenGenerals.length < options.num && generals.length >= options.num) {
 			let availableGenerals = generals;
 			if (options.sameKingdom && options.num > 1) {
-				let kingdoms = new Map;
-				for (let general of generals) {
-					let alliances = kingdoms.get(general.kingdom());
+				const kingdoms = new Map();
+				for (const general of generals) {
+					const alliances = kingdoms.get(general.kingdom());
 					if (!alliances) {
 						kingdoms.set(general.kingdom(), [general]);
 					} else {
@@ -73,20 +72,20 @@ class ServerPlayer extends Player {
 					}
 				}
 
-				let availableKingdoms = [];
-				for (let [_, alliances] of kingdoms) {
+				const availableKingdoms = [];
+				for (const [_, alliances] of kingdoms) {
 					if (alliances.length >= options.num) {
 						availableKingdoms.push(alliances);
 					}
 				}
 
-				let index = Math.floor(Math.random() * availableKingdoms.length);
+				const index = Math.floor(Math.random() * availableKingdoms.length);
 				availableGenerals = availableKingdoms[index];
 			}
 
 			do {
-				let index = Math.floor(Math.random() * availableGenerals.length);
-				let chosen = availableGenerals[index];
+				const index = Math.floor(Math.random() * availableGenerals.length);
+				const chosen = availableGenerals[index];
 				if (chosenGenerals.indexOf(chosen) < 0) {
 					chosenGenerals.push(chosen);
 				}
@@ -108,10 +107,10 @@ class ServerPlayer extends Player {
 			// No response from client
 		}
 
-		const cardSet = new Set;
+		const cardSet = new Set();
 		if (reply instanceof Array) {
 			for (const cardId of reply) {
-				const card = area.find(card => card.id() === cardId);
+				const card = area.find((card) => card.id() === cardId);
 				if (card) {
 					cardSet.add(card);
 				}
@@ -125,7 +124,7 @@ class ServerPlayer extends Player {
 				cardSet.splice(options.num, -delta);
 			} else if (delta > 0) {
 				delta = Math.min(delta, area.size - selected.length);
-				const cards = area.cards.filter(card => !selected.includes(card));
+				const cards = area.cards.filter((card) => !selected.includes(card));
 				selected.push(...cards.slice(0, delta));
 			}
 		}
@@ -137,7 +136,7 @@ class ServerPlayer extends Player {
 		this.user.send(cmd.UpdatePlayer, {
 			uid: this.user.id,
 			prop,
-			value
+			value,
 		});
 	}
 
@@ -149,10 +148,9 @@ class ServerPlayer extends Player {
 		room.broadcast(cmd.UpdatePlayer, {
 			uid: this.user.id,
 			prop,
-			value
+			value,
 		});
 	}
-
 }
 
 module.exports = ServerPlayer;

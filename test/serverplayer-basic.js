@@ -5,11 +5,11 @@ const ServerPlayer = require('../driver/ServerPlayer');
 const CardAreaType = require('../core/CardArea/Type');
 
 describe('ServerPlayer - Basic', function () {
-	const player = new ServerPlayer;
+	const player = new ServerPlayer();
 
 	it('has user id', function () {
 		assert(player.id === 0);
-		player.user = {id: 123};
+		player.user = { id: 123 };
 		assert(player.id === 123);
 	});
 
@@ -36,5 +36,4 @@ describe('ServerPlayer - Basic', function () {
 		assert(CardAreaType.Judge);
 		assert(player.judgeArea.type === CardAreaType.Judge);
 	});
-
 });

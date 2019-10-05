@@ -1,6 +1,5 @@
 
 class EventListener {
-
 	constructor(event) {
 		this.event = event;
 	}
@@ -16,7 +15,6 @@ class EventListener {
 	async effect(driver, target, data) {
 		return false;
 	}
-
 }
 
 module.exports = EventListener;

@@ -12,7 +12,6 @@ function fillArray(arr, value, n) {
 }
 
 class StandardRule extends BasicRule {
-
 	constructor() {
 		super();
 
@@ -30,13 +29,13 @@ class StandardRule extends BasicRule {
 	}
 
 	prepareRoles(driver) {
-		const players = driver.players;
+		const { players } = driver;
 		if (!players || players.length <= 1) {
 			return;
 		}
 		shuffle(players);
 
-		let rebelNum = Math.floor(players.length / 2);
+		const rebelNum = Math.floor(players.length / 2);
 		let loyalistNum = players.length - rebelNum - 1;
 		let renegadeNum = 0;
 		if (loyalistNum > 1) {
@@ -62,8 +61,8 @@ class StandardRule extends BasicRule {
 		const generals = driver.createGenerals();
 
 		// Set up the Emperor first
-		const players = driver.players;
-		const emperor = players.find(player => player.role() === Role.Emperor);
+		const { players } = driver;
+		const emperor = players.find((player) => player.role() === Role.Emperor);
 		await this.prepareEmperor(emperor, generals);
 		const emperorGeneral = emperor.general();
 		emperor.setKingdom(emperorGeneral.kingdom());
@@ -80,8 +79,8 @@ class StandardRule extends BasicRule {
 
 		// Shuffle and set up others' generals
 		shuffle(generals);
-		const others = players.filter(player => player.role() !== Role.Emperor);
-		await Promise.all(others.map(player => this.prepareGeneral(player, generals)));
+		const others = players.filter((player) => player.role() !== Role.Emperor);
+		await Promise.all(others.map((player) => this.prepareGeneral(player, generals)));
 		for (const player of others) {
 			const general = player.general();
 			if (general) {
@@ -93,12 +92,12 @@ class StandardRule extends BasicRule {
 	}
 
 	async prepareEmperor(player, generals) {
-		const candidates = generals.filter(general => general.isEmperor());
+		const candidates = generals.filter((general) => general.isEmperor());
 
-		const others = generals.filter(general => !general.isEmperor());
+		const others = generals.filter((general) => !general.isEmperor());
 		candidates.push(...randsub(others, 2));
 
-		const res = await player.askForGeneral(candidates, {num: 1});
+		const res = await player.askForGeneral(candidates, { num: 1 });
 		const general = res[0];
 		player.setGeneral(general);
 
@@ -112,7 +111,7 @@ class StandardRule extends BasicRule {
 	async prepareGeneral(player, generals) {
 		const offset = this.candidateGeneralNum * (player.seat() - 2);
 		const candidates = generals.slice(offset, offset + this.candidateGeneralNum);
-		const res = await player.askForGeneral(candidates, {num: 1});
+		const res = await player.askForGeneral(candidates, { num: 1 });
 
 		const general = res[0];
 		player.setGeneral(general);
@@ -123,7 +122,6 @@ class StandardRule extends BasicRule {
 		player.broadcastProperty('maxHp', hp);
 		player.broadcastProperty('hp', hp);
 	}
-
 }
 
 module.exports = StandardRule;

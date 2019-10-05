@@ -16,22 +16,22 @@ describe('GameDriver - Use Card', function () {
 	});
 
 	const room = {
-		broadcast: sinon.fake()
+		broadcast: sinon.fake(),
 	};
 	const driver = new GameDriver(room);
 
 	it('accepts invalid parameter', function () {
-		const use = new CardUseStruct;
+		const use = new CardUseStruct();
 		const success = driver.useCard(use);
 		assert(!success);
 	});
 
 	it('proceed card effects', function () {
-		const card = new Card;
+		const card = new Card();
 		card.onUse = sinon.fake();
 		card.use = sinon.fake();
 
-		const use = new CardUseStruct(new Player, card);
+		const use = new CardUseStruct(new Player(), card);
 		driver.useCard(use);
 
 		sinon.assert.calledOnce(card.onUse);
@@ -41,5 +41,4 @@ describe('GameDriver - Use Card', function () {
 		sinon.assert.calledOnce(card.use);
 		sinon.assert.calledWith(card.use, driver, use);
 	});
-
 });

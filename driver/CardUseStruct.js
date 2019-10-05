@@ -1,6 +1,5 @@
 
 class CardUseStruct {
-
 	/**
 	 *
 	 * @param {Player} from
@@ -17,11 +16,10 @@ class CardUseStruct {
 		return {
 			from: this.from.seat(),
 			card: this.card.toJSON(),
-			to: this.to.length > 0 ? this.to.map(player => player.seat()) : undefined,
+			to: this.to.length > 0 ? this.to.map((player) => player.seat()) : undefined,
 			target: this.target ? this.target.toJSON() : undefined,
 		};
 	}
-
 }
 
 module.exports = CardUseStruct;

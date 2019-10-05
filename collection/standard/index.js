@@ -11,7 +11,6 @@ const equip = require('./list/equip');
 const trick = require('./list/trick');
 
 class StandardCollection extends Collection {
-
 	constructor() {
 		super('standard');
 	}
@@ -32,7 +31,6 @@ class StandardCollection extends Collection {
 			...trick(),
 		];
 	}
-
 }
 
-module.exports = new StandardCollection;
+module.exports = new StandardCollection();

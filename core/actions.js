@@ -1,16 +1,16 @@
 
 const cmd = require('../cmd');
 
-const act = new Map;
+const act = new Map();
 
-for (let key in cmd) {
+for (const key in cmd) {
 	const id = cmd[key];
 
 	try {
-		const func = require('../cmd/' + key);
+		const func = require(`../cmd/${key}`);
 		act.set(id, func);
 	} catch (error) {
-		//TO-DO: Append an error log or bind a default handler
+		// TO-DO: Append an error log or bind a default handler
 	}
 }
 

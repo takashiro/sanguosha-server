@@ -1,7 +1,7 @@
 
 const Type = {
 	Unknown: 0,
-	
+
 	Hand: 1,
 	Equip: 2,
 	DelayedTrick: 3,

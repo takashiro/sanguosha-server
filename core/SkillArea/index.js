@@ -2,7 +2,6 @@
 const Type = require('./Type');
 
 class SkillArea {
-
 	constructor(type) {
 		this.type = type;
 		this.skills = [];
@@ -22,7 +21,7 @@ class SkillArea {
 	}
 
 	remove(skill) {
-		let index = this.skills.indexOf(skill);
+		const index = this.skills.indexOf(skill);
 		if (index >= 0) {
 			this.skills.splice(index, 1);
 			return true;
@@ -30,7 +29,6 @@ class SkillArea {
 
 		return false;
 	}
-
 }
 
 SkillArea.Type = Type;

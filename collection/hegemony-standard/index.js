@@ -7,6 +7,7 @@ const wei = require('./wei');
 const shu = require('./shu');
 const wu = require('./wu');
 const qun = require('./qun');
+
 HegemonyStandard.generals = [
 	...wei,
 	...shu,
@@ -17,10 +18,11 @@ HegemonyStandard.generals = [
 const create_basic_cards = require('./basic-cards');
 const create_equip_cards = require('./equip-cards');
 const create_trick_cards = require('./trick-cards');
-HegemonyStandard.createCards = function() {
-	let basic_cards = create_basic_cards();
-	let equip_cards = create_equip_cards();
-	let trick_cards = create_trick_cards();
+
+HegemonyStandard.createCards = function () {
+	const basic_cards = create_basic_cards();
+	const equip_cards = create_equip_cards();
+	const trick_cards = create_trick_cards();
 	return [
 		...basic_cards,
 		...equip_cards,

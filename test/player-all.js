@@ -3,7 +3,7 @@ const assert = require('assert');
 const Player = require('../core/Player');
 
 describe('Player', function () {
-	const player = new Player;
+	const player = new Player();
 
 	it('sets/gets HP', function () {
 		player.setHp(4);
@@ -29,5 +29,4 @@ describe('Player', function () {
 		assert(player.isAlive());
 		assert(player.lostHp() === 3);
 	});
-
 });

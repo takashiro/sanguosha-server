@@ -3,7 +3,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 
 const cmd = require('../cmd');
-const GameEvent =  require('../driver/GameEvent');
+const GameEvent = require('../driver/GameEvent');
 
 const BasicRule = require('../mode/basic/BasicRule');
 const PhaseRule = require('../mode/basic/PhaseRule');
@@ -16,13 +16,13 @@ describe('Basic Rule', function () {
 	});
 
 	const users = [
-		{id: 1, name: 'user1'},
-		{id: 2, name: 'user2'},
+		{ id: 1, name: 'user1' },
+		{ id: 2, name: 'user2' },
 	];
 
 	const driver = {
 		room: {
-			broadcast: sinon.fake()
+			broadcast: sinon.fake(),
 		},
 		getUsers() { return users; },
 		stop() {
@@ -34,7 +34,7 @@ describe('Basic Rule', function () {
 		trigger() {},
 	};
 
-	const rule = new BasicRule;
+	const rule = new BasicRule();
 	rule.idle = 0;
 
 	it('binds to start event', function () {
@@ -44,7 +44,7 @@ describe('Basic Rule', function () {
 	it('prepares players', function () {
 		rule.preparePlayers(driver);
 
-		const players = driver.players;
+		const { players } = driver;
 		assert(players.length === users.length);
 		for (let i = 0; i < players.length; i++) {
 			assert(players[i].id === users[i].id);
@@ -54,7 +54,7 @@ describe('Basic Rule', function () {
 
 	it('prepares seats', function () {
 		rule.prepareSeats(driver);
-		const players = driver.players.map(player => ({
+		const players = driver.players.map((player) => ({
 			uid: player.id,
 			seat: player.seat(),
 			name: player.name,
@@ -86,7 +86,7 @@ describe('Basic Rule', function () {
 			}
 		};
 
-		const players = driver.players;
+		const { players } = driver;
 		for (const player of players) {
 			player.setPhase = setPhase;
 		}
@@ -106,7 +106,7 @@ describe('Basic Rule', function () {
 });
 
 describe('Phase Rule', function () {
-	const rule = new PhaseRule;
+	const rule = new PhaseRule();
 
 	it('draws 2 cards', async function () {
 		const player = {};
@@ -116,11 +116,11 @@ describe('Phase Rule', function () {
 			drawCards(target, num) {
 				assert(target === player);
 				assert(num === 2);
-			}
+			},
 		};
 
 		await rule.effect(driver, player, {
-			to: Phase.Draw
+			to: Phase.Draw,
 		});
 	});
 });

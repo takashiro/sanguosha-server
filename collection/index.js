@@ -4,18 +4,18 @@ const path = require('path');
 
 const collectionDir = path.resolve(__dirname);
 
-let collectionDirs = fs.readdirSync(collectionDir);
+const collectionDirs = fs.readdirSync(collectionDir);
 
-let collections = [];
-for (let dir of collectionDirs) {
-	let fullPath = path.resolve(__dirname, dir);
-	let stat = fs.statSync(fullPath);
+const collections = [];
+for (const dir of collectionDirs) {
+	const fullPath = path.resolve(__dirname, dir);
+	const stat = fs.statSync(fullPath);
 	if (!stat.isDirectory()) {
 		continue;
 	}
 
 	try {
-		let collection = require(fullPath);
+		const collection = require(fullPath);
 		collections.push(collection);
 	} catch (e) {
 		console.log(e);

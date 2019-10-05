@@ -1,11 +1,10 @@
 
 const assert = require('assert');
 
-const EventListener =require('../driver/EventListener');
+const EventListener = require('../driver/EventListener');
 const EventDriver = require('../driver/EventDriver');
 
 class FakeTrigger extends EventListener {
-
 	constructor(event, name) {
 		super(event);
 		this.name = name;
@@ -18,11 +17,10 @@ class FakeTrigger extends EventListener {
 	effect(driver, target, data) {
 		data.push(this.name);
 	}
-
 }
 
 describe('EventDriver', function () {
-	const driver = new EventDriver;
+	const driver = new EventDriver();
 
 	it('registers event listners', function () {
 		driver.register(new FakeTrigger(1, 'test1-1'));
@@ -32,7 +30,7 @@ describe('EventDriver', function () {
 	});
 
 	it('triggers events with cost rejected', async function () {
-		const target = {invoke: false};
+		const target = { invoke: false };
 		const names = [];
 
 		await driver.trigger(1, target, names);
@@ -40,7 +38,7 @@ describe('EventDriver', function () {
 	});
 
 	it('triggers events with cost resolved', async function () {
-		const target = {invoke: true};
+		const target = { invoke: true };
 		const names = [];
 
 		await driver.trigger(1, target, names);
@@ -48,5 +46,4 @@ describe('EventDriver', function () {
 		assert(names.indexOf('test1-1') >= 0);
 		assert(names.indexOf('test1-2') >= 0);
 	});
-
 });

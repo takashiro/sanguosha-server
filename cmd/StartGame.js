@@ -9,9 +9,9 @@ function StartGame() {
 	const mode = config.mode || 'standard';
 
 	try {
-		const ruleClasses = require('../mode/' + mode);
+		const ruleClasses = require(`../mode/${mode}`);
 		for (const ruleClass of ruleClasses) {
-			driver.register(new ruleClass);
+			driver.register(new ruleClass());
 		}
 	} catch (error) {
 		console.error(error);

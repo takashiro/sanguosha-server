@@ -3,7 +3,6 @@ const Tag = require('./Tag');
 const Type = require('./Type');
 
 class Skill {
-
 	constructor(name, tags = []) {
 		this._name = name;
 		this._tags = tags;
@@ -26,7 +25,6 @@ class Skill {
 	subskills() {
 		return this._subskills;
 	}
-
 }
 
 Skill.Tag = Tag;

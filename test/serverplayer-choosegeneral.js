@@ -10,7 +10,7 @@ describe('ServerPlayer - Choose General', function () {
 	for (let i = 0; i < 10; i++) {
 		const kingdom = (i % 4) + 1;
 		const gender = (i % 2) + 1;
-		const general = new General('general' + i, kingdom, 4, gender);
+		const general = new General(`general${i}`, kingdom, 4, gender);
 		generals.push(general);
 	}
 
@@ -19,7 +19,7 @@ describe('ServerPlayer - Choose General', function () {
 
 		async request(command, args) {
 			assert(command === cmd.ChooseGeneral);
-		}
+		},
 	};
 
 	const player = new ServerPlayer(user);
@@ -39,7 +39,7 @@ describe('ServerPlayer - Choose General', function () {
 	});
 
 	it('asks for 1 general (not required)', async function () {
-		const chosen = await player.askForGeneral(generals, {forced: false});
+		const chosen = await player.askForGeneral(generals, { forced: false });
 		assert(chosen.length === 0);
 	});
 });

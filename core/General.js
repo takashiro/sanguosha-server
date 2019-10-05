@@ -1,6 +1,5 @@
 
 class General {
-
 	constructor(name, kingdom, maxHp, gender) {
 		this._id = 0;
 		this._name = name;
@@ -14,7 +13,7 @@ class General {
 		this._headExtraMaxHp = 0;
 		this._deputyExtraMaxHp = 0;
 
-		this._companions = new Set;
+		this._companions = new Set();
 
 		this._skills = [];
 	}
@@ -81,7 +80,6 @@ class General {
 			name: this.name(),
 		};
 	}
-
 }
 
 module.exports = General;

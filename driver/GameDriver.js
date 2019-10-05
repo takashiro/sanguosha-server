@@ -5,7 +5,6 @@ const GameEvent = require('./GameEvent');
 const EventDriver = require('./EventDriver');
 
 class GameDriver extends EventDriver {
-
 	constructor(room) {
 		super();
 
@@ -30,7 +29,7 @@ class GameDriver extends EventDriver {
 	}
 
 	loadCollection(name) {
-		const collection = require('../collection/' + name);
+		const collection = require(`../collection/${name}`);
 		this.collections.push(collection);
 	}
 
@@ -66,13 +65,13 @@ class GameDriver extends EventDriver {
 	 */
 	drawCards(player, num) {
 		const cards = this.drawPile.shift(num);
-		//TO-DO: Shuffle and shift more cards if there are insufficient cards.
+		// TO-DO: Shuffle and shift more cards if there are insufficient cards.
 
 		for (const card of cards) {
 			player.handArea.add(card);
 		}
 
-		this.broadcastCardMove(cards, this.drawPile, player.handArea, {openTo: player});
+		this.broadcastCardMove(cards, this.drawPile, player.handArea, { openTo: player });
 	}
 
 	/**
@@ -83,7 +82,7 @@ class GameDriver extends EventDriver {
 	 * @param {object=} options
 	 */
 	moveCards(cards, from, to, options) {
-		cards = cards.filter(card => from.remove(card));
+		cards = cards.filter((card) => from.remove(card));
 		for (const card of cards) {
 			to.add(card);
 		}
@@ -100,7 +99,7 @@ class GameDriver extends EventDriver {
 			return false;
 		}
 
-		const card = use.card;
+		const { card } = use;
 		card.onUse(this, use);
 
 		if (!use.from) {
@@ -124,10 +123,10 @@ class GameDriver extends EventDriver {
 		};
 
 		if (options && options.openTo) {
-			const user = options.openTo.user;
+			const { user } = options.openTo;
 			user.send(cmd.MoveCards, {
 				...movePath,
-				cards: cards.map(card => card.toJSON())
+				cards: cards.map((card) => card.toJSON()),
 			});
 			this.room.broadcastExcept(user, cmd.MoveCards, {
 				...movePath,
@@ -135,14 +134,13 @@ class GameDriver extends EventDriver {
 			});
 		} else {
 			if (options && options.open) {
-				movePath.cards = cards.map(card => card.toJSON());
+				movePath.cards = cards.map((card) => card.toJSON());
 			} else {
 				movePath.cardNum = cards.length;
 			}
 			this.room.broadcast(cmd.MoveCards, movePath);
 		}
 	}
-
 }
 
 module.exports = GameDriver;

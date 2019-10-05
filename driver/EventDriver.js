@@ -6,9 +6,8 @@ const State = {
 };
 
 class EventDriver {
-
 	constructor() {
-		this._listeners = new Map;
+		this._listeners = new Map();
 		this._state = State.Starting;
 	}
 
@@ -53,7 +52,7 @@ class EventDriver {
 			return false;
 		}
 
-		const triggerableListeners = listners.filter(handler => handler.triggerable(this, player, data));
+		const triggerableListeners = listners.filter((handler) => handler.triggerable(this, player, data));
 		for (const listener of triggerableListeners) {
 			if (await listener.cost(this, player, data)) {
 				const prevented = await listener.effect(this, player, data);
@@ -65,7 +64,6 @@ class EventDriver {
 
 		return false;
 	}
-
 }
 
 module.exports = EventDriver;

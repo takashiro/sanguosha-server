@@ -5,7 +5,6 @@ const Phase = require('../../core/Player/Phase');
 const GameEvent = require('../../driver/GameEvent');
 
 class PhaseRule extends GameRule {
-
 	constructor() {
 		super(GameEvent.ProceedPhase);
 	}
@@ -29,21 +28,20 @@ class PhaseRule extends GameRule {
 
 	async drawCards(driver, player) {
 		const data = {
-			num: 2
+			num: 2,
 		};
 		await driver.trigger(GameEvent.DrawNCards, player, data);
 		await driver.drawCards(player, data.num);
 	}
 
 	async discardCards(driver, player) {
-		const handArea = player.handArea;
+		const { handArea } = player;
 		const discardNum = handArea.size - player.hp();
 		const selected = await player.askForCards(player.handArea, {
 			num: discardNum,
 		});
-		driver.moveCards(selected, handArea, driver.discardPile, {open: true});
+		driver.moveCards(selected, handArea, driver.discardPile, { open: true });
 	}
-
 }
 
 module.exports = PhaseRule;

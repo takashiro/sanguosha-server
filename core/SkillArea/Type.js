@@ -1,5 +1,4 @@
 
-
 const Type = {
 	Unknown: 0,
 

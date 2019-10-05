@@ -30,10 +30,9 @@ describe('Standard Mode - GameStartRule', function () {
 	const candidateDuplicates = [];
 
 	class User {
-
 		constructor(i) {
 			this.id = i;
-			this.name = 'user' + i;
+			this.name = `user${i}`;
 		}
 
 		send(command, args) {
@@ -41,19 +40,19 @@ describe('Standard Mode - GameStartRule', function () {
 
 		request(command, args) {
 			if (command === cmd.ChooseGeneral) {
-				candidateDuplicates.push(...args.generals.map(general => general.name));
+				candidateDuplicates.push(...args.generals.map((general) => general.name));
 				return Math.floor(Math.random() * args.generals.length);
-			} else if (command === cmd.MoveCards) {
+			}
+			if (command === cmd.MoveCards) {
 				console.log(args);
 			}
 		}
-
 	}
 	for (let i = 1; i <= 8; i++) {
 		users.push(new User(i));
 	}
 
-	const rule = new StandardRule;
+	const rule = new StandardRule();
 
 	it('binds to start event', function () {
 		assert(rule.event === GameEvent.StartGame);
@@ -66,19 +65,19 @@ describe('Standard Mode - GameStartRule', function () {
 	it('prepares roles', function () {
 		rule.prepareRoles(driver);
 
-		const players = driver.players;
+		const { players } = driver;
 		assert(players[0].role() === Role.Emperor);
 
-		const rebelNum = countArray(players, player => player.role() === Role.Rebel);
+		const rebelNum = countArray(players, (player) => player.role() === Role.Rebel);
 		assert(rebelNum === 4);
 
-		const emperorNum = countArray(players, player => player.role() === Role.Emperor);
+		const emperorNum = countArray(players, (player) => player.role() === Role.Emperor);
 		assert(emperorNum === 1);
 
-		const renegadeNum = countArray(players, player => player.role() === Role.Renegade);
+		const renegadeNum = countArray(players, (player) => player.role() === Role.Renegade);
 		assert(renegadeNum === 1);
 
-		const loyalistNum = countArray(players, player => player.role() === Role.Loyalist);
+		const loyalistNum = countArray(players, (player) => player.role() === Role.Loyalist);
 		assert(loyalistNum === 2);
 	});
 

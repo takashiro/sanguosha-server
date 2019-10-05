@@ -1,6 +1,5 @@
 
 class Collection {
-
 	constructor(name) {
 		this.name = name;
 	}
@@ -12,7 +11,6 @@ class Collection {
 	createCards() {
 		return [];
 	}
-
 }
 
 module.exports = Collection;

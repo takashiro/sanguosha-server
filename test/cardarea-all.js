@@ -54,7 +54,7 @@ describe('CardArea', function () {
 	});
 
 	it('finds a card', function () {
-		assert(area.find(card => card <= 3) === 1);
+		assert(area.find((card) => card <= 3) === 1);
 	});
 
 	it('removes a card', function () {
