@@ -5,14 +5,13 @@ const GameDriver = require('./driver');
 const actions = require('./core/actions');
 
 class KarutaDriver extends GameDriver {
-
 	/**
 	 * Create a game driver for the room
 	 * @param {Room} room
 	 */
 	constructor(room) {
 		super(room);
-		this.config = {...defaultConfig};
+		this.config = { ...defaultConfig };
 	}
 
 	setConfig(config) {
@@ -26,7 +25,6 @@ class KarutaDriver extends GameDriver {
 	getAction(command) {
 		return actions.get(command);
 	}
-
 }
 
 module.exports = KarutaDriver;

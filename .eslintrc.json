@@ -4,7 +4,7 @@
         "es6": true,
         "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": "airbnb-base",
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -16,21 +16,17 @@
         "indent": [
             "error",
             "tab"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
 		],
-		"eol-last": [
+		"no-restricted-syntax": [
 			"error",
-			"always"
+			"WithStatement"
 		],
-		"keyword-spacing": "error",
-		"no-unused-vars": "off",
+		"no-tabs": "off",
+		"no-plusplus": "off",
+		"linebreak-style": "off",
+		"prefer-arrow-callback": "off",
+		"func-names": "off",
+		"no-await-in-loop": "off",
 		"no-console": "off"
     }
 }

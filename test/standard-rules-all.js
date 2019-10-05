@@ -1,5 +1,6 @@
-
 const assert = require('assert');
+const sinon = require('sinon');
+
 const GameDriver = require('../driver');
 const GameEvent = require('../driver/GameEvent');
 
@@ -29,27 +30,25 @@ describe('Standard Mode - GameStartRule', function () {
 
 	const candidateDuplicates = [];
 
-	class User {
-		constructor(i) {
-			this.id = i;
-			this.name = `user${i}`;
+	function request(command, args) {
+		if (command === cmd.ChooseGeneral) {
+			candidateDuplicates.push(...args.generals.map((general) => general.name));
+			return Math.floor(Math.random() * args.generals.length);
 		}
-
-		send(command, args) {
+		if (command === cmd.MoveCards) {
+			console.log(args);
 		}
-
-		request(command, args) {
-			if (command === cmd.ChooseGeneral) {
-				candidateDuplicates.push(...args.generals.map((general) => general.name));
-				return Math.floor(Math.random() * args.generals.length);
-			}
-			if (command === cmd.MoveCards) {
-				console.log(args);
-			}
-		}
+		return null;
 	}
+	const send = sinon.fake();
+
 	for (let i = 1; i <= 8; i++) {
-		users.push(new User(i));
+		users.push({
+			id: i,
+			name: `user${i}`,
+			send,
+			request,
+		});
 	}
 
 	const rule = new StandardRule();
