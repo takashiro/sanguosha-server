@@ -21,6 +21,10 @@
 			"error",
 			"WithStatement"
 		],
+		"max-len": [
+			"error",
+			120
+		],
 		"no-tabs": "off",
 		"no-plusplus": "off",
 		"linebreak-style": "off",
@@ -28,6 +32,11 @@
 		"func-names": "off",
 		"no-await-in-loop": "off",
 		"no-underscore-dangle": "off",
+		"class-methods-use-this": "off",
+		"no-param-reassign": "off",
+		"no-continue": "off",
+		"max-classes-per-file": "off",
+		"camelcase": "off",
 		"no-console": "off"
     }
 }

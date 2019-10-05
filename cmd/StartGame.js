@@ -9,9 +9,10 @@ function StartGame() {
 	const mode = config.mode || 'standard';
 
 	try {
+		// eslint-disable-next-line global-require, import/no-dynamic-require
 		const ruleClasses = require(`../mode/${mode}`);
-		for (const ruleClass of ruleClasses) {
-			driver.register(new ruleClass());
+		for (const RuleClass of ruleClasses) {
+			driver.register(new RuleClass());
 		}
 	} catch (error) {
 		console.error(error);

@@ -10,7 +10,7 @@ class FakeTrigger extends EventListener {
 		this.name = name;
 	}
 
-	// eslint-disable-next-line no-unused-vars, class-methods-use-this
+	// eslint-disable-next-line no-unused-vars
 	cost(driver, target, data) {
 		return target && target.invoke;
 	}

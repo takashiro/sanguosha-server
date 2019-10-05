@@ -15,6 +15,7 @@ for (const dir of collectionDirs) {
 	}
 
 	try {
+		// eslint-disable-next-line global-require, import/no-dynamic-require
 		const collection = require(fullPath);
 		collections.push(collection);
 	} catch (e) {
