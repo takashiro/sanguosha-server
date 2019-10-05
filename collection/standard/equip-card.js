@@ -1,72 +1,15 @@
+const KylinBow = require('./KylinBow');
+const Axe = require('./Axe');
+const SerpentSpear = require('./SerpentSpear');
+const QinggangSword = require('./QinggangSword');
+const Crossbow = require('./Crossbow');
+const YinyangSword = require('./YinyangSword');
+const FrostSword = require('./FrostSword');
+const GreenDragonCrescentBlade = require('./GreenDragonCrescentBlade');
+const Halberd = require('./Halberd');
 
-const WeaponCard = require('../WeaponCard');
-const ArmorCard = require('../ArmorCard');
-
-class KylinBow extends WeaponCard {
-	constructor(suit, number) {
-		super('kylin-bow', suit, number);
-	}
-}
-
-class Axe extends WeaponCard {
-	constructor(suit, number) {
-		super('axe', suit, number);
-	}
-}
-
-class SerpentSpear extends WeaponCard {
-	constructor(suit, number) {
-		super('serpent-spear', suit, number);
-	}
-}
-
-class QinggangSword extends WeaponCard {
-	constructor(suit, number) {
-		super('qinggang-sword', suit, number);
-	}
-}
-
-class Crossbow extends WeaponCard {
-	constructor(suit, number) {
-		super('crossbow', suit, number);
-	}
-}
-
-class YinyangSword extends WeaponCard {
-	constructor(suit, number) {
-		super('yinyang-sword', suit, number);
-	}
-}
-
-class FrostSword extends WeaponCard {
-	constructor(suit, number) {
-		super('frost-sword', suit, number);
-	}
-}
-
-class GreenDragonCrescentBlade extends WeaponCard {
-	constructor(suit, number) {
-		super('green-dragon-crescent-blade', suit, number);
-	}
-}
-
-class Halberd extends WeaponCard {
-	constructor(suit, number) {
-		super('halberd', suit, number);
-	}
-}
-
-class EightDiagram extends ArmorCard {
-	constructor(suit, number) {
-		super('eight-diagram', suit, number);
-	}
-}
-
-class RenwangShield extends ArmorCard {
-	constructor(suit, number) {
-		super('renwang-shield', suit, number);
-	}
-}
+const EightDiagram = require('./EightDiagram');
+const RenwangShield = require('./RenwangShield');
 
 module.exports = {
 	KylinBow,
