@@ -3,21 +3,10 @@ const Suit = require('../../core/Card/Suit');
 const std = require('../standard/equip-card');
 const mnv = require('../maneuvering/card');
 
-const WeaponCard = require('../WeaponCard');
+const WuliuSword = require('./equip/WuliuSword');
+const Triblade = require('./equip/Triblade');
 const DefensiveHorseCard = require('../DefensiveHorseCard');
 const OffensiveHorseCard = require('../OffensiveHorseCard');
-
-class WuliuSword extends WeaponCard {
-	constructor(suit, number) {
-		super('wuliu-sword', suit, number);
-	}
-}
-
-class Triblade extends WeaponCard {
-	constructor(suit, number) {
-		super('triblade', suit, number);
-	}
-}
 
 module.exports = function () {
 	return [

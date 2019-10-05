@@ -4,31 +4,10 @@ const Suit = require('../../core/Card/Suit');
 const std = require('../standard/trick-card');
 const mnv = require('../maneuvering/card');
 
-const TrickCard = require('../TrickCard');
-
-class HegNullification extends TrickCard {
-	constructor(suit, number) {
-		super('heg-nullification', suit, number);
-	}
-}
-
-class Ease extends TrickCard {
-	constructor(suit, number) {
-		super('ease', suit, number);
-	}
-}
-
-class Scout extends TrickCard {
-	constructor(suit, number) {
-		super('scout', suit, number);
-	}
-}
-
-class Ally extends TrickCard {
-	constructor(suit, number) {
-		super('ally', suit, number);
-	}
-}
+const HegNullification = require('./trick/HegNullification');
+const Ease = require('./trick/Ease');
+const Scout = require('./trick/Scout');
+const Ally = require('./trick/Ally');
 
 module.exports = function () {
 	return [
