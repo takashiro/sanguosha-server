@@ -69,6 +69,7 @@ class Card {
 	 * @param {Player} source
 	 * @return {boolean}
 	 */
+	// eslint-disable-next-line no-unused-vars
 	targetFeasible(selected, source) {
 		return true;
 	}
@@ -80,6 +81,7 @@ class Card {
 	 * @param {Player} source
 	 * @return {boolean}
 	 */
+	// eslint-disable-next-line no-unused-vars
 	targetFilter(selected, toSelect, source) {
 		return !!toSelect;
 	}
@@ -90,7 +92,7 @@ class Card {
 	 * @return {boolean}
 	 */
 	isAvailable(source) {
-		return true;
+		return Boolean(source);
 	}
 
 	/**
@@ -98,6 +100,7 @@ class Card {
 	 * @param {GameDriver} driver
 	 * @param {CardUseStruct} use
 	 */
+	// eslint-disable-next-line no-unused-vars
 	onUse(driver, use) {
 	}
 
@@ -106,6 +109,7 @@ class Card {
 	 * @param {GameDriver} driver
 	 * @param {CardUseStruct} use
 	 */
+	// eslint-disable-next-line no-unused-vars
 	use(driver, use) {
 	}
 
@@ -114,6 +118,7 @@ class Card {
 	 * @param {GameDriver} driver
 	 * @param {CardEffectStruct} effect
 	 */
+	// eslint-disable-next-line no-unused-vars
 	onEffect(driver, effect) {
 	}
 
@@ -122,6 +127,7 @@ class Card {
 	 * @param {GameDriver} driver
 	 * @param {CardEffectStruct} effect
 	 */
+	// eslint-disable-next-line no-unused-vars
 	effect(driver, effect) {
 	}
 
@@ -129,6 +135,7 @@ class Card {
 	 * This function will be called after effect() has been executed on every target
 	 * @param {GameDriver} driver
 	 */
+	// eslint-disable-next-line no-unused-vars
 	complete(driver) {
 	}
 

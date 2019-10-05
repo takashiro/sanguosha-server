@@ -73,7 +73,7 @@ class ServerPlayer extends Player {
 				}
 
 				const availableKingdoms = [];
-				for (const [_, alliances] of kingdoms) {
+				for (const [, alliances] of kingdoms) {
 					if (alliances.length >= options.num) {
 						availableKingdoms.push(alliances);
 					}
@@ -110,7 +110,7 @@ class ServerPlayer extends Player {
 		const cardSet = new Set();
 		if (reply instanceof Array) {
 			for (const cardId of reply) {
-				const card = area.find((card) => card.id() === cardId);
+				const card = area.find((c) => c.id() === cardId);
 				if (card) {
 					cardSet.add(card);
 				}
