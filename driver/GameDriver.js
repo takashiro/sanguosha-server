@@ -29,6 +29,7 @@ class GameDriver extends EventDriver {
 	}
 
 	loadCollection(name) {
+		// eslint-disable-next-line global-require, import/no-dynamic-require
 		const collection = require(`../collection/${name}`);
 		this.collections.push(collection);
 	}
