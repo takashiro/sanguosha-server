@@ -40,7 +40,7 @@ class PhaseRule extends GameRule {
 		const discardNum = handArea.size - player.hp();
 		const selected = await player.askForCards(player.handArea, {
 			num: discardNum,
-		}, );
+		});
 		driver.moveCards(selected, handArea, driver.discardPile, {open: true});
 	}
 

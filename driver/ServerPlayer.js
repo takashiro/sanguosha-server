@@ -96,6 +96,43 @@ class ServerPlayer extends Player {
 		return chosenGenerals;
 	}
 
+	async askForCards(area, options) {
+		let reply = null;
+
+		try {
+			reply = await this.user.request(cmd.ChooseCards, {
+				area: area.toJSON(),
+				...options,
+			}, 15000);
+		} catch (error) {
+			// No response from client
+		}
+
+		const cardSet = new Set;
+		if (reply instanceof Array) {
+			for (const cardId of reply) {
+				const card = area.find(card => card.id() === cardId);
+				if (card) {
+					cardSet.add(card);
+				}
+			}
+		}
+
+		const selected = Array.from(cardSet);
+		if (options.num > 0) {
+			let delta = options.num - selected.length;
+			if (delta < 0) {
+				cardSet.splice(options.num, -delta);
+			} else if (delta > 0) {
+				delta = Math.min(delta, area.size - selected.length);
+				const cards = area.cards.filter(card => !selected.includes(card));
+				selected.push(...cards.slice(0, delta));
+			}
+		}
+
+		return selected;
+	}
+
 	updateProperty(prop, value) {
 		this.user.send(cmd.UpdatePlayer, {
 			uid: this.user.id,
