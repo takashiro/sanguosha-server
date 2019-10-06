@@ -3,7 +3,7 @@ const Strike = require('../standard/Strike');
 class FireStrike extends Strike {
 	constructor(suit, number) {
 		super(suit, number);
-		this._name = 'fire-strike';
+		this.name = 'fire-strike';
 	}
 }
 

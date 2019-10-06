@@ -36,7 +36,7 @@ class PhaseRule extends GameRule {
 
 	async discardCards(driver, player) {
 		const { handArea } = player;
-		const discardNum = handArea.size - player.hp();
+		const discardNum = handArea.size - player.getHp();
 		const selected = await player.askForCards(player.handArea, {
 			num: discardNum,
 		});

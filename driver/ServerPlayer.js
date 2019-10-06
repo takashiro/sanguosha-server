@@ -27,8 +27,16 @@ class ServerPlayer extends Player {
 		return this.user ? this.user.id : 0;
 	}
 
+	getId() {
+		return this.id;
+	}
+
 	get name() {
 		return this.user ? this.user.name : '';
+	}
+
+	getName() {
+		return this.name;
 	}
 
 	async askForGeneral(generals, options = {}) {
@@ -44,8 +52,8 @@ class ServerPlayer extends Player {
 				num: options.num || 1,
 				generals: generals.map((general, i) => ({
 					id: i,
-					kingdom: general.kingdom(),
-					name: general.name(),
+					kingdom: general.getKingdom(),
+					name: general.getName(),
 				})),
 			}, options.timeout * 1000);
 		} catch (error) {
@@ -66,9 +74,9 @@ class ServerPlayer extends Player {
 			if (options.sameKingdom && options.num > 1) {
 				const kingdoms = new Map();
 				for (const general of generals) {
-					const alliances = kingdoms.get(general.kingdom());
+					const alliances = kingdoms.get(general.getKingdom());
 					if (!alliances) {
-						kingdoms.set(general.kingdom(), [general]);
+						kingdoms.set(general.getKingdom(), [general]);
 					} else {
 						alliances.push(general);
 					}
@@ -112,7 +120,7 @@ class ServerPlayer extends Player {
 		const cardSet = new Set();
 		if (reply instanceof Array) {
 			for (const cardId of reply) {
-				const card = area.find((c) => c.id() === cardId);
+				const card = area.find((c) => c.getId() === cardId);
 				if (card) {
 					cardSet.add(card);
 				}

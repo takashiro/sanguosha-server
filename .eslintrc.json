@@ -31,7 +31,6 @@
 		"prefer-arrow-callback": "off",
 		"func-names": "off",
 		"no-await-in-loop": "off",
-		"no-underscore-dangle": "off",
 		"class-methods-use-this": "off",
 		"no-param-reassign": "off",
 		"no-continue": "off",

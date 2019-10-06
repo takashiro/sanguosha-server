@@ -62,11 +62,11 @@ class StandardRule extends BasicRule {
 
 		// Set up the Emperor first
 		const { players } = driver;
-		const emperor = players.find((player) => player.role() === Role.Emperor);
+		const emperor = players.find((player) => player.getRole() === Role.Emperor);
 		await this.prepareEmperor(emperor, generals);
-		const emperorGeneral = emperor.general();
-		emperor.setKingdom(emperorGeneral.kingdom());
-		emperor.broadcastProperty('kingdom', emperor.kingdom());
+		const emperorGeneral = emperor.getGeneral();
+		emperor.setKingdom(emperorGeneral.getKingdom());
+		emperor.broadcastProperty('kingdom', emperor.getKingdom());
 		emperor.broadcastProperty('general', emperorGeneral.toJSON());
 
 		// Remove the Emperor's general from the candidate list
@@ -79,13 +79,13 @@ class StandardRule extends BasicRule {
 
 		// Shuffle and set up others' generals
 		shuffle(generals);
-		const others = players.filter((player) => player.role() !== Role.Emperor);
+		const others = players.filter((player) => player.getRole() !== Role.Emperor);
 		await Promise.all(others.map((player) => this.prepareGeneral(player, generals)));
 		for (const player of others) {
-			const general = player.general();
+			const general = player.getGeneral();
 			if (general) {
-				player.setKingdom(general.kingdom());
-				player.broadcastProperty('kingdom', player.kingdom());
+				player.setKingdom(general.getKingdom());
+				player.broadcastProperty('kingdom', player.getKingdom());
 				player.broadcastProperty('general', general.toJSON());
 			}
 		}
@@ -101,7 +101,7 @@ class StandardRule extends BasicRule {
 		const general = res[0];
 		player.setGeneral(general);
 
-		const hp = general.maxHp() + 1;
+		const hp = general.getMaxHp() + 1;
 		player.setMaxHp(hp);
 		player.setHp(hp);
 		player.broadcastProperty('maxHp', hp);
@@ -109,14 +109,14 @@ class StandardRule extends BasicRule {
 	}
 
 	async prepareGeneral(player, generals) {
-		const offset = this.candidateGeneralNum * (player.seat() - 2);
+		const offset = this.candidateGeneralNum * (player.getSeat() - 2);
 		const candidates = generals.slice(offset, offset + this.candidateGeneralNum);
 		const res = await player.askForGeneral(candidates, { num: 1 });
 
 		const general = res[0];
 		player.setGeneral(general);
 
-		const hp = general.maxHp();
+		const hp = general.getMaxHp();
 		player.setMaxHp(hp);
 		player.setHp(hp);
 		player.broadcastProperty('maxHp', hp);

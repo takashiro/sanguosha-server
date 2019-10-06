@@ -8,9 +8,9 @@ describe('ServerPlayer', function () {
 	const player = new ServerPlayer();
 
 	it('has user id', function () {
-		assert(player.id === 0);
+		assert(player.getId() === 0);
 		player.user = { id: 123 };
-		assert(player.id === 123);
+		assert(player.getId() === 123);
 	});
 
 	it('has hand-card area', function () {

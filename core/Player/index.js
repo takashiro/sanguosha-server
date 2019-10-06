@@ -1,122 +1,122 @@
 
 class Player {
 	constructor() {
-		this._hp = 0;
-		this._maxHp = 0;
-		this._alive = true;
-		this._dying = false;
+		this.hp = 0;
+		this.maxHp = 0;
+		this.alive = true;
+		this.dying = false;
 
-		this._seat = 0;
-		this._phase = 0;
+		this.seat = 0;
+		this.phase = 0;
 
-		this._role = 0;
-		this._kingdom = 0;
-		this._headGeneral = null;
-		this._deputyGeneral = null;
+		this.role = 0;
+		this.kingdom = 0;
+		this.headGeneral = null;
+		this.deputyGeneral = null;
 	}
 
-	hp() {
-		return this._hp;
+	getHp() {
+		return this.hp;
 	}
 
 	setHp(hp) {
-		this._hp = hp;
+		this.hp = hp;
 	}
 
-	maxHp() {
-		return this._maxHp;
+	getMaxHp() {
+		return this.maxHp;
 	}
 
 	setMaxHp(maxHp) {
-		this._maxHp = maxHp;
+		this.maxHp = maxHp;
 	}
 
-	lostHp() {
-		return Math.max(this.maxHp() - this.hp(), 0);
+	getLostHp() {
+		return Math.max(this.getMaxHp() - this.getHp(), 0);
 	}
 
 	isWounded() {
-		return this.lostHp() > 0;
+		return this.getLostHp() > 0;
 	}
 
 	isAlive() {
-		return this._alive;
+		return this.alive;
 	}
 
 	setAlive(alive) {
-		this._alive = !!alive;
+		this.alive = !!alive;
 	}
 
 	isDead() {
-		return !this._alive;
+		return !this.alive;
 	}
 
 	setDead(dead) {
-		this._alive = !dead;
+		this.alive = !dead;
 	}
 
 	isDying() {
-		return this._dying;
+		return this.dying;
 	}
 
 	setDying(dying) {
-		this._dying = !!dying;
+		this.dying = !!dying;
 	}
 
-	seat() {
-		return this._seat;
+	getSeat() {
+		return this.seat;
 	}
 
 	setSeat(seat) {
-		this._seat = seat;
+		this.seat = seat;
 	}
 
-	phase() {
-		return this._phase;
+	getPhase() {
+		return this.phase;
 	}
 
 	setPhase(phase) {
-		this._phase = phase;
+		this.phase = phase;
 	}
 
-	role() {
-		return this._role;
+	getRole() {
+		return this.role;
 	}
 
 	setRole(role) {
-		this._role = role;
+		this.role = role;
 	}
 
-	kingdom() {
-		return this._kingdom;
+	getKingdom() {
+		return this.kingdom;
 	}
 
 	setKingdom(kingdom) {
-		this._kingdom = kingdom;
+		this.kingdom = kingdom;
 	}
 
-	general() {
-		return this._headGeneral;
+	getGeneral() {
+		return this.headGeneral;
 	}
 
 	setGeneral(general) {
-		this._headGeneral = general;
+		this.headGeneral = general;
 	}
 
-	headGeneral() {
-		return this._headGeneral;
+	getHeadGeneral() {
+		return this.headGeneral;
 	}
 
 	setHeadGeneral(general) {
-		this._headGeneral = general;
+		this.headGeneral = general;
 	}
 
-	deputyGeneral() {
-		return this._deputyGeneral;
+	getDeputyGeneral() {
+		return this.deputyGeneral;
 	}
 
 	setDeputyGeneral(general) {
-		this._deputyGeneral = general;
+		this.deputyGeneral = general;
 	}
 }
 

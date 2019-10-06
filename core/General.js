@@ -1,83 +1,83 @@
 
 class General {
 	constructor(name, kingdom, maxHp, gender) {
-		this._id = 0;
-		this._name = name;
-		this._kingdom = kingdom;
-		this._maxHp = maxHp;
-		this._gender = gender;
+		this.id = 0;
+		this.name = name;
+		this.kingdom = kingdom;
+		this.maxHp = maxHp;
+		this.gender = gender;
 
-		this._emperor = false;
-		this._hidden = false;
+		this.emperor = false;
+		this.hidden = false;
 
-		this._headExtraMaxHp = 0;
-		this._deputyExtraMaxHp = 0;
+		this.headExtraMaxHp = 0;
+		this.deputyExtraMaxHp = 0;
 
-		this._companions = new Set();
+		this.companions = new Set();
 
-		this._skills = [];
+		this.skills = [];
 	}
 
-	id() {
-		return this._id;
+	getId() {
+		return this.id;
 	}
 
-	name() {
-		return this._name;
+	getName() {
+		return this.name;
 	}
 
-	kingdom() {
-		return this._kingdom;
+	getKingdom() {
+		return this.kingdom;
 	}
 
-	maxHp() {
-		return this._maxHp;
+	getMaxHp() {
+		return this.maxHp;
 	}
 
-	gender() {
+	getGender() {
 		return this.gender;
 	}
 
 	setEmperor(emperor) {
-		this._emperor = emperor;
+		this.emperor = emperor;
 	}
 
 	isEmperor() {
-		return this._emperor;
+		return this.emperor;
 	}
 
 	isHidden() {
-		return this._hidden;
+		return this.hidden;
 	}
 
-	headMaxHp() {
-		return this._maxHp + this._headExtraMaxHp;
+	getHeadMaxHp() {
+		return this.maxHp + this.headExtraMaxHp;
 	}
 
-	deputyMaxHp() {
-		return this._maxHp + this._deputyExtraMaxHp;
+	getDeputyMaxHp() {
+		return this.maxHp + this.deputyExtraMaxHp;
 	}
 
 	addCompanion(companion) {
-		this._companions.add(companion);
+		this.companions.add(companion);
 	}
 
 	isCompanionWith(general) {
-		return this._companions.has(general.name());
+		return this.companions.has(general.getName());
 	}
 
 	addSkill(skillClass) {
-		this._skills.push(skillClass);
+		this.skills.push(skillClass);
 	}
 
-	skills() {
-		return this._skills;
+	getSkills() {
+		return this.skills;
 	}
 
 	toJSON() {
 		return {
-			kingdom: this.kingdom(),
-			name: this.name(),
+			kingdom: this.getKingdom(),
+			name: this.getName(),
 		};
 	}
 }

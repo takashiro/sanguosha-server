@@ -14,9 +14,9 @@ class CardUseStruct {
 
 	toJSON() {
 		return {
-			from: this.from.seat(),
+			from: this.from.getSeat(),
 			card: this.card.toJSON(),
-			to: this.to.length > 0 ? this.to.map((player) => player.seat()) : undefined,
+			to: this.to.length > 0 ? this.to.map((player) => player.getSeat()) : undefined,
 			target: this.target ? this.target.toJSON() : undefined,
 		};
 	}

@@ -7,12 +7,12 @@ describe('Player', function () {
 
 	it('sets/gets HP', function () {
 		player.setHp(4);
-		assert(player.hp() === 4);
+		assert(player.getHp() === 4);
 	});
 
 	it('sets/gets max HP', function () {
 		player.setMaxHp(4);
-		assert(player.maxHp() === 4);
+		assert(player.getMaxHp() === 4);
 	});
 
 	it('is not wounded', function () {
@@ -27,6 +27,6 @@ describe('Player', function () {
 	it('is wounded', function () {
 		player.setHp(1);
 		assert(player.isAlive());
-		assert(player.lostHp() === 3);
+		assert(player.getLostHp() === 3);
 	});
 });

@@ -10,19 +10,19 @@ describe('Card', function () {
 	});
 
 	it('is named test', function () {
-		assert(card.name() === 'test');
+		assert(card.getName() === 'test');
 	});
 
 	it('is of Heart', function () {
-		assert(card.suit() === Card.Suit.Heart);
+		assert(card.getSuit() === Card.Suit.Heart);
 	});
 
 	it('is numbered 12', function () {
-		assert(card.number() === 12);
+		assert(card.getNumber() === 12);
 	});
 
 	it('is red', function () {
-		assert(card.color() === Card.Color.Red);
+		assert(card.getColor() === Card.Color.Red);
 	});
 
 	it('is converted to JSON', function () {

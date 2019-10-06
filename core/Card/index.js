@@ -15,53 +15,52 @@ function convertSuitToColor(suit) {
 
 class Card {
 	constructor(name, suit, number) {
-		this._id = 0;
-		this._name = name;
-		this._suit = suit;
-		this._number = number;
-		this._color = convertSuitToColor(suit);
+		this.id = 0;
+		this.name = name;
+		this.suit = suit;
+		this.number = number;
+		this.color = convertSuitToColor(suit);
 	}
 
 	/**
 	 * Card id
 	 * @return {number}
 	 */
-	id() {
-		return this._id;
+	getId() {
+		return this.id;
 	}
 
 	/**
 	 * Card name
 	 * @return {string}
 	 */
-	name() {
-		return this._name;
+	getName() {
+		return this.name;
 	}
 
 	/**
 	 * Card suit
 	 * @return {Card.Suit}
 	 */
-	suit() {
-		return this._suit;
+	getSuit() {
+		return this.suit;
 	}
 
 	/**
 	 * Card number
 	 * @return {number}
 	 */
-	number() {
-		return this._number;
+	getNumber() {
+		return this.number;
 	}
 
 	/**
 	 * Card color
 	 * @return {Card.Color}
 	 */
-	color() {
-		return this._color;
+	getColor() {
+		return this.color;
 	}
-
 
 	/**
 	 * Check if the selected players are feasible
@@ -144,7 +143,7 @@ class Card {
 	 * @return {boolean}
 	 */
 	isVirtual() {
-		return this._id <= 0;
+		return this.id <= 0;
 	}
 
 	/**
@@ -153,10 +152,10 @@ class Card {
 	 */
 	toJSON() {
 		return {
-			id: this._id,
-			name: this._name,
-			suit: this._suit,
-			number: this._number,
+			id: this.id,
+			name: this.name,
+			suit: this.suit,
+			number: this.number,
 		};
 	}
 }

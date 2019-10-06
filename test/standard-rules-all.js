@@ -65,18 +65,18 @@ describe('Standard Mode - GameStartRule', function () {
 		rule.prepareRoles(driver);
 
 		const { players } = driver;
-		assert(players[0].role() === Role.Emperor);
+		assert(players[0].getRole() === Role.Emperor);
 
-		const rebelNum = countArray(players, (player) => player.role() === Role.Rebel);
+		const rebelNum = countArray(players, (player) => player.getRole() === Role.Rebel);
 		assert(rebelNum === 4);
 
-		const emperorNum = countArray(players, (player) => player.role() === Role.Emperor);
+		const emperorNum = countArray(players, (player) => player.getRole() === Role.Emperor);
 		assert(emperorNum === 1);
 
-		const renegadeNum = countArray(players, (player) => player.role() === Role.Renegade);
+		const renegadeNum = countArray(players, (player) => player.getRole() === Role.Renegade);
 		assert(renegadeNum === 1);
 
-		const loyalistNum = countArray(players, (player) => player.role() === Role.Loyalist);
+		const loyalistNum = countArray(players, (player) => player.getRole() === Role.Loyalist);
 		assert(loyalistNum === 2);
 	});
 
@@ -85,8 +85,8 @@ describe('Standard Mode - GameStartRule', function () {
 
 		const seats = [];
 		for (const player of driver.players) {
-			seats.push(player.seat());
-			assert(player.seat() > 0);
+			seats.push(player.getSeat());
+			assert(player.getSeat() > 0);
 		}
 
 		seats.sort();
@@ -98,7 +98,7 @@ describe('Standard Mode - GameStartRule', function () {
 	it('prepares generals', async function () {
 		await rule.prepareGenerals(driver);
 		for (const player of driver.players) {
-			const general = player.general();
+			const general = player.getGeneral();
 			assert(general);
 		}
 	});

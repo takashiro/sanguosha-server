@@ -33,7 +33,7 @@ class BasicRule extends GameRule {
 
 		driver.room.broadcast(cmd.ArrangeSeats, players.map((player) => ({
 			uid: player.id,
-			seat: player.seat(),
+			seat: player.getSeat(),
 			name: player.name,
 		})));
 	}
@@ -59,7 +59,7 @@ class BasicRule extends GameRule {
 		];
 
 		for (const phase of phases) {
-			const data = new PhaseChangeStruct(player, player.phase(), phase);
+			const data = new PhaseChangeStruct(player, player.getPhase(), phase);
 			if (await driver.trigger(GameEvent.StartPhase, player, data)) {
 				continue;
 			}

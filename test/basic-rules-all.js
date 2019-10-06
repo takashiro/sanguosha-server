@@ -47,8 +47,8 @@ describe('Basic Rule', function () {
 		const { players } = driver;
 		assert(players.length === users.length);
 		for (let i = 0; i < players.length; i++) {
-			assert(players[i].id === users[i].id);
-			assert(players[i].name === users[i].name);
+			assert(players[i].getId() === users[i].id);
+			assert(players[i].getName() === users[i].name);
 		}
 	});
 
@@ -56,7 +56,7 @@ describe('Basic Rule', function () {
 		rule.prepareSeats(driver);
 		const players = driver.players.map((player) => ({
 			uid: player.id,
-			seat: player.seat(),
+			seat: player.getSeat(),
 			name: player.name,
 		}));
 		sinon.assert.calledWith(driver.room.broadcast, cmd.ArrangeSeats, players);

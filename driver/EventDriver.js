@@ -7,24 +7,24 @@ const State = {
 
 class EventDriver {
 	constructor() {
-		this._listeners = new Map();
-		this._state = State.Starting;
+		this.listeners = new Map();
+		this.state = State.Starting;
 	}
 
 	isStopped() {
-		return this._state === State.Stopped;
+		return this.state === State.Stopped;
 	}
 
 	isRunning() {
-		return this._state === State.Running;
+		return this.state === State.Running;
 	}
 
 	start() {
-		this._state = State.Running;
+		this.state = State.Running;
 	}
 
 	stop() {
-		this._state = State.Stopped;
+		this.state = State.Stopped;
 	}
 
 	register(listener) {
@@ -33,10 +33,10 @@ class EventDriver {
 			return;
 		}
 
-		let handlers = this._listeners.get(listener.event);
+		let handlers = this.listeners.get(listener.event);
 		if (!handlers) {
 			handlers = [];
-			this._listeners.set(listener.event, handlers);
+			this.listeners.set(listener.event, handlers);
 		}
 
 		handlers.push(listener);
@@ -47,7 +47,7 @@ class EventDriver {
 			return false;
 		}
 
-		const listners = this._listeners.get(event);
+		const listners = this.listeners.get(event);
 		if (!listners) {
 			return false;
 		}

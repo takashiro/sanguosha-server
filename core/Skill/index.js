@@ -4,26 +4,26 @@ const Type = require('./Type');
 
 class Skill {
 	constructor(name, tags = []) {
-		this._name = name;
-		this._tags = tags;
+		this.name = name;
+		this.tags = tags;
 
-		this._subskills = [];
+		this.children = [];
 	}
 
-	name() {
-		return this._name;
+	getName() {
+		return this.name;
 	}
 
-	tags() {
-		return this._tags;
+	getTags() {
+		return this.tags;
 	}
 
 	hasTag(tag) {
-		return this._tags.indexOf(tag) >= 0;
+		return this.tags.indexOf(tag) >= 0;
 	}
 
-	subskills() {
-		return this._subskills;
+	getChildren() {
+		return this.children;
 	}
 }
 
