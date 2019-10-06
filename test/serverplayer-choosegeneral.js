@@ -6,7 +6,7 @@ const ServerPlayer = require('../driver/ServerPlayer');
 const cmd = require('../cmd');
 const General = require('../core/General');
 
-describe('ServerPlayer#askForGeneral()', function () {
+describe('ServerPlayer: Choose Generals', function () {
 	const generals = [];
 	for (let i = 0; i < 10; i++) {
 		const kingdom = (i % 4) + 1;

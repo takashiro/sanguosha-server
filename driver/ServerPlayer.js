@@ -3,6 +3,8 @@ const Player = require('../core/Player');
 const CardArea = require('../core/CardArea');
 const cmd = require('../cmd');
 
+const CardUseStruct = require('./CardUseStruct');
+
 const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 	timeout: 40,
 	num: 1,
@@ -22,6 +24,7 @@ class ServerPlayer extends Player {
 
 		this.useCount = new Map();
 		this.useLimit = new Map();
+		this.requestTimeout = 15000;
 	}
 
 	get id() {
@@ -40,6 +43,14 @@ class ServerPlayer extends Player {
 		return this.name;
 	}
 
+	setRequestTimeout(msecs) {
+		this.requestTimeout = msecs;
+	}
+
+	getDriver() {
+		return this.user ? this.user.getDriver() : null;
+	}
+
 	async askForGeneral(generals, options = {}) {
 		options = {
 			...CHOOSE_GENERAL_DEFAULT_OPTIONS,
@@ -56,7 +67,7 @@ class ServerPlayer extends Player {
 					kingdom: general.getKingdom(),
 					name: general.getName(),
 				})),
-			}, options.timeout * 1000);
+			}, options.timeout ? options.timeout * 1000 : this.requestTimeout * 2);
 		} catch (error) {
 			console.error(error);
 		}
@@ -113,7 +124,7 @@ class ServerPlayer extends Player {
 			reply = await this.user.request(cmd.ChooseCards, {
 				area: area.toJSON(),
 				...options,
-			}, 15000);
+			}, this.requestTimeout);
 		} catch (error) {
 			// No response from client
 		}
@@ -190,6 +201,52 @@ class ServerPlayer extends Player {
 
 	clearUseLimit() {
 		this.useLimit.clear();
+	}
+
+	async play() {
+		const availableHandCards = this.handArea.findAll((card) => card.isAvailable(this));
+
+		let reply = null;
+		try {
+			reply = await this.user.request(cmd.Play, {
+				cards: availableHandCards.map((card) => card.getId()),
+			}, this.requestTimeout);
+		} catch (error) {
+			return false;
+		}
+		if (!reply) {
+			return false;
+		}
+
+		if (!reply.skill) {
+			const { cards } = reply;
+			const cardId = cards[0];
+			if (!cardId || typeof cardId !== 'number') {
+				return false;
+			}
+
+			const card = availableHandCards.find((c) => c.getId() === cardId);
+			if (!card) {
+				return false;
+			}
+
+			return this.playCard(card);
+		}
+
+		// TO-DO: Invoke a proactive skill.
+		return false;
+	}
+
+	playCard(card) {
+		if (!card.isAvailable(this)) {
+			return false;
+		}
+
+		const driver = this.getDriver();
+		const use = new CardUseStruct(this, card);
+		driver.useCard(use);
+
+		return true;
 	}
 }
 

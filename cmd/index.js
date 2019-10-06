@@ -9,6 +9,7 @@ const cmd = {
 	ToBattle: 5,
 	MoveCards: 6,
 	ChooseCards: 7,
+	Play: 8,
 };
 
 module.exports = cmd;

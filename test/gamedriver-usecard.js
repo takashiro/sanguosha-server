@@ -9,7 +9,7 @@ const Player = require('../core/Player');
 const GameDriver = require('../driver');
 const CardUseStruct = require('../driver/CardUseStruct');
 
-describe('GameDriver#useCard()', function () {
+describe('GameDriver: Use a Card', function () {
 	this.afterEach(function () {
 		sinon.restore();
 	});

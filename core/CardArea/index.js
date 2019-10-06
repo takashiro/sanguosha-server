@@ -133,6 +133,14 @@ class CardArea {
 	}
 
 	/**
+	 * Find all cards that matches condition
+	 * @param {Function} condition
+	 */
+	findAll(condition) {
+		return this.cards.filter(condition);
+	}
+
+	/**
 	 * The number of cards in this area
 	 * @return {number}
 	 */
