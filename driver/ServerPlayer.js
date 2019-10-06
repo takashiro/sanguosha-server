@@ -21,6 +21,7 @@ class ServerPlayer extends Player {
 		this.judgeArea = new CardArea(CardArea.Type.Judge, this);
 
 		this.useCount = new Map();
+		this.useLimit = new Map();
 	}
 
 	get id() {
@@ -177,6 +178,18 @@ class ServerPlayer extends Player {
 
 	clearUseCount() {
 		this.useCount.clear();
+	}
+
+	getUseLimit(name) {
+		return this.useLimit.get(name) || Infinity;
+	}
+
+	setUseLimit(name, limit) {
+		this.useLimit.set(name, limit);
+	}
+
+	clearUseLimit() {
+		this.useLimit.clear();
 	}
 }
 

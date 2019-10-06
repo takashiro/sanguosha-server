@@ -21,4 +21,12 @@ describe('ServerPlayer', function () {
 		assert(player.getUseCount('strike') === 0);
 		assert(player.getUseCount('jink') === 0);
 	});
+
+	it('sets use limit of cards', function () {
+		assert(player.getUseLimit('strike') === Infinity);
+		player.setUseLimit('strike', 1);
+		assert(player.getUseLimit('strike') === 1);
+		player.clearUseLimit();
+		assert(player.getUseLimit('strike') === Infinity);
+	});
 });
