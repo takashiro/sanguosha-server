@@ -19,6 +19,8 @@ class ServerPlayer extends Player {
 		this.equipArea = new CardArea(CardArea.Type.Equip, this);
 		this.delayedTrickArea = new CardArea(CardArea.Type.DelayedTrick, this);
 		this.judgeArea = new CardArea(CardArea.Type.Judge, this);
+
+		this.useCount = new Map();
 	}
 
 	get id() {
@@ -150,6 +152,23 @@ class ServerPlayer extends Player {
 			prop,
 			value,
 		});
+	}
+
+	addUseCount(name, delta) {
+		const count = this.getUseCount(name);
+		this.useCount.set(name, count + delta);
+	}
+
+	getUseCount(name) {
+		return this.useCount.get(name) || 0;
+	}
+
+	resetUseCount(name) {
+		this.useCount.set(name, 0);
+	}
+
+	clearUseCount() {
+		this.useCount.clear();
 	}
 }
 
