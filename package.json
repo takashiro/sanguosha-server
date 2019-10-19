@@ -4,7 +4,8 @@
   "description": "Sanguosha (Karuta Extension)",
   "main": "index.js",
   "scripts": {
-    "test": "eslint . && mocha test"
+	"test": "eslint . && mocha test",
+	"test-coverage": "nyc --reporter=lcov --report-dir=build/coverage --temp-dir=build/.nyc_output mocha test"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.1",
+    "nyc": "^14.1.1",
     "sinon": "^7.5.0"
   },
   "dependencies": {}
