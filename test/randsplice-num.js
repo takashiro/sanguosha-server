@@ -1,6 +1,6 @@
 
 const assert = require('assert');
-const randsub = require('../util/randsub');
+const randsub = require('../src/util/randsub');
 
 describe('randsub', function () {
 	const arr = [];

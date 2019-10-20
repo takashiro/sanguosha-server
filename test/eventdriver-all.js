@@ -1,8 +1,8 @@
 
 const assert = require('assert');
 
-const EventListener = require('../driver/EventListener');
-const EventDriver = require('../driver/EventDriver');
+const EventListener = require('../src/driver/EventListener');
+const EventDriver = require('../src/driver/EventDriver');
 
 class FakeTrigger extends EventListener {
 	constructor(event, name) {

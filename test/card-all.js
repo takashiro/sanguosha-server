@@ -1,6 +1,6 @@
 
 const assert = require('assert');
-const Card = require('../core/Card');
+const Card = require('../src/core/Card');
 
 describe('Card', function () {
 	const card = new Card('test', Card.Suit.Heart, 12);

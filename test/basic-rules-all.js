@@ -2,13 +2,13 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const cmd = require('../cmd');
-const GameEvent = require('../driver/GameEvent');
+const cmd = require('../src/cmd');
+const GameEvent = require('../src/driver/GameEvent');
 
-const BasicRule = require('../mode/basic/BasicRule');
-const PhaseRule = require('../mode/basic/PhaseRule');
+const BasicRule = require('../src/mode/basic/BasicRule');
+const PhaseRule = require('../src/mode/basic/PhaseRule');
 
-const Phase = require('../core/Player/Phase');
+const Phase = require('../src/core/Player/Phase');
 
 describe('Basic Rule', function () {
 	this.afterEach(function () {

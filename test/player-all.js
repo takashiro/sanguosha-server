@@ -1,6 +1,6 @@
 
 const assert = require('assert');
-const Player = require('../core/Player');
+const Player = require('../src/core/Player');
 
 describe('Player', function () {
 	const player = new Player();

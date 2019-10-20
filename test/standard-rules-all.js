@@ -1,13 +1,13 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const GameDriver = require('../driver');
-const GameEvent = require('../driver/GameEvent');
+const GameDriver = require('../src/driver');
+const GameEvent = require('../src/driver/GameEvent');
 
-const StandardRule = require('../mode/standard/StandardRule');
+const StandardRule = require('../src/mode/standard/StandardRule');
 
-const cmd = require('../cmd');
-const Role = require('../core/Player/Role');
+const cmd = require('../src/cmd');
+const Role = require('../src/core/Player/Role');
 
 function countArray(arr, condition) {
 	let count = 0;

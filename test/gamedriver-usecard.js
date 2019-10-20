@@ -1,13 +1,13 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const cmd = require('../cmd');
+const cmd = require('../src/cmd');
 
-const Card = require('../core/Card');
-const Player = require('../core/Player');
+const Card = require('../src/core/Card');
+const Player = require('../src/core/Player');
 
-const GameDriver = require('../driver');
-const CardUseStruct = require('../driver/CardUseStruct');
+const GameDriver = require('../src/driver');
+const CardUseStruct = require('../src/driver/CardUseStruct');
 
 describe('GameDriver: Use a Card', function () {
 	this.afterEach(function () {

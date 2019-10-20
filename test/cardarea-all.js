@@ -1,6 +1,6 @@
 
 const assert = require('assert');
-const CardArea = require('../core/CardArea');
+const CardArea = require('../src/core/CardArea');
 
 describe('CardArea', function () {
 	const area = new CardArea(CardArea.Type.DrawPile);

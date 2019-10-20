@@ -1,8 +1,8 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const cmd = require('../cmd');
-const ServerPlayer = require('../driver/ServerPlayer');
+const cmd = require('../src/cmd');
+const ServerPlayer = require('../src/driver/ServerPlayer');
 
 describe('ServerPlayer: Play Cards', function () {
 	const user = {};

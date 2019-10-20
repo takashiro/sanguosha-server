@@ -1,8 +1,8 @@
 
 const defaultConfig = require('./config.default.json');
-const GameDriver = require('./driver');
+const GameDriver = require('./src/driver');
 
-const actions = require('./core/actions');
+const actions = require('./src/core/actions');
 
 class KarutaDriver extends GameDriver {
 	/**

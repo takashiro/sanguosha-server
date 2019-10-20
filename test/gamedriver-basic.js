@@ -2,8 +2,8 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const GameDriver = require('../driver');
-const GameEvent = require('../driver/GameEvent');
+const GameDriver = require('../src/driver');
+const GameEvent = require('../src/driver/GameEvent');
 
 describe('GameDriver', function () {
 	this.afterEach(function () {

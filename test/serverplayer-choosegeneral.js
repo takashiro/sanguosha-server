@@ -1,10 +1,9 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const ServerPlayer = require('../driver/ServerPlayer');
-
-const cmd = require('../cmd');
-const General = require('../core/General');
+const cmd = require('../src/cmd');
+const General = require('../src/core/General');
+const ServerPlayer = require('../src/driver/ServerPlayer');
 
 describe('ServerPlayer: Choose Generals', function () {
 	const generals = [];

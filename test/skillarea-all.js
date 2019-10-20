@@ -1,7 +1,8 @@
 
 const assert = require('assert');
-const Skill = require('../core/Skill');
-const SkillArea = require('../core/SkillArea');
+
+const Skill = require('../src/core/Skill');
+const SkillArea = require('../src/core/SkillArea');
 
 describe('SkillArea', function () {
 	const area = new SkillArea(SkillArea.Type.Acquired);

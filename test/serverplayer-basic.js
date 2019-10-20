@@ -1,8 +1,8 @@
 
 const assert = require('assert');
-const ServerPlayer = require('../driver/ServerPlayer');
 
-const CardAreaType = require('../core/CardArea/Type');
+const ServerPlayer = require('../src/driver/ServerPlayer');
+const CardAreaType = require('../src/core/CardArea/Type');
 
 describe('ServerPlayer', function () {
 	const player = new ServerPlayer();
