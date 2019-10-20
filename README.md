@@ -33,6 +33,7 @@ Running Environment
 -------------------
 1. Node.js v10 or later versions
 1. [karuta-node-server](https://github.com/takashiro/karuta-node-server)
+2. Client application [sanguosha-react](https://github.com/takashiro/sanguosha-react)
 
 Build and Run
 -------------
