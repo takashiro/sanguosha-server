@@ -8,7 +8,7 @@ function randsub(arr, num) {
 
 	const res = [];
 	let j = num;
-	while (j) {
+	while (j > 0) {
 		const i = Math.floor(Math.random() * arr.length);
 		if (!flag[i]) {
 			res.push(arr[i]);

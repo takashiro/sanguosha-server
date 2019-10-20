@@ -4,8 +4,8 @@
   "description": "Sanguosha (Karuta Extension)",
   "main": "index.js",
   "scripts": {
-	"test": "eslint . && mocha test",
-	"test-coverage": "nyc --reporter=lcov --report-dir=build/coverage --temp-dir=build/.nyc_output mocha test"
+	"test": "eslint . && mocha",
+	"test-coverage": "nyc --reporter=lcov --report-dir=build/coverage --temp-dir=build/.nyc_output mocha"
   },
   "repository": {
     "type": "git",
