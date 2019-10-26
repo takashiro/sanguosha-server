@@ -62,6 +62,7 @@ describe('CardArea', function () {
 		assert(area.has(1000));
 		area.remove(1000);
 		assert(!area.has(1000));
+		assert(!area.remove(1000));
 	});
 
 	it('takes a random card', function () {
@@ -78,6 +79,7 @@ describe('CardArea', function () {
 	});
 
 	it('shifts N cards', function () {
+		area.add(4, CardArea.Direction.Top);
 		area.add(1, CardArea.Direction.Top);
 		area.add(2, CardArea.Direction.Top);
 		area.add(3, CardArea.Direction.Top);
@@ -89,13 +91,23 @@ describe('CardArea', function () {
 	});
 
 	it('pops N cards', function () {
+		area.add(4);
 		area.add(1);
 		area.add(2);
 		area.add(3);
 
-		const bottoms = area.shift(3);
+		const bottoms = area.pop(3);
 		assert(bottoms[0] === 1);
 		assert(bottoms[1] === 2);
 		assert(bottoms[2] === 3);
+	});
+
+	it('is converted to JSON', function () {
+		area.name = 'test';
+		const json = area.toJSON();
+		assert.deepStrictEqual(json, {
+			type: area.type,
+			name: area.name,
+		});
 	});
 });
