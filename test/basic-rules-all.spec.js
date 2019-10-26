@@ -6,7 +6,6 @@ const cmd = require('../src/cmd');
 const GameEvent = require('../src/driver/GameEvent');
 
 const BasicRule = require('../src/mode/basic/BasicRule');
-const PhaseRule = require('../src/mode/basic/PhaseRule');
 
 const Phase = require('../src/core/Player/Phase');
 
@@ -114,23 +113,5 @@ describe('Basic Rule', function () {
 			delete player.setPhase;
 		}
 		delete driver.trigger;
-	});
-});
-
-describe('Phase Rule', function () {
-	const rule = new PhaseRule();
-
-	it('draws 2 cards', async function () {
-		const player = {};
-		const driver = {
-			trigger() {},
-			drawCards: sinon.spy(),
-		};
-
-		await rule.effect(driver, player, {
-			to: Phase.Draw,
-		});
-
-		assert(driver.drawCards.calledOnceWithExactly(player, 2));
 	});
 });

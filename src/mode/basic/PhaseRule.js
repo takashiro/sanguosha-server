@@ -10,7 +10,7 @@ class PhaseRule extends GameRule {
 	}
 
 	triggerable(driver, target) {
-		return driver && target;
+		return Boolean(driver && target);
 	}
 
 	async effect(driver, player, data) {
