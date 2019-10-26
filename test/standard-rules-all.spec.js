@@ -19,7 +19,7 @@ function countArray(arr, condition) {
 	return count;
 }
 
-describe('Standard Mode - GameStartRule', function () {
+describe('StandardRule', function () {
 	const users = [];
 
 	const driver = new GameDriver({
@@ -57,50 +57,58 @@ describe('Standard Mode - GameStartRule', function () {
 		assert(rule.event === GameEvent.StartGame);
 	});
 
-	it('prepares players', function () {
-		rule.preparePlayers(driver);
+	describe('#preparePlayers()', function () {
+		it('prepares players', function () {
+			rule.preparePlayers(driver);
+		});
 	});
 
-	it('prepares roles', function () {
-		rule.prepareRoles(driver);
+	describe('#prepareRules()', function () {
+		it('prepares roles', function () {
+			rule.prepareRoles(driver);
 
-		const { players } = driver;
-		assert(players[0].getRole() === Role.Emperor);
+			const { players } = driver;
+			assert(players[0].getRole() === Role.Emperor);
 
-		const rebelNum = countArray(players, (player) => player.getRole() === Role.Rebel);
-		assert(rebelNum === 4);
+			const rebelNum = countArray(players, (player) => player.getRole() === Role.Rebel);
+			assert(rebelNum === 4);
 
-		const emperorNum = countArray(players, (player) => player.getRole() === Role.Emperor);
-		assert(emperorNum === 1);
+			const emperorNum = countArray(players, (player) => player.getRole() === Role.Emperor);
+			assert(emperorNum === 1);
 
-		const renegadeNum = countArray(players, (player) => player.getRole() === Role.Renegade);
-		assert(renegadeNum === 1);
+			const renegadeNum = countArray(players, (player) => player.getRole() === Role.Renegade);
+			assert(renegadeNum === 1);
 
-		const loyalistNum = countArray(players, (player) => player.getRole() === Role.Loyalist);
-		assert(loyalistNum === 2);
+			const loyalistNum = countArray(players, (player) => player.getRole() === Role.Loyalist);
+			assert(loyalistNum === 2);
+		});
 	});
 
-	it('prepares seats', function () {
-		rule.prepareSeats(driver);
+	describe('#prepareSeats()', function () {
+		it('prepares seats', function () {
+			rule.prepareSeats(driver);
 
-		const seats = [];
-		for (const player of driver.players) {
-			seats.push(player.getSeat());
-			assert(player.getSeat() > 0);
-		}
+			const seats = [];
+			for (const player of driver.players) {
+				seats.push(player.getSeat());
+				assert(player.getSeat() > 0);
+			}
 
-		seats.sort();
-		for (let i = 0; i < seats.length; i++) {
-			assert(seats[i] === i + 1);
-		}
+			seats.sort();
+			for (let i = 0; i < seats.length; i++) {
+				assert(seats[i] === i + 1);
+			}
+		});
 	});
 
-	it('prepares generals', async function () {
-		await rule.prepareGenerals(driver);
-		for (const player of driver.players) {
-			const general = player.getGeneral();
-			assert(general);
-		}
+	describe('#prepareGenerals()', function () {
+		it('prepares generals', async function () {
+			await rule.prepareGenerals(driver);
+			for (const player of driver.players) {
+				const general = player.getGeneral();
+				assert(general);
+			}
+		});
 	});
 
 	it('checks candidate duplicates', function () {
@@ -113,11 +121,20 @@ describe('Standard Mode - GameStartRule', function () {
 		}
 	});
 
-	it('prepares cards', async function () {
-		await rule.prepareCards(driver);
+	describe('#prepareCards()', function () {
+		it('prepares cards', function () {
+			rule.prepareCards(driver);
 
-		for (const player of driver.players) {
-			assert(player.handArea.size === 4);
-		}
+			for (const player of driver.players) {
+				assert(player.handArea.size === 4);
+			}
+		});
+	});
+
+	it('handles invalid values', async function () {
+		driver.users = [];
+		driver.players = [];
+		await rule.prepareRoles(driver);
+		await rule.effect(driver);
 	});
 });

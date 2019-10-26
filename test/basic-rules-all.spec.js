@@ -78,30 +78,42 @@ describe('Basic Rule', function () {
 	});
 
 	it('proceeds the game', async function () {
-		const phases = [];
-		const setPhase = function (phase) {
-			phases.push(phase);
-			if (phases.length >= 14) {
-				driver.stop();
-			}
-		};
-
 		const { players } = driver;
 		for (const player of players) {
-			player.setPhase = setPhase;
+			player.setPhase = sinon.spy();
 		}
 
+		driver.trigger = function (event, player, data) {
+			if (player === players[1]) {
+				if (event === GameEvent.StartPhase && data.to === Phase.Draw) {
+					return true;
+				}
+				if (event === GameEvent.EndPhase && data.to === Phase.End) {
+					this.stop();
+					return true;
+				}
+			}
+			return false;
+		};
+
 		await rule.proceed(driver);
+
+		const phases = [Phase.Start, Phase.Judge, Phase.Draw, Phase.Play, Phase.Discard, Phase.End, Phase.Inactive];
+		assert.strictEqual(players[0].setPhase.callCount, 7);
+		for (let i = 0; i < 7; i++) {
+			assert(players[0].setPhase.getCall(i).calledWith(phases[i]));
+		}
+
+		phases.splice(2, 1);
+		assert.strictEqual(players[1].setPhase.callCount, 6);
+		for (let i = 0; i < 6; i++) {
+			assert(players[1].setPhase.getCall(i).calledWith(phases[i]));
+		}
+
 		for (const player of players) {
 			delete player.setPhase;
 		}
-
-		for (let i = 0; i < 6; i++) {
-			assert(phases[i] === i + 1);
-			assert(phases[7 + i] === i + 1);
-		}
-		assert(phases[6] === 0);
-		assert(phases[13] === 0);
+		delete driver.trigger;
 	});
 });
 
@@ -110,17 +122,15 @@ describe('Phase Rule', function () {
 
 	it('draws 2 cards', async function () {
 		const player = {};
-
 		const driver = {
 			trigger() {},
-			drawCards(target, num) {
-				assert(target === player);
-				assert(num === 2);
-			},
+			drawCards: sinon.spy(),
 		};
 
 		await rule.effect(driver, player, {
 			to: Phase.Draw,
 		});
+
+		assert(driver.drawCards.calledOnceWithExactly(player, 2));
 	});
 });
