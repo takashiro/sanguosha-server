@@ -18,6 +18,9 @@ class PhaseRule extends GameRule {
 		case Phase.Draw:
 			await this.drawCards(player);
 			break;
+		case Phase.Play:
+			await this.play(player);
+			break;
 		case Phase.Discard:
 			await this.discardCards(player);
 			break;
@@ -34,6 +37,15 @@ class PhaseRule extends GameRule {
 		const { driver } = this;
 		await driver.trigger(GameEvent.DrawNCards, player, data);
 		await driver.drawCards(player, data.num);
+	}
+
+	async play(player) {
+		for (;;) {
+			const valid = await player.play();
+			if (!valid) {
+				break;
+			}
+		}
 	}
 
 	async discardCards(player) {

@@ -47,6 +47,10 @@ class ServerPlayer extends Player {
 		this.requestTimeout = msecs;
 	}
 
+	getRequestTimeout() {
+		return this.requestTimeout;
+	}
+
 	getDriver() {
 		return this.user ? this.user.getDriver() : null;
 	}

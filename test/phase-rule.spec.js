@@ -32,6 +32,22 @@ describe('Phase Rule', function () {
 		sinon.assert.calledOnceWithExactly(driver.drawCards, player, 2);
 	});
 
+	it('activates a player', async function () {
+		let count = 0;
+		const player = {
+			async play() {
+				count++;
+				return count < 3;
+			},
+		};
+
+		await rule.effect(player, {
+			to: Phase.Play,
+		});
+
+		assert.strictEqual(count, 3);
+	});
+
 	it('discards overflow hand cards', async function () {
 		const selected = [1, 2, 3];
 		const player = {
