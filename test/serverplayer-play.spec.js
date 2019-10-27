@@ -84,16 +84,142 @@ describe('ServerPlayer: Play Cards', function () {
 			assert(!await player.play());
 		});
 
-		it('uses a card', async function () {
+		it('plays a card', async function () {
 			const driver = {
 				useCard: sinon.spy(),
 			};
 			user.getDriver = sinon.stub().returns(driver);
 			user.request = sinon.stub().returns({ cards: [card1.getId()] });
+			const playCard = sinon.stub(player, 'playCard');
+			playCard.withArgs(card1).returns(true);
 			assert(await player.play());
-			assert(driver.useCard.calledOnce);
+			assert(playCard.calledOnceWith(card1));
+
+			delete user.getDriver;
+			delete user.request;
+			playCard.restore();
+		});
+	});
+
+	describe('#playCard()', function () {
+		const driver = {
+			players: [
+				new ServerPlayer(),
+				new ServerPlayer(),
+				new ServerPlayer(),
+				new ServerPlayer(),
+			],
+			findPlayer(seat) { return this.players[seat - 1]; },
+			getPlayers() { return this.players; },
+			useCard: sinon.spy(),
+		};
+
+		this.beforeAll(function () {
+			user.getDriver = sinon.stub().returns(driver);
+		});
+
+		this.afterAll(function () {
+			delete user.getDriver;
+			delete user.request;
+		});
+
+		const fakeCard = {
+			isAvailable() { return true; },
+			targetFilter: sinon.fake(),
+			targetFeasible: sinon.fake(),
+		};
+
+		const someCard = {
+			isAvailable() { return true; },
+			targetFeasible() { return true; },
+			targetFilter() { return true; },
+		};
+
+		it('should reject unavailable cards', async function () {
+			const card = {
+				isAvailable: sinon.stub().returns(false),
+			};
+			assert(!await player.playCard(card));
+			assert(card.isAvailable.calledOnceWith(player));
+		});
+
+		it('should handle timeout error', async function () {
+			user.request = sinon.stub().throws(new Error('timeout'));
+			assert(!await player.playCard(fakeCard));
+		});
+
+		it('should handle cancel command', async function () {
+			user.request = sinon.stub().returns({ cancel: true });
+			assert(await player.playCard(fakeCard));
+			user.request = sinon.stub().returns(null);
+			assert(await player.playCard(fakeCard));
+		});
+
+		it('should handle non-existing player', async function () {
+			user.request = sinon.stub().returns({ player: 100 });
+			assert(!await player.playCard(fakeCard));
+		});
+
+		it('should reject invalid card targets', async function () {
+			const card = {
+				isAvailable() { return true; },
+				targetFeasible(selected) {
+					return selected.length === 1;
+				},
+				targetFilter(selected, target) {
+					return selected.length === 0 && target !== null;
+				},
+			};
+
+			user.request = sinon.stub()
+				.onCall(0)
+				.returns({ player: 1, selected: false })
+				.onCall(1)
+				.returns({ player: 1, selected: true })
+				.onCall(2)
+				.returns({ player: 1, selected: true });
+
+			assert(!await player.playCard(card));
+		});
+
+		it('should stop if no confirm or selection command is received', async function () {
+			user.request = sinon.stub().returns({});
+			assert(!await player.playCard(someCard));
+		});
+
+		it('should stop if targets are not feasible', async function () {
+			const card = {
+				isAvailable() { return true; },
+				targetFeasible() { return false; },
+				targetFilter() { return true; },
+			};
+
+			user.request = sinon.stub().returns({ confirm: true });
+			assert(!await player.playCard(card));
+		});
+
+		it('should handle duplicate add or removal', async function () {
+			user.request = sinon.stub()
+				.onCall(0)
+				.returns({ player: 1, selected: true })
+				.onCall(1)
+				.returns({ player: 1, selected: true })
+				.onCall(2)
+				.returns({ player: 2, selected: true })
+				.onCall(3)
+				.returns({ player: 2, selected: false })
+				.onCall(4)
+				.returns({ player: 2, selected: false })
+				.onCall(5)
+				.returns({ confirm: true });
+
+			assert(await player.playCard(someCard));
 			const use = driver.useCard.firstCall.args[0];
-			assert(use.card === card1);
+			assert(use.to && use.to.length === 1);
+			assert(use.from === player);
+			assert(use.to[0] === driver.players[0]);
+			assert(use.card === someCard);
+			driver.useCard.resetHistory();
 		});
 	});
 });

@@ -35,6 +35,15 @@ describe('GameDriver', function () {
 		assert(cards.every((card) => card.getId() > 0));
 	});
 
+	it('finds a player', function () {
+		driver.players = [
+			{ getSeat() { return 2; } },
+			{ getSeat() { return 1; } },
+		];
+		assert.strictEqual(driver.getPlayers(), driver.players);
+		assert.strictEqual(driver.findPlayer(2), driver.players[0]);
+	});
+
 	it('starts game', async function () {
 		await driver.start();
 		sinon.assert.calledWith(room.broadcast, GameEvent.StartGame);

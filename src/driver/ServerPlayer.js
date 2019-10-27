@@ -158,6 +158,14 @@ class ServerPlayer extends Player {
 		return selected;
 	}
 
+	request(command, args = null, timeout = null) {
+		if (!this.user) {
+			return null;
+		}
+
+		return this.user.request(command, args, timeout === null ? this.requestTimeout : timeout);
+	}
+
 	updateProperty(prop, value) {
 		this.user.send(cmd.UpdatePlayer, {
 			uid: this.user.id,
@@ -241,13 +249,72 @@ class ServerPlayer extends Player {
 		return false;
 	}
 
-	playCard(card) {
+	async playCard(card) {
 		if (!card.isAvailable(this)) {
 			return false;
 		}
 
 		const driver = this.getDriver();
+		const players = driver.getPlayers();
+		const targets = [];
+
+		// Request to choose card targets
+		const expiry = Date.now() + this.requestTimeout;
+		while (Date.now() < expiry) {
+			const candidates = players.map((player) => {
+				const selectable = card.targetFilter(targets, player, this);
+				return {
+					seat: player.getSeat(),
+					selectable,
+				};
+			});
+			const feasible = card.targetFeasible(targets, this);
+
+			let reply = null;
+			try {
+				reply = await this.request(cmd.ChoosePlayer, {
+					candidates,
+					feasible,
+				}, expiry - Date.now());
+			} catch (error) {
+				// Timed out. Ends play phase.
+				return false;
+			}
+
+			if (!reply || reply.cancel) {
+				// Cancel using the card
+				return true;
+			}
+
+			if (reply.player) {
+				const player = driver.findPlayer(reply.player);
+				if (!player || !card.targetFilter(targets, player, this)) {
+					// Ends play phase
+					return false;
+				}
+
+				const i = targets.indexOf(player);
+				if (reply.selected) {
+					if (i < 0) {
+						targets.push(player);
+					}
+				} else if (i >= 0) {
+					targets.splice(i, 1);
+				}
+			} else if (reply.confirm) {
+				break;
+			} else {
+				return false;
+			}
+		}
+
+		// Confirm the targets are feasible
+		if (!card.targetFeasible(targets, this)) {
+			return false;
+		}
+
 		const use = new CardUseStruct(this, card);
+		use.to = targets;
 		driver.useCard(use);
 
 		return true;

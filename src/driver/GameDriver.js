@@ -28,6 +28,14 @@ class GameDriver extends EventDriver {
 		return this.room ? this.room.getUsers() : [];
 	}
 
+	getPlayers() {
+		return this.players;
+	}
+
+	findPlayer(seat) {
+		return this.players.find((player) => player.getSeat() === seat);
+	}
+
 	loadCollection(name) {
 		// eslint-disable-next-line global-require, import/no-dynamic-require
 		const collection = require(`../collection/${name}`);

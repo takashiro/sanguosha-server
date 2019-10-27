@@ -36,4 +36,15 @@ describe('ServerPlayer', function () {
 		assert(CardAreaType.Judge);
 		assert(player.judgeArea.type === CardAreaType.Judge);
 	});
+
+	it('has request timeout', function () {
+		const timeout = Math.floor(Math.random() * 0xFFFF);
+		player.setRequestTimeout(timeout);
+		assert.strictEqual(player.getRequestTimeout(), timeout);
+	});
+
+	it('generates null reply if no user is connected', function () {
+		player.user = null;
+		assert.strictEqual(player.request(), null);
+	});
 });
