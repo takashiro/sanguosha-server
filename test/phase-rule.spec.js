@@ -8,10 +8,13 @@ describe('Phase Rule', function () {
 	const rule = new PhaseRule();
 
 	it('checks driver and target', function () {
-		assert.strictEqual(rule.triggerable(null, null), false);
-		assert.strictEqual(rule.triggerable(null, {}), false);
-		assert.strictEqual(rule.triggerable({}, null), false);
-		assert.strictEqual(rule.triggerable({}, {}), true);
+		rule.setDriver(null);
+		assert.strictEqual(rule.isTriggerable(null), false);
+		assert.strictEqual(rule.isTriggerable({}), false);
+
+		rule.setDriver({});
+		assert.strictEqual(rule.isTriggerable(null), false);
+		assert.strictEqual(rule.isTriggerable({}), true);
 	});
 
 	it('draws 2 cards', async function () {
@@ -20,12 +23,13 @@ describe('Phase Rule', function () {
 			trigger() {},
 			drawCards: sinon.spy(),
 		};
+		rule.setDriver(driver);
 
-		await rule.effect(driver, player, {
+		await rule.effect(player, {
 			to: Phase.Draw,
 		});
 
-		assert(driver.drawCards.calledOnceWithExactly(player, 2));
+		sinon.assert.calledOnceWithExactly(driver.drawCards, player, 2);
 	});
 
 	it('discards overflow hand cards', async function () {
@@ -44,15 +48,16 @@ describe('Phase Rule', function () {
 			trigger: sinon.fake(),
 			moveCards: sinon.spy(),
 		};
+		rule.setDriver(driver);
 
-		await rule.effect(driver, player, {
+		await rule.effect(player, {
 			to: Phase.Discard,
 		});
 
-		assert(driver.moveCards.calledOnceWithExactly(selected, player.handArea, driver.discardPile, { open: true }));
+		sinon.assert.calledOnceWithExactly(driver.moveCards, selected, player.handArea, driver.discardPile, { open: true });
 	});
 
 	it('does nothing by default', async function () {
-		await rule.effect({}, {}, {});
+		await rule.effect({}, {});
 	});
 });

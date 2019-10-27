@@ -34,6 +34,7 @@ describe('Basic Rule', function () {
 	};
 
 	const rule = new BasicRule();
+	rule.setDriver(driver);
 	rule.idle = 0;
 
 	it('binds to start event', function () {
@@ -41,7 +42,7 @@ describe('Basic Rule', function () {
 	});
 
 	it('prepares players', function () {
-		rule.preparePlayers(driver);
+		rule.preparePlayers();
 
 		const { players } = driver;
 		assert(players.length === users.length);
@@ -52,7 +53,7 @@ describe('Basic Rule', function () {
 	});
 
 	it('prepares seats', function () {
-		rule.prepareSeats(driver);
+		rule.prepareSeats();
 		const players = driver.players.map((player) => ({
 			uid: player.id,
 			seat: player.getSeat(),
@@ -67,7 +68,7 @@ describe('Basic Rule', function () {
 		player.setPhase = function (phase) {
 			phases.push(phase);
 		};
-		await rule.activatePlayer(driver, player);
+		await rule.activatePlayer(player);
 		delete player.setPhase;
 
 		for (let i = 0; i < 6; i++) {
@@ -95,7 +96,7 @@ describe('Basic Rule', function () {
 			return false;
 		};
 
-		await rule.proceed(driver);
+		await rule.proceed();
 
 		const phases = [Phase.Start, Phase.Judge, Phase.Draw, Phase.Play, Phase.Discard, Phase.End, Phase.Inactive];
 		assert.strictEqual(players[0].setPhase.callCount, 7);

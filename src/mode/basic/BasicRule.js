@@ -15,14 +15,16 @@ class BasicRule extends GameRule {
 		this.idle = 1000;
 	}
 
-	preparePlayers(driver) {
+	preparePlayers() {
+		const { driver } = this;
 		const users = driver.getUsers();
 
 		const players = users.map((user) => new ServerPlayer(user));
 		driver.players = players;
 	}
 
-	prepareSeats(driver) {
+	prepareSeats() {
+		const { driver } = this;
 		const { players } = driver;
 
 		let seat = 1;
@@ -38,7 +40,8 @@ class BasicRule extends GameRule {
 		})));
 	}
 
-	prepareCards(driver) {
+	prepareCards() {
+		const { driver } = this;
 		const cards = driver.createCards();
 		shuffle(cards);
 		driver.resetDrawPile(cards);
@@ -48,7 +51,7 @@ class BasicRule extends GameRule {
 		}
 	}
 
-	async activatePlayer(driver, player) {
+	async activatePlayer(player) {
 		const phases = [
 			Phase.Start,
 			Phase.Judge,
@@ -57,6 +60,7 @@ class BasicRule extends GameRule {
 			Phase.Discard,
 			Phase.End,
 		];
+		const { driver } = this;
 
 		for (const phase of phases) {
 			const data = new PhaseChangeStruct(player, player.getPhase(), phase);
@@ -77,16 +81,18 @@ class BasicRule extends GameRule {
 		player.broadcastProperty('phase', Phase.Inactive);
 	}
 
-	prepareBattleField(driver) {
+	prepareBattleField() {
+		const { driver } = this;
 		driver.room.broadcast(cmd.ToBattle);
 	}
 
-	async proceed(driver) {
+	async proceed() {
+		const { driver } = this;
 		let i = 0;
 		const { players } = driver;
 		while (driver.isRunning()) {
 			const player = players[i];
-			await this.activatePlayer(driver, player);
+			await this.activatePlayer(player);
 
 			i++;
 			if (i >= players.length) {

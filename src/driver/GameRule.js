@@ -2,8 +2,8 @@
 const EventListener = require('./EventListener');
 
 class GameRule extends EventListener {
-	triggerable(driver, target) {
-		return driver && !target;
+	isTriggerable(target) {
+		return Boolean(this.driver && !target);
 	}
 
 	async cost() {

@@ -27,6 +27,10 @@ class EventDriver {
 		this.state = State.Stopped;
 	}
 
+	/**
+	 * Register an listener.
+	 * @param {EventListener} listener
+	 */
 	register(listener) {
 		if (!listener.event) {
 			console.error('Failed to register undefined event handler');
@@ -39,9 +43,17 @@ class EventDriver {
 			this.listeners.set(listener.event, handlers);
 		}
 
+		listener.setDriver(this);
 		handlers.push(listener);
 	}
 
+	/**
+	 * Trigger an event. Corresponding listeners will be triggered.
+	 * If this driver is stopped, it does nothing.
+	 * @param {GameEvent} event
+	 * @param {ServerPlayer} player
+	 * @param {*} data
+	 */
 	async trigger(event, player = null, data = null) {
 		if (this.isStopped()) {
 			return false;
@@ -52,10 +64,10 @@ class EventDriver {
 			return false;
 		}
 
-		const triggerableListeners = listners.filter((handler) => handler.triggerable(this, player, data));
+		const triggerableListeners = listners.filter((handler) => handler.isTriggerable(player, data));
 		for (const listener of triggerableListeners) {
-			if (await listener.cost(this, player, data)) {
-				const prevented = await listener.effect(this, player, data);
+			if (await listener.cost(player, data)) {
+				const prevented = await listener.effect(player, data);
 				if (prevented) {
 					return true;
 				}

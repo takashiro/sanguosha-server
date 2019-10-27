@@ -21,10 +21,7 @@
 			"error",
 			"WithStatement"
 		],
-		"max-len": [
-			"error",
-			120
-		],
+		"max-len": "off",
 		"no-tabs": "off",
 		"no-plusplus": "off",
 		"linebreak-style": "off",

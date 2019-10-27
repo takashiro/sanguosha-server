@@ -18,18 +18,18 @@ class StandardRule extends BasicRule {
 		this.candidateGeneralNum = 3;
 	}
 
-	async effect(driver) {
-		await this.preparePlayers(driver);
-		await this.prepareRoles(driver);
-		await this.prepareSeats(driver);
-		await this.prepareGenerals(driver);
-		await this.prepareBattleField(driver);
-		await this.prepareCards(driver);
-		await this.proceed(driver);
+	async effect() {
+		await this.preparePlayers();
+		await this.prepareRoles();
+		await this.prepareSeats();
+		await this.prepareGenerals();
+		await this.prepareBattleField();
+		await this.prepareCards();
+		await this.proceed();
 	}
 
-	prepareRoles(driver) {
-		const { players } = driver;
+	prepareRoles() {
+		const { players } = this.driver;
 		if (!players || players.length <= 1) {
 			return;
 		}
@@ -56,7 +56,9 @@ class StandardRule extends BasicRule {
 		}
 	}
 
-	async prepareGenerals(driver) {
+	async prepareGenerals() {
+		const { driver } = this;
+
 		driver.loadCollection('standard');
 		const generals = driver.createGenerals();
 

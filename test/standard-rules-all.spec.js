@@ -52,6 +52,7 @@ describe('StandardRule', function () {
 	}
 
 	const rule = new StandardRule();
+	rule.setDriver(driver);
 
 	it('binds to start event', function () {
 		assert(rule.event === GameEvent.StartGame);
@@ -59,13 +60,13 @@ describe('StandardRule', function () {
 
 	describe('#preparePlayers()', function () {
 		it('prepares players', function () {
-			rule.preparePlayers(driver);
+			rule.preparePlayers();
 		});
 	});
 
 	describe('#prepareRules()', function () {
 		it('prepares roles', function () {
-			rule.prepareRoles(driver);
+			rule.prepareRoles();
 
 			const { players } = driver;
 			assert(players[0].getRole() === Role.Emperor);
@@ -86,7 +87,7 @@ describe('StandardRule', function () {
 
 	describe('#prepareSeats()', function () {
 		it('prepares seats', function () {
-			rule.prepareSeats(driver);
+			rule.prepareSeats();
 
 			const seats = [];
 			for (const player of driver.players) {
@@ -103,7 +104,7 @@ describe('StandardRule', function () {
 
 	describe('#prepareGenerals()', function () {
 		it('prepares generals', async function () {
-			await rule.prepareGenerals(driver);
+			await rule.prepareGenerals();
 			for (const player of driver.players) {
 				const general = player.getGeneral();
 				assert(general);
@@ -123,7 +124,7 @@ describe('StandardRule', function () {
 
 	describe('#prepareCards()', function () {
 		it('prepares cards', function () {
-			rule.prepareCards(driver);
+			rule.prepareCards();
 
 			for (const player of driver.players) {
 				assert(player.handArea.size === 4);
@@ -134,7 +135,7 @@ describe('StandardRule', function () {
 	it('handles invalid values', async function () {
 		driver.users = [];
 		driver.players = [];
-		await rule.prepareRoles(driver);
-		await rule.effect(driver);
+		await rule.prepareRoles();
+		await rule.effect();
 	});
 });
