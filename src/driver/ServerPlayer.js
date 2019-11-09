@@ -20,7 +20,7 @@ class ServerPlayer extends Player {
 		this.handArea = new CardArea(CardArea.Type.Hand, this);
 		this.equipArea = new CardArea(CardArea.Type.Equip, this);
 		this.delayedTrickArea = new CardArea(CardArea.Type.DelayedTrick, this);
-		this.judgeArea = new CardArea(CardArea.Type.Judge, this);
+		this.processArea = new CardArea(CardArea.Type.Process, this);
 
 		this.useCount = new Map();
 		this.useLimit = new Map();

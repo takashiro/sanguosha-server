@@ -31,10 +31,10 @@ describe('ServerPlayer', function () {
 		assert(player.delayedTrickArea.type === CardAreaType.DelayedTrick);
 	});
 
-	it('has judge area', function () {
-		assert(player.judgeArea);
-		assert(CardAreaType.Judge);
-		assert(player.judgeArea.type === CardAreaType.Judge);
+	it('has process area', function () {
+		assert(player.processArea);
+		assert(CardAreaType.Process);
+		assert(player.processArea.type === CardAreaType.Process);
 	});
 
 	it('has request timeout', function () {

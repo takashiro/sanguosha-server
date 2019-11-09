@@ -4,8 +4,7 @@ const Type = {
 
 	Hand: 1,
 	Equip: 2,
-	DelayedTrick: 3,
-	Judge: 4,
+	Process: 4,
 
 	DrawPile: 5,
 	DiscardPile: 6,
