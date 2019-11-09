@@ -26,9 +26,9 @@ describe('ServerPlayer', function () {
 	});
 
 	it('has delayed-trick area', function () {
-		assert(player.delayedTrickArea);
-		assert(CardAreaType.DelayedTrick);
-		assert(player.delayedTrickArea.type === CardAreaType.DelayedTrick);
+		assert(player.judgeArea);
+		assert(CardAreaType.Judge);
+		assert(player.judgeArea.type === CardAreaType.Judge);
 	});
 
 	it('has process area', function () {
