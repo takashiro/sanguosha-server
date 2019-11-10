@@ -60,7 +60,9 @@ class BasicRule extends GameRule {
 			Phase.Discard,
 			Phase.End,
 		];
+
 		const { driver } = this;
+		driver.setCurrentPlayer(player);
 
 		for (const phase of phases) {
 			const data = new PhaseChangeStruct(player, player.getPhase(), phase);
@@ -79,6 +81,8 @@ class BasicRule extends GameRule {
 
 		player.setPhase(Phase.Inactive);
 		player.broadcastProperty('phase', Phase.Inactive);
+
+		driver.setCurrentPlayer(null);
 	}
 
 	prepareBattleField() {

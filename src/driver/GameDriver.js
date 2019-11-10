@@ -16,6 +16,8 @@ class GameDriver extends EventDriver {
 
 		this.drawPile = new CardArea(CardArea.Type.DrawPile);
 		this.discardPile = new CardArea(CardArea.Type.DiscardPile);
+
+		this.currentPlayer = null;
 	}
 
 	async start() {
@@ -123,6 +125,22 @@ class GameDriver extends EventDriver {
 
 		card.use(this, use);
 		return true;
+	}
+
+	/**
+	 * Get current player.
+	 * @return {ServerPlayer}
+	 */
+	getCurrentPlayer() {
+		return this.currentPlayer;
+	}
+
+	/**
+	 * Set current player.
+	 * @param {ServerPlayer} player
+	 */
+	setCurrentPlayer(player) {
+		this.currentPlayer = player;
 	}
 
 	broadcastCardMove(cards, from, to, options = null) {

@@ -23,6 +23,7 @@ describe('Basic Rule', function () {
 		room: {
 			broadcast: sinon.fake(),
 		},
+		setCurrentPlayer: sinon.fake(),
 		getUsers() { return users; },
 		stop() {
 			this.finished = true;
