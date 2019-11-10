@@ -171,6 +171,18 @@ class GameDriver extends EventDriver {
 		const dist = Math.abs(players.indexOf(from) - players.indexOf(to));
 		return dist <= maxDist ? dist : players.length - dist;
 	}
+
+	/**
+	 * Check if a player is in one's attack range.
+	 * @param {ServerPlayer} source
+	 * @param {ServerPlayer} target
+	 * @return {Promise<boolean>}
+	 */
+	async isInAttackRange(source, target) {
+		const range = source.getAttackRange();
+		const dist = await this.getDistance(source, target);
+		return range >= dist;
+	}
 }
 
 module.exports = GameDriver;

@@ -78,4 +78,20 @@ describe('GameDriver', function () {
 			assert.strictEqual(dist, 1);
 		});
 	});
+
+	describe('#isInAttackRange()', function () {
+		it('checks attack range', async function () {
+			const getDistance = sinon.stub(driver, 'getDistance');
+
+			getDistance.returns(2);
+			const source = {
+				getAttackRange() { return 2; }
+			};
+			assert(await driver.isInAttackRange(source, {}));
+			getDistance.returns(3);
+			assert(!await driver.isInAttackRange(source, {}));
+
+			getDistance.restore();
+		});
+	});
 });

@@ -13,6 +13,8 @@ class Player {
 		this.kingdom = 0;
 		this.headGeneral = null;
 		this.deputyGeneral = null;
+
+		this.attackRange = 1;
 	}
 
 	getHp() {
@@ -117,6 +119,14 @@ class Player {
 
 	setDeputyGeneral(general) {
 		this.deputyGeneral = general;
+	}
+
+	getAttackRange() {
+		return this.attackRange;
+	}
+
+	setAttackRange(range) {
+		this.attackRange = range;
 	}
 }
 
