@@ -19,19 +19,19 @@ describe('GameDriver: Use a Card', function () {
 	};
 	const driver = new GameDriver(room);
 
-	it('accepts invalid parameter', function () {
+	it('accepts invalid parameter', async function () {
 		const use = new CardUseStruct();
-		const success = driver.useCard(use);
+		const success = await driver.useCard(use);
 		assert(!success);
 	});
 
-	it('proceed card effects', function () {
+	it('proceed card effects', async function () {
 		const card = new Card();
 		card.onUse = sinon.spy();
 		card.use = sinon.spy();
 
 		const use = new CardUseStruct(new Player(), card);
-		driver.useCard(use);
+		await driver.useCard(use);
 
 		assert(card.onUse.calledOnceWith(driver, use));
 		assert(room.broadcast.calledOnceWith(cmd.UseCard, use.toJSON()));

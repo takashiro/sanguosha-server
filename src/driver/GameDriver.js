@@ -3,6 +3,7 @@ const cmd = require('../cmd');
 const CardArea = require('../core/CardArea');
 const GameEvent = require('./GameEvent');
 const EventDriver = require('./EventDriver');
+const CardEffectStruct = require('./CardEffectStruct');
 
 class GameDriver extends EventDriver {
 	constructor(room) {
@@ -69,8 +70,16 @@ class GameDriver extends EventDriver {
 		return cards;
 	}
 
+	getDrawPile() {
+		return this.drawPile;
+	}
+
 	resetDrawPile(cards) {
 		this.drawPile.cards = cards;
+	}
+
+	getDiscardPile() {
+		return this.discardPile;
 	}
 
 	/**
@@ -107,15 +116,15 @@ class GameDriver extends EventDriver {
 	/**
 	 * A player uses a card.
 	 * @param {CardUseStruct} use
-	 * @return {boolean}
+	 * @return {<Promise<boolean>}
 	 */
-	useCard(use) {
+	async useCard(use) {
 		if (!use.from || !use.card) {
 			return false;
 		}
 
 		const { card } = use;
-		card.onUse(this, use);
+		await card.onUse(this, use);
 
 		if (!use.from) {
 			return false;
@@ -123,7 +132,20 @@ class GameDriver extends EventDriver {
 
 		this.room.broadcast(cmd.UseCard, use.toJSON());
 
-		card.use(this, use);
+		await card.use(this, use);
+
+		if (use.to.length > 1) {
+			this.sortPlayersByActionOrder(use.to);
+		}
+
+		for (const target of use.to) {
+			const effect = new CardEffectStruct(use, target);
+			await card.onEffect(this, effect);
+			await card.effect(this, effect);
+		}
+
+		await card.complete(this, use);
+
 		return true;
 	}
 
@@ -141,6 +163,40 @@ class GameDriver extends EventDriver {
 	 */
 	setCurrentPlayer(player) {
 		this.currentPlayer = player;
+	}
+
+	/**
+	 * Sort players by action order
+	 * @param {ServerPlayer[]} players
+	 */
+	sortPlayersByActionOrder(players) {
+		if (!this.currentPlayer) {
+			return;
+		}
+
+		players.sort((p1, p2) => {
+			const s1 = this.getRelativeSeat(p1);
+			const s2 = this.getRelativeSeat(p2);
+			return s1 - s2;
+		});
+	}
+
+	/**
+	 * Get a player seat number relative to the current player.
+	 * @param {ServerPlayer} player
+	 * @return {number}
+	 */
+	getRelativeSeat(player) {
+		if (!this.currentPlayer) {
+			return NaN;
+		}
+
+		const current = this.currentPlayer.getSeat();
+		let seat = player.getSeat() - current;
+		if (seat < 0) {
+			seat += this.players.length;
+		}
+		return seat;
 	}
 
 	broadcastCardMove(cards, from, to, options = null) {

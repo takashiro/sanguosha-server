@@ -43,6 +43,22 @@ class ServerPlayer extends Player {
 		return this.name;
 	}
 
+	getHandArea() {
+		return this.handArea;
+	}
+
+	getEquipArea() {
+		return this.equipArea;
+	}
+
+	getJudgeArea() {
+		return this.judgeArea;
+	}
+
+	getProcessArea() {
+		return this.processArea;
+	}
+
 	setRequestTimeout(msecs) {
 		this.requestTimeout = msecs;
 	}
@@ -259,7 +275,7 @@ class ServerPlayer extends Player {
 	}
 
 	async playCard(card) {
-		if (!card.isAvailable(this)) {
+		if (!await card.isAvailable(this)) {
 			return false;
 		}
 
@@ -324,7 +340,7 @@ class ServerPlayer extends Player {
 
 		const use = new CardUseStruct(this, card);
 		use.to = targets;
-		driver.useCard(use);
+		await driver.useCard(use);
 
 		return true;
 	}

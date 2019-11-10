@@ -138,18 +138,19 @@ class Card {
 	/**
 	 * This function will be called after effect() has been executed on every target
 	 * @param {GameDriver} driver
+	 * @param {CardUseStruct} use
 	 * @return {Promise}
 	 */
 	// eslint-disable-next-line no-unused-vars, no-empty-function
-	async complete(driver) {
+	async complete(driver, use) {
 	}
 
 	/**
-	 * Check if this is a virtual card
+	 * Check if this is a real card
 	 * @return {boolean}
 	 */
-	isVirtual() {
-		return this.id <= 0;
+	isReal() {
+		return this.id > 0;
 	}
 
 	/**

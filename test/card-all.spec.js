@@ -6,7 +6,7 @@ describe('Card', function () {
 	const card = new Card('test', Card.Suit.Heart, 12);
 
 	it('is virtual', function () {
-		assert(card.isVirtual());
+		assert(!card.isReal());
 	});
 
 	it('is named test', function () {
