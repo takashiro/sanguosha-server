@@ -183,6 +183,23 @@ class GameDriver extends EventDriver {
 		const dist = await this.getDistance(source, target);
 		return range >= dist;
 	}
+
+	/**
+	 * Proceed a damage event.
+	 * @param {DamageStruct} damage
+	 * @return {boolean} Whether it takes effect.
+	 */
+	async damage(damage) {
+		if (damage.num <= 0 || !damage.to) {
+			return false;
+		}
+
+		const hp = damage.to.getHp() - damage.num;
+		damage.to.setHp(hp);
+		damage.to.broadcastProperty('hp', hp);
+
+		return true;
+	}
 }
 
 module.exports = GameDriver;
