@@ -216,12 +216,17 @@ class ServerPlayer extends Player {
 	}
 
 	async play() {
-		const availableHandCards = this.handArea.findAll((card) => card.isAvailable(this));
+		const availableCards = [];
+		for (const card of this.handArea.getCards()) {
+			if (await card.isAvailable(this)) {
+				availableCards.push(card);
+			}
+		}
 
 		let reply = null;
 		try {
 			reply = await this.user.request(cmd.Play, {
-				cards: availableHandCards.map((card) => card.getId()),
+				cards: availableCards.map((card) => card.getId()),
 			}, this.requestTimeout);
 		} catch (error) {
 			return false;
@@ -232,12 +237,16 @@ class ServerPlayer extends Player {
 
 		if (!reply.skill) {
 			const { cards } = reply;
+			if (!cards) {
+				return false;
+			}
+
 			const cardId = cards[0];
 			if (!cardId || typeof cardId !== 'number') {
 				return false;
 			}
 
-			const card = availableHandCards.find((c) => c.getId() === cardId);
+			const card = availableCards.find((c) => c.getId() === cardId);
 			if (!card) {
 				return false;
 			}
@@ -261,14 +270,13 @@ class ServerPlayer extends Player {
 		// Request to choose card targets
 		const expiry = Date.now() + this.requestTimeout;
 		while (Date.now() < expiry) {
-			const candidates = players.map((player) => {
-				const selectable = card.targetFilter(targets, player, this);
-				return {
-					seat: player.getSeat(),
-					selectable,
-				};
-			});
-			const feasible = card.targetFeasible(targets, this);
+			const candidates = [];
+			for (const player of players) {
+				if (await card.targetFilter(targets, player, this)) {
+					candidates.push(player.getSeat());
+				}
+			}
+			const feasible = await card.targetFeasible(targets, this);
 
 			let reply = null;
 			try {
@@ -285,31 +293,32 @@ class ServerPlayer extends Player {
 				// Cancel using the card
 				return true;
 			}
-
-			if (reply.player) {
-				const player = driver.findPlayer(reply.player);
-				if (!player || !card.targetFilter(targets, player, this)) {
-					// Ends play phase
-					return false;
-				}
-
-				const i = targets.indexOf(player);
-				if (reply.selected) {
-					if (i < 0) {
-						targets.push(player);
-					}
-				} else if (i >= 0) {
-					targets.splice(i, 1);
-				}
-			} else if (reply.confirm) {
+			if (reply.confirm) {
 				break;
-			} else {
+			}
+
+			if (!reply.player) {
 				return false;
+			}
+
+			const player = driver.findPlayer(reply.player);
+			if (!player || !await card.targetFilter(targets, player, this)) {
+				// Ends play phase
+				return false;
+			}
+
+			const i = targets.indexOf(player);
+			if (reply.selected) {
+				if (i < 0) {
+					targets.push(player);
+				}
+			} else if (i >= 0) {
+				targets.splice(i, 1);
 			}
 		}
 
 		// Confirm the targets are feasible
-		if (!card.targetFeasible(targets, this)) {
+		if (!await card.targetFeasible(targets, this)) {
 			return false;
 		}
 

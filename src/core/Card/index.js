@@ -66,10 +66,10 @@ class Card {
 	 * Check if the selected players are feasible
 	 * @param {Player[]} selected
 	 * @param {Player} source
-	 * @return {boolean}
+	 * @return {Promise<boolean>}
 	 */
 	// eslint-disable-next-line no-unused-vars
-	targetFeasible(selected, source) {
+	async targetFeasible(selected, source) {
 		return true;
 	}
 
@@ -78,64 +78,70 @@ class Card {
 	 * @param {Player[]} selected
 	 * @param {Player} toSelect
 	 * @param {Player} source
-	 * @return {boolean}
+	 * @return {Promise<boolean>}
 	 */
 	// eslint-disable-next-line no-unused-vars
-	targetFilter(selected, toSelect, source) {
+	async targetFilter(selected, toSelect, source) {
 		return !!toSelect;
 	}
 
 	/**
 	 * Check if this card is available
 	 * @param {Player} source
-	 * @return {boolean}
+	 * @return {Promise<boolean>}
 	 */
-	isAvailable(source) {
-		return Boolean(source);
+	// eslint-disable-next-line no-unused-vars
+	async isAvailable(source) {
+		return false;
 	}
 
 	/**
 	 * The first procedure of using a card
 	 * @param {GameDriver} driver
 	 * @param {CardUseStruct} use
+	 * @return {Promise}
 	 */
-	// eslint-disable-next-line no-unused-vars
-	onUse(driver, use) {
+	// eslint-disable-next-line no-unused-vars, no-empty-function
+	async onUse(driver, use) {
 	}
 
 	/**
 	 * The second procedure of using a card
 	 * @param {GameDriver} driver
 	 * @param {CardUseStruct} use
+	 * @return {Promise}
 	 */
-	// eslint-disable-next-line no-unused-vars
-	use(driver, use) {
+	// eslint-disable-next-line no-unused-vars, no-empty-function
+	async use(driver, use) {
 	}
 
 	/**
 	 * This function will be called on every target before effect()
 	 * @param {GameDriver} driver
 	 * @param {CardEffectStruct} effect
+	 * @return {Promise}
 	 */
-	// eslint-disable-next-line no-unused-vars
-	onEffect(driver, effect) {
+	// eslint-disable-next-line no-unused-vars, no-empty-function
+	async onEffect(driver, effect) {
 	}
 
 	/**
 	 * This function will be called on every target after use()
 	 * @param {GameDriver} driver
 	 * @param {CardEffectStruct} effect
+	 * @return {Promise}
 	 */
-	// eslint-disable-next-line no-unused-vars
-	effect(driver, effect) {
+	// eslint-disable-next-line no-unused-vars, no-empty-function
+	async effect(driver, effect) {
 	}
 
 	/**
 	 * This function will be called after effect() has been executed on every target
 	 * @param {GameDriver} driver
+	 * @return {Promise}
 	 */
-	// eslint-disable-next-line no-unused-vars
-	complete(driver) {
+	// eslint-disable-next-line no-unused-vars, no-empty-function
+	async complete(driver) {
 	}
 
 	/**

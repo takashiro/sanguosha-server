@@ -85,7 +85,7 @@ describe('GameDriver', function () {
 
 			getDistance.returns(2);
 			const source = {
-				getAttackRange() { return 2; }
+				getAttackRange() { return 2; },
 			};
 			assert(await driver.isInAttackRange(source, {}));
 			getDistance.returns(3);
