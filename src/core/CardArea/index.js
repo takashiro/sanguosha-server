@@ -141,6 +141,14 @@ class CardArea {
 	}
 
 	/**
+	 * Return all cards in this area
+	 * @return {Card[]}
+	 */
+	getCards() {
+		return this.cards;
+	}
+
+	/**
 	 * The number of cards in this area
 	 * @return {number}
 	 */
