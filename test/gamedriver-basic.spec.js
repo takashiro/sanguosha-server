@@ -48,4 +48,34 @@ describe('GameDriver', function () {
 		await driver.start();
 		sinon.assert.calledWith(room.broadcast, GameEvent.StartGame);
 	});
+
+	describe('#getDistance()', function () {
+		const players = [
+			{ isDead() { return true; }, isAlive() { return false; }, getSeat() { return 1; } },
+			{ isDead() { return false; }, isAlive() { return true; }, getSeat() { return 2; } },
+			{ isDead() { return false; }, isAlive() { return true; }, getSeat() { return 3; } },
+			{ isDead() { return false; }, isAlive() { return true; }, getSeat() { return 4; } },
+			{ isDead() { return false; }, isAlive() { return true; }, getSeat() { return 5; } },
+			{ isDead() { return true; }, isAlive() { return false; }, getSeat() { return 6; } },
+		];
+
+		it('refuses dead players', async function () {
+			driver.players = players;
+			assert(!Number.isFinite(await driver.getDistance(players[0], players[1])));
+			assert(!Number.isFinite(await driver.getDistance(players[1], players[5])));
+			assert(!Number.isFinite(driver.getDistance(players[0], players[5])));
+		});
+
+		it('calculates shorter distance', async function () {
+			driver.players = players;
+			const dist = await driver.getDistance(players[2], players[4]);
+			assert.strictEqual(dist, 2);
+		});
+
+		it('calculates shorter distance', async function () {
+			driver.players = players;
+			const dist = await driver.getDistance(players[1], players[4]);
+			assert.strictEqual(dist, 1);
+		});
+	});
 });

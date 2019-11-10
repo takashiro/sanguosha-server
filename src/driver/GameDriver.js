@@ -36,6 +36,10 @@ class GameDriver extends EventDriver {
 		return this.players.find((player) => player.getSeat() === seat);
 	}
 
+	getAlivePlayers() {
+		return this.players.filter((player) => player.isAlive());
+	}
+
 	loadCollection(name) {
 		// eslint-disable-next-line global-require, import/no-dynamic-require
 		const collection = require(`../collection/${name}`);
@@ -149,6 +153,23 @@ class GameDriver extends EventDriver {
 			}
 			this.room.broadcast(cmd.MoveCards, movePath);
 		}
+	}
+
+	/**
+	 * Calculate the distance from a player to another.
+	 * @param {ServerPlayer} from
+	 * @param {ServerPlayer} to
+	 * @return {Promise<number>}
+	 */
+	async getDistance(from, to) {
+		if (from.isDead() || to.isDead()) {
+			return Infinity;
+		}
+
+		const players = this.getAlivePlayers();
+		const maxDist = Math.floor(players.length / 2);
+		const dist = Math.abs(players.indexOf(from) - players.indexOf(to));
+		return dist <= maxDist ? dist : players.length - dist;
 	}
 }
 
