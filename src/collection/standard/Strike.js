@@ -26,10 +26,6 @@ class Strike extends BasicCard {
 			return true;
 		}
 
-		if (source === target) {
-			return false;
-		}
-
 		const inRange = await driver.isInAttackRange(source, target);
 		return inRange;
 	}

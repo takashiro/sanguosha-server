@@ -253,6 +253,10 @@ class GameDriver extends EventDriver {
 	 * @return {Promise<boolean>}
 	 */
 	async isInAttackRange(source, target) {
+		if (source === target) {
+			return false;
+		}
+
 		const range = source.getAttackRange();
 		const dist = await this.getDistance(source, target);
 		return range >= dist;
