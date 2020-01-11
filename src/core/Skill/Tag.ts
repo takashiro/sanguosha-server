@@ -1,11 +1,11 @@
 
-const Tag = {
-	Invalid: 0,
+enum Tag {
+	Invalid,
 
-	Frequent: 1,
-	Compulsory: 2,
-	Limited: 3,
-	Wake: 4,
+	Frequent,
+	Compulsory,
+	Limited,
+	Wake,
 };
 
-module.exports = Tag;
+export default Tag;
