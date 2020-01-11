@@ -1,10 +1,10 @@
 
-const Type = {
-	Invalid: 0,
+enum Type {
+	Invalid,
 
-	Trigger: 1,
-	ViewAs: 2,
-	CardMod: 3,
+	Trigger,
+	ViewAs,
+	CardMod,
 };
 
-module.exports = Type;
+export default Type;
