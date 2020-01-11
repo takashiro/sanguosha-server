@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run lint",
-    "lint": "eslint ."
+    "lint": "eslint --ext ts ."
   },
   "repository": {
     "type": "git",
@@ -22,9 +22,17 @@
   },
   "homepage": "https://github.com/takashiro/sanguosha-server#readme",
   "devDependencies": {
+    "@types/node": "^13.1.6",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.18.2",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@karuta/core": "^0.1.0"
+  }
 }
