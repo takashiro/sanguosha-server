@@ -1,33 +1,40 @@
 
-const Tag = require('./Tag');
-const Type = require('./Type');
+import Tag from './Tag';
+import Type from './Type';
 
 class Skill {
-	constructor(name, tags = []) {
+	static Tag = Tag;
+
+	static Type = Type;
+
+	name: string;
+
+	tags: Set<string>;
+
+	children: Skill[];
+
+	constructor(name: string, tags: string[] = []) {
 		this.name = name;
-		this.tags = tags;
+		this.tags = new Set(tags);
 
 		this.children = [];
 	}
 
-	getName() {
+	getName(): string {
 		return this.name;
 	}
 
-	getTags() {
+	getTags(): Set<string> {
 		return this.tags;
 	}
 
-	hasTag(tag) {
-		return this.tags.indexOf(tag) >= 0;
+	hasTag(tag: string): boolean {
+		return this.tags.has(tag);
 	}
 
-	getChildren() {
+	getChildren(): Skill[] {
 		return this.children;
 	}
 }
 
-Skill.Tag = Tag;
-Skill.Type = Type;
-
-module.exports = Skill;
+export default Skill;
