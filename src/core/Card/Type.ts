@@ -1,10 +1,10 @@
 
-const Type = {
-	Invalid: 0,
+enum Type {
+	Invalid,
 
-	Basic: 1,
-	Trick: 2,
-	Equip: 3,
+	Basic,
+	Trick,
+	Equip,
 };
 
-module.exports = Type;
+export default Type;

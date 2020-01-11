@@ -1,9 +1,9 @@
 
-const Color = {
-	None: 0,
+enum Color {
+	None,
 
-	Red: 1,
-	Black: 2,
+	Red,
+	Black,
 };
 
-module.exports = Color;
+export default Color;
