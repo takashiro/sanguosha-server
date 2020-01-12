@@ -1,37 +1,44 @@
+import EventListener from './EventListener';
 
-const State = {
-	Starting: 0,
-	Running: 1,
-	Stopped: 2,
-};
+enum State {
+	Starting,
+	Running,
+	Stopped,
+}
 
-class EventDriver {
+class EventDriver<EventType> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	protected listeners: Map<EventType, EventListener<EventType, any>[]>;
+
+	protected state: State;
+
 	constructor() {
 		this.listeners = new Map();
 		this.state = State.Starting;
 	}
 
-	isStopped() {
+	isStopped(): boolean {
 		return this.state === State.Stopped;
 	}
 
-	isRunning() {
+	isRunning(): boolean {
 		return this.state === State.Running;
 	}
 
-	start() {
+	start(): void {
 		this.state = State.Running;
 	}
 
-	stop() {
+	stop(): void {
 		this.state = State.Stopped;
 	}
 
 	/**
 	 * Register an listener.
-	 * @param {EventListener} listener
+	 * @param listener
 	 */
-	register(listener) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	register(listener: EventListener<EventType, any>): void {
 		if (!listener.event) {
 			console.error('Failed to register undefined event handler');
 			return;
@@ -50,11 +57,11 @@ class EventDriver {
 	/**
 	 * Trigger an event. Corresponding listeners will be triggered.
 	 * If this driver is stopped, it does nothing.
-	 * @param {GameEvent} event
-	 * @param {ServerPlayer} player
-	 * @param {*} data
+	 * @param event
+	 * @param data
 	 */
-	async trigger(event, player = null, data = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	async trigger(event: EventType, data: any = null): Promise<boolean> {
 		if (this.isStopped()) {
 			return false;
 		}
@@ -64,10 +71,10 @@ class EventDriver {
 			return false;
 		}
 
-		const triggerableListeners = listners.filter((handler) => handler.isTriggerable(player, data));
+		const triggerableListeners = listners.filter((handler) => handler.isTriggerable(data));
 		for (const listener of triggerableListeners) {
-			if (await listener.cost(player, data)) {
-				const prevented = await listener.effect(player, data);
+			if (await listener.cost(data)) {
+				const prevented = await listener.effect(data);
 				if (prevented) {
 					return true;
 				}
@@ -78,4 +85,4 @@ class EventDriver {
 	}
 }
 
-module.exports = EventDriver;
+export default EventDriver;
