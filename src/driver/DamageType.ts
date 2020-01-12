@@ -1,8 +1,8 @@
 
-const DamageType = {
-	Normal: 0,
-	Fire: 1,
-	Thunder: 2,
+enum DamageType {
+	Normal,
+	Fire,
+	Thunder,
 };
 
-module.exports = DamageType;
+export default DamageType;
