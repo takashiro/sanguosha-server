@@ -1,15 +1,15 @@
 
-const GameEvent = {
-	Invalid: 0,
+enum GameEvent {
+	Invalid,
 
-	StartGame: 1,
-	EndGame: 2,
+	StartGame,
+	EndGame,
 
-	StartPhase: 3,
-	ProceedPhase: 4,
-	EndPhase: 5,
+	StartPhase,
+	ProceedPhase,
+	EndPhase,
 
-	DrawNCards: 6,
-};
+	DrawNCards,
+}
 
-module.exports = GameEvent;
+export default GameEvent;
