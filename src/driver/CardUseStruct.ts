@@ -1,11 +1,18 @@
+import { Player, Card } from '@karuta/sanguosha-core';
 
 class CardUseStruct {
+	from: Player;
+
+	card: Card;
+
+	to: Player[];
+
 	/**
 	 *
-	 * @param {Player} from
-	 * @param {Card} card
+	 * @param from
+	 * @param card
 	 */
-	constructor(from, card) {
+	constructor(from: Player, card: Card) {
 		this.from = from;
 		this.card = card;
 		this.to = [];
@@ -20,4 +27,4 @@ class CardUseStruct {
 	}
 }
 
-module.exports = CardUseStruct;
+export default CardUseStruct;
