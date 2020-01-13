@@ -1,10 +1,10 @@
+import { PlayerPhase } from '@karuta/sanguosha-core';
+import ServerPlayer from './ServerPlayer';
 
-class PhaseChangeStruct {
-	constructor(player, from, to) {
-		this.player = player;
-		this.from = from;
-		this.to = to;
-	}
+interface PhaseChangeStruct {
+	player: ServerPlayer;
+	from: PlayerPhase;
+	to: PlayerPhase;
 }
 
-module.exports = PhaseChangeStruct;
+export default PhaseChangeStruct;
