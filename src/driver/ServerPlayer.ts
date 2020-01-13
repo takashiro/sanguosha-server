@@ -1,9 +1,23 @@
+import {
+	User,
+	Room,
+} from '@karuta/core';
 
-const Player = require('../core/Player');
-const CardArea = require('../core/CardArea');
-const cmd = require('../cmd');
+import {
+	Command as cmd,
+	Player,
+	Card,
+	CardArea,
+	CardAreaType,
+	General,
+} from '@karuta/sanguosha-core';
 
-const CardUseStruct = require('./CardUseStruct');
+interface ChooseGeneralOptions {
+	timeout: number;
+	num: number;
+	sameKingdom: boolean;
+	forced: boolean;
+}
 
 const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 	timeout: 40,
@@ -12,67 +26,81 @@ const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 	forced: true,
 };
 
+interface AskForCardOptions {
+	num: number;
+}
+
+type PropertyValue = string | number | boolean | object | null;
+
 class ServerPlayer extends Player {
-	constructor(user) {
+	protected user: User;
+
+	protected handArea: CardArea;
+
+	protected equipArea: CardArea;
+
+	protected judgeArea: CardArea;
+
+	protected processArea: CardArea;
+
+	protected useCount: Map<string, number>;
+
+	protected useLimit: Map<string, number>;
+
+	protected requestTimeout: number;
+
+	constructor(user: User) {
 		super();
 		this.user = user;
 
-		this.handArea = new CardArea(CardArea.Type.Hand, this);
-		this.equipArea = new CardArea(CardArea.Type.Equip, this);
-		this.judgeArea = new CardArea(CardArea.Type.Judge, this);
-		this.processArea = new CardArea(CardArea.Type.Process, this);
+		this.handArea = new CardArea(CardAreaType.Hand, this);
+		this.equipArea = new CardArea(CardAreaType.Equip, this);
+		this.judgeArea = new CardArea(CardAreaType.Judge, this);
+		this.processArea = new CardArea(CardAreaType.Process, this);
 
 		this.useCount = new Map();
 		this.useLimit = new Map();
 		this.requestTimeout = 15000;
 	}
 
-	get id() {
-		return this.user ? this.user.id : 0;
+	getId(): number {
+		return this.user ? this.user.getId() : 0;
 	}
 
-	getId() {
-		return this.id;
+	getName(): string | undefined {
+		return this.user ? this.user.getName() : undefined;
 	}
 
-	get name() {
-		return this.user ? this.user.name : '';
+	getRoom(): Room | null {
+		return this.user ? this.user.getRoom() : null;
 	}
 
-	getName() {
-		return this.name;
-	}
-
-	getHandArea() {
+	getHandArea(): CardArea {
 		return this.handArea;
 	}
 
-	getEquipArea() {
+	getEquipArea(): CardArea {
 		return this.equipArea;
 	}
 
-	getJudgeArea() {
+	getJudgeArea(): CardArea {
 		return this.judgeArea;
 	}
 
-	getProcessArea() {
+	getProcessArea(): CardArea {
 		return this.processArea;
 	}
 
-	setRequestTimeout(msecs) {
+	setRequestTimeout(msecs: number): void {
 		this.requestTimeout = msecs;
 	}
 
-	getRequestTimeout() {
+	getRequestTimeout(): number {
 		return this.requestTimeout;
 	}
 
-	getDriver() {
-		return this.user ? this.user.getDriver() : null;
-	}
-
-	async askForGeneral(generals, options = {}) {
-		options = {
+	async askForGeneral(generals: General[], options: Partial<ChooseGeneralOptions> = {}): Promise<General[]> {
+		const opt: ChooseGeneralOptions = {
 			...CHOOSE_GENERAL_DEFAULT_OPTIONS,
 			...options,
 		};
@@ -80,14 +108,14 @@ class ServerPlayer extends Player {
 		let reply = [];
 		try {
 			reply = await this.user.request(cmd.ChooseGeneral, {
-				sameKingdom: !!options.sameKingdom,
-				num: options.num || 1,
+				sameKingdom: !!opt.sameKingdom,
+				num: opt.num || 1,
 				generals: generals.map((general, i) => ({
 					id: i,
 					kingdom: general.getKingdom(),
 					name: general.getName(),
 				})),
-			}, options.timeout ? options.timeout * 1000 : this.requestTimeout * 2);
+			}, opt.timeout ? opt.timeout * 1000 : this.requestTimeout * 2);
 		} catch (error) {
 			console.error(error);
 		}
@@ -101,9 +129,9 @@ class ServerPlayer extends Player {
 			}
 		}
 
-		if (options.forced && chosenGenerals.length < options.num && generals.length >= options.num) {
+		if (opt.forced && chosenGenerals.length < opt.num && generals.length >= opt.num) {
 			let availableGenerals = generals;
-			if (options.sameKingdom && options.num > 1) {
+			if (opt.sameKingdom && opt.num > 1) {
 				const kingdoms = new Map();
 				for (const general of generals) {
 					const alliances = kingdoms.get(general.getKingdom());
@@ -116,7 +144,7 @@ class ServerPlayer extends Player {
 
 				const availableKingdoms = [];
 				for (const [, alliances] of kingdoms) {
-					if (alliances.length >= options.num) {
+					if (alliances.length >= opt.num) {
 						availableKingdoms.push(alliances);
 					}
 				}
@@ -131,13 +159,13 @@ class ServerPlayer extends Player {
 				if (chosenGenerals.indexOf(chosen) < 0) {
 					chosenGenerals.push(chosen);
 				}
-			} while (chosenGenerals.length < options.num);
+			} while (chosenGenerals.length < opt.num);
 		}
 
 		return chosenGenerals;
 	}
 
-	async askForCards(area, options) {
+	async askForCards(area: CardArea, options: AskForCardOptions): Promise<Card[]> {
 		let reply = null;
 
 		try {
@@ -149,7 +177,7 @@ class ServerPlayer extends Player {
 			// No response from client
 		}
 
-		const cardSet = new Set();
+		const cardSet = new Set<Card>();
 		if (reply instanceof Array) {
 			for (const cardId of reply) {
 				const card = area.find((c) => c.getId() === cardId);
@@ -163,7 +191,7 @@ class ServerPlayer extends Player {
 		if (options.num > 0) {
 			let delta = options.num - selected.length;
 			if (delta < 0) {
-				cardSet.splice(options.num, -delta);
+				selected.splice(options.num, -delta);
 			} else if (delta > 0) {
 				delta = Math.min(delta, area.size - selected.length);
 				const cards = area.cards.filter((card) => !selected.includes(card));
@@ -174,63 +202,66 @@ class ServerPlayer extends Player {
 		return selected;
 	}
 
-	request(command, args = null, timeout = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	async request(command: number, args: any, timeout: number): Promise<any> {
 		if (!this.user) {
 			return null;
 		}
 
-		return this.user.request(command, args, timeout === null ? this.requestTimeout : timeout);
+		return this.user.request(command, args, timeout === undefined ? this.requestTimeout : timeout);
 	}
 
-	updateProperty(prop, value) {
+	updateProperty(prop: string, value: PropertyValue): void {
 		this.user.send(cmd.UpdatePlayer, {
-			uid: this.user.id,
+			uid: this.getId(),
 			prop,
 			value,
 		});
 	}
 
-	broadcastProperty(prop, value) {
-		const room = this.user && this.user.room;
+	broadcastProperty(prop: string, value: PropertyValue): void {
+		const room = this.getRoom();
 		if (!room) {
 			return;
 		}
+
 		room.broadcast(cmd.UpdatePlayer, {
-			uid: this.user.id,
+			uid: this.getId(),
 			prop,
 			value,
 		});
 	}
 
-	addUseCount(name, delta) {
+	addUseCount(name: string, delta: number): void {
 		const count = this.getUseCount(name);
 		this.useCount.set(name, count + delta);
 	}
 
-	getUseCount(name) {
+	getUseCount(name: string): number {
 		return this.useCount.get(name) || 0;
 	}
 
-	resetUseCount(name) {
+	resetUseCount(name: string): void {
 		this.useCount.set(name, 0);
 	}
 
-	clearUseCount() {
+	clearUseCount(): void {
 		this.useCount.clear();
 	}
 
-	getUseLimit(name) {
+	getUseLimit(name: string): number {
 		return this.useLimit.get(name) || Infinity;
 	}
 
-	setUseLimit(name, limit) {
+	setUseLimit(name: string, limit: number): void {
 		this.useLimit.set(name, limit);
 	}
 
-	clearUseLimit() {
+	clearUseLimit(): void {
 		this.useLimit.clear();
 	}
 
+	/*
 	async play() {
 		const availableCards = [];
 		for (const card of this.handArea.getCards()) {
@@ -344,6 +375,7 @@ class ServerPlayer extends Player {
 
 		return true;
 	}
+	*/
 }
 
-module.exports = ServerPlayer;
+export default ServerPlayer;
