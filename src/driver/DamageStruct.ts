@@ -1,20 +1,30 @@
-const DamageType = require('./DamageType');
+import {
+	Card,
+	DamageType,
+	Skill,
+} from '@karuta/sanguosha-core';
+
+import ServerPlayer from './ServerPlayer';
 
 class DamageStruct {
-	/**
-	 * Create a damage struct.
-	 * @param {ServerPlayer} from
-	 * @param {ServerPlayer} to
-	 * @param {number} num
-	 */
-	constructor(from, to, num, type = DamageType.Normal) {
+	from: ServerPlayer;
+
+	to: ServerPlayer;
+
+	num: number;
+
+	type: DamageType;
+
+	skill: Skill | undefined;
+
+	card: Card | undefined;
+
+	constructor(from: ServerPlayer, to: ServerPlayer, num = 1) {
 		this.from = from;
 		this.to = to;
 		this.num = num;
-		this.type = type;
-		this.skill = null;
-		this.card = null;
+		this.type = DamageType.Normal;
 	}
 }
 
-module.exports = DamageStruct;
+export default DamageStruct;
