@@ -1,18 +1,23 @@
+import CardUseStruct from './CardUseStruct';
+import ServerPlayer from './ServerPlayer';
 
 class CardEffectStruct {
+	use: CardUseStruct;
+
+	to: ServerPlayer;
+
 	/**
-	 *
-	 * @param {CardUseStruct} use
-	 * @param {ServerPlayer} to
+	 * @param use
+	 * @param to
 	 */
-	constructor(use, to) {
+	constructor(use: CardUseStruct, to: ServerPlayer) {
 		this.use = use;
 		this.to = to;
 	}
 
-	get from() {
+	get from(): ServerPlayer {
 		return this.use.from;
 	}
 }
 
-module.exports = CardEffectStruct;
+export default CardEffectStruct;
