@@ -1,2 +1,2 @@
 
-module.exports = require('./GameDriver');
+export { default } from './GameDriver';
