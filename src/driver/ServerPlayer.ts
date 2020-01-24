@@ -63,6 +63,10 @@ class ServerPlayer extends Player {
 		this.requestTimeout = 15000;
 	}
 
+	getUser(): User {
+		return this.user;
+	}
+
 	getId(): number {
 		return this.user ? this.user.getId() : 0;
 	}
