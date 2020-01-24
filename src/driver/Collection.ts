@@ -1,7 +1,5 @@
-import {
-	Card,
-	General,
-} from '@karuta/sanguosha-core';
+import { General } from '@karuta/sanguosha-core';
+import Card from './Card';
 
 abstract class Collection {
 	protected name: string;
