@@ -1,5 +1,4 @@
-import { Card } from '@karuta/sanguosha-core';
-
+import Card from './Card';
 import ServerPlayer from './ServerPlayer';
 
 interface CardUseMeta {
