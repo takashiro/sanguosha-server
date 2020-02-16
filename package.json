@@ -33,6 +33,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "@karuta/core": "^0.1.0"
+    "@karuta/core": "^0.1.0",
+    "@karuta/sanguosha-core": "^0.1.0"
   }
 }
