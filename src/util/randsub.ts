@@ -1,5 +1,5 @@
 
-function randsub(arr, num) {
+function randsub<Element>(arr: Element[], num: number): Element[] {
 	if (num >= arr.length) {
 		return arr;
 	}
@@ -20,4 +20,4 @@ function randsub(arr, num) {
 	return res;
 }
 
-module.exports = randsub;
+export default randsub;

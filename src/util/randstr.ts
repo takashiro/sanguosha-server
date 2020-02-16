@@ -1,5 +1,5 @@
 
-function randstr(length) {
+function randstr(length: number): string {
 	let str = '';
 	for (let i = 0; i < length; i++) {
 		let rand = Math.floor(Math.random() * 62);
@@ -18,4 +18,4 @@ function randstr(length) {
 	return str;
 }
 
-module.exports = randstr;
+export default randstr;
