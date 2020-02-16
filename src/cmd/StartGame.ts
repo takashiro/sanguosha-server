@@ -1,24 +1,21 @@
+import { User } from '@karuta/core';
+import { Command } from '@karuta/sanguosha-core';
 
-function StartGame() {
-	const driver = this.getDriver();
-	if (!driver) {
-		return;
+import Action from '../core/Action';
+import GameDriver from '../driver';
+
+class StartGame extends Action<void, void> {
+	constructor() {
+		super(Command.StartGame);
 	}
 
-	const config = driver.getConfig();
-	const mode = config.mode || 'standard';
-
-	try {
-		// eslint-disable-next-line global-require, import/no-dynamic-require
-		const ruleClasses = require(`../mode/${mode}`);
-		for (const RuleClass of ruleClasses) {
-			driver.register(new RuleClass());
+	async process(user: User): Promise<void> {
+		const driver = user.getDriver() as GameDriver;
+		if (!driver) {
+			return;
 		}
-	} catch (error) {
-		console.error(error);
+		driver.start();
 	}
-
-	driver.start();
 }
 
-module.exports = StartGame;
+export default StartGame;
