@@ -1,14 +1,19 @@
+import EventListener from './EventListener';
+import GameEvent from './GameEvent';
+import GameDriver from './GameDriver';
 
-const EventListener = require('./EventListener');
-
-class GameRule extends EventListener {
-	isTriggerable(target) {
-		return Boolean(this.driver && !target);
+class GameRule<ParamType> extends EventListener<GameEvent, ParamType> {
+	getDriver(): GameDriver {
+		return super.getDriver() as GameDriver;
 	}
 
-	async cost() {
+	isTriggerable(data: ParamType): boolean {
+		return !data;
+	}
+
+	async cost(): Promise<boolean> {
 		return true;
 	}
 }
 
-module.exports = GameRule;
+export default GameRule;
