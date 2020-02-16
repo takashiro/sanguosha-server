@@ -7,14 +7,20 @@ import {
 	General,
 } from '@karuta/sanguosha-core';
 
+import Action from '../core/Action';
+import Config from '../core/Config';
+
+import { ActionMap } from '../cmd';
+
 import EventDriver from './EventDriver';
 import GameEvent from './GameEvent';
 import Card from './Card';
+import Collection from './Collection';
 import ServerPlayer from './ServerPlayer';
+
 import CardUseStruct from './CardUseStruct';
 import CardEffectStruct from './CardEffectStruct';
 import DamageStruct from './DamageStruct';
-import Collection from './Collection';
 
 interface CardMoveOptions {
 	openTo?: ServerPlayer;
@@ -33,7 +39,7 @@ class GameDriver extends EventDriver<GameEvent> {
 
 	protected players: ServerPlayer[];
 
-	protected capacity: number;
+	protected config: Config;
 
 	protected collections: Collection[];
 
@@ -48,7 +54,11 @@ class GameDriver extends EventDriver<GameEvent> {
 
 		this.room = room;
 		this.players = [];
-		this.capacity = 8;
+
+		this.config = {
+			mode: 'standard',
+			capacity: 8,
+		};
 
 		this.collections = [];
 
@@ -58,10 +68,37 @@ class GameDriver extends EventDriver<GameEvent> {
 		this.currentPlayer = null;
 	}
 
+	getName(): string {
+		return 'sanguosha';
+	}
+
+	setConfig(config: Config): void {
+		if (config.mode) {
+			this.config.mode = config.mode;
+		}
+
+		if (config.capacity) {
+			this.config.capacity = config.capacity;
+		}
+	}
+
+	getConfig(): Config {
+		return this.config;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	getAction(command: number): Action<any, any> | undefined {
+		return ActionMap.get(command);
+	}
+
 	async start(): Promise<void> {
 		super.start();
 		this.room.broadcast(cmd.StartGame);
 		await this.trigger(GameEvent.StartGame);
+	}
+
+	getRoom(): Room {
+		return this.room;
 	}
 
 	getUsers(): User[] {
@@ -70,6 +107,10 @@ class GameDriver extends EventDriver<GameEvent> {
 
 	getPlayers(): ServerPlayer[] {
 		return this.players;
+	}
+
+	setPlayers(players: ServerPlayer[]): void {
+		this.players = players;
 	}
 
 	findPlayer(seat: number): ServerPlayer | undefined {
@@ -151,6 +192,83 @@ class GameDriver extends EventDriver<GameEvent> {
 		this.broadcastCardMove(cards, from, to, options);
 	}
 
+
+	/**
+	 * Ask a player to choose and confirm card targets. And then make the card take effect.
+	 * @param player
+	 * @param card
+	 * @return Whether the card takes effect.
+	 */
+	async playCard(source: ServerPlayer, card: Card): Promise<boolean> {
+		if (!await card.isAvailable(this, source)) {
+			return false;
+		}
+
+		const players = this.getPlayers();
+		const targets = [];
+
+		// Request to choose card targets
+		const expiry = Date.now() + source.getRequestTimeout();
+		while (Date.now() < expiry) {
+			const candidates = [];
+			for (const target of players) {
+				if (await card.targetFilter(this, targets, target, source)) {
+					candidates.push(target.getSeat());
+				}
+			}
+			const feasible: boolean = await card.targetFeasible(this, targets, source);
+
+			let reply = null;
+			try {
+				reply = await source.request(cmd.ChoosePlayer, {
+					candidates,
+					feasible,
+				}, expiry - Date.now());
+			} catch (error) {
+				// Timed out. Ends play phase.
+				return false;
+			}
+
+			if (!reply || reply.cancel) {
+				// Cancel using the card
+				return true;
+			}
+			if (reply.confirm) {
+				break;
+			}
+
+			if (!reply.player) {
+				return false;
+			}
+
+			const target = this.findPlayer(reply.player);
+			if (!target || !await card.targetFilter(this, targets, target, source)) {
+				// Ends play phase
+				return false;
+			}
+
+			const i = targets.indexOf(target);
+			if (reply.selected) {
+				if (i < 0) {
+					targets.push(target);
+				}
+			} else if (i >= 0) {
+				targets.splice(i, 1);
+			}
+		}
+
+		// Confirm the targets are feasible
+		if (!await card.targetFeasible(this, targets, source)) {
+			return false;
+		}
+
+		const use = new CardUseStruct(source, card);
+		use.to = targets;
+		await this.useCard(use);
+
+		return true;
+	}
+
 	/**
 	 * A player uses a card.
 	 * @param use
@@ -197,7 +315,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * Set current player.
 	 * @param player
 	 */
-	setCurrentPlayer(player: ServerPlayer): void {
+	setCurrentPlayer(player: ServerPlayer | null): void {
 		this.currentPlayer = player;
 	}
 
@@ -235,7 +353,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		return seat;
 	}
 
-	broadcastCardMove(cards: MetaCard[], from: CardArea, to: CardArea, options?: CardMoveOptions) {
+	broadcastCardMove(cards: MetaCard[], from: CardArea, to: CardArea, options?: CardMoveOptions): void {
 		if (!this.room) {
 			return;
 		}
