@@ -1,21 +1,23 @@
+import { General } from '@karuta/sanguosha-core';
 
-const Collection = require('../../core/Collection');
+import Collection from '../../driver/Collection';
+import Card from '../../driver/Card';
 
-const wei = require('./list/wei');
-const shu = require('./list/shu');
-const wu = require('./list/wu');
-const qun = require('./list/qun');
+import wei from './list/wei';
+import shu from './list/shu';
+import wu from './list/wu';
+import qun from './list/qun';
 
-const basic = require('./list/basic');
-const equip = require('./list/equip');
-const trick = require('./list/trick');
+import basic from './list/basic';
+import equip from './list/equip';
+import trick from './list/trick';
 
-class StandardCollection extends Collection {
+export default class StandardCollection extends Collection {
 	constructor() {
 		super('standard');
 	}
 
-	createGenerals() {
+	getGenerals(): General[] {
 		return [
 			...wei,
 			...shu,
@@ -24,7 +26,7 @@ class StandardCollection extends Collection {
 		];
 	}
 
-	createCards() {
+	createCards(): Card[] {
 		return [
 			...basic(),
 			...equip(),
@@ -32,5 +34,3 @@ class StandardCollection extends Collection {
 		];
 	}
 }
-
-module.exports = new StandardCollection();
