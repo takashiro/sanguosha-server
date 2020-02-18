@@ -32,6 +32,10 @@ interface AskForCardOptions {
 
 type PropertyValue = string | number | boolean | object | null;
 
+interface PlayAction {
+	card?: Card;
+}
+
 class ServerPlayer extends Player {
 	protected user: User;
 
@@ -265,121 +269,41 @@ class ServerPlayer extends Player {
 		this.useLimit.clear();
 	}
 
-	/*
-	async play() {
-		const availableCards = [];
-		for (const card of this.handArea.getCards()) {
-			if (await card.isAvailable(this)) {
-				availableCards.push(card);
-			}
-		}
-
+	async play(availableCards: Card[]): Promise<PlayAction | null> {
 		let reply = null;
 		try {
 			reply = await this.user.request(cmd.Play, {
 				cards: availableCards.map((card) => card.getId()),
 			}, this.requestTimeout);
 		} catch (error) {
-			return false;
+			return null;
 		}
 		if (!reply) {
-			return false;
+			return null;
 		}
 
 		if (!reply.skill) {
 			const { cards } = reply;
 			if (!cards) {
-				return false;
+				return null;
 			}
 
 			const cardId = cards[0];
 			if (!cardId || typeof cardId !== 'number') {
-				return false;
+				return null;
 			}
 
 			const card = availableCards.find((c) => c.getId() === cardId);
 			if (!card) {
-				return false;
+				return null;
 			}
 
-			return this.playCard(card);
+			return { card };
 		}
 
 		// TO-DO: Invoke a proactive skill.
-		return false;
+		return null;
 	}
-
-	async playCard(card) {
-		if (!await card.isAvailable(this)) {
-			return false;
-		}
-
-		const driver = this.getDriver();
-		const players = driver.getPlayers();
-		const targets = [];
-
-		// Request to choose card targets
-		const expiry = Date.now() + this.requestTimeout;
-		while (Date.now() < expiry) {
-			const candidates = [];
-			for (const player of players) {
-				if (await card.targetFilter(targets, player, this)) {
-					candidates.push(player.getSeat());
-				}
-			}
-			const feasible = await card.targetFeasible(targets, this);
-
-			let reply = null;
-			try {
-				reply = await this.request(cmd.ChoosePlayer, {
-					candidates,
-					feasible,
-				}, expiry - Date.now());
-			} catch (error) {
-				// Timed out. Ends play phase.
-				return false;
-			}
-
-			if (!reply || reply.cancel) {
-				// Cancel using the card
-				return true;
-			}
-			if (reply.confirm) {
-				break;
-			}
-
-			if (!reply.player) {
-				return false;
-			}
-
-			const player = driver.findPlayer(reply.player);
-			if (!player || !await card.targetFilter(targets, player, this)) {
-				// Ends play phase
-				return false;
-			}
-
-			const i = targets.indexOf(player);
-			if (reply.selected) {
-				if (i < 0) {
-					targets.push(player);
-				}
-			} else if (i >= 0) {
-				targets.splice(i, 1);
-			}
-		}
-
-		// Confirm the targets are feasible
-		if (!await card.targetFeasible(targets, this)) {
-			return false;
-		}
-
-		const use = new CardUseStruct(this, card);
-		use.to = targets;
-		await driver.useCard(use);
-
-		return true;
-	}
-	*/
 }
 
 export default ServerPlayer;
