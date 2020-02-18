@@ -1,27 +1,12 @@
-const Duel = require('./Duel');
-const Dismantle = require('./Dismantle');
-const Snatch = require('./Snatch');
-const BorrowSword = require('./BorrowSword');
-const Nullification = require('./Nullification');
-const BarbarianInvasion = require('./BarbarianInvasion');
-const ArrowBarrage = require('./ArrowBarrage');
-const PeachGarden = require('./PeachGarden');
-const Harvest = require('./Harvest');
-const ExNihilo = require('./ExNihilo');
-const Indulgence = require('./Indulgence');
-const Lightning = require('./Lightning');
-
-module.exports = {
-	Duel,
-	Dismantle,
-	Snatch,
-	BorrowSword,
-	Nullification,
-	BarbarianInvasion,
-	ArrowBarrage,
-	PeachGarden,
-	Harvest,
-	ExNihilo,
-	Indulgence,
-	Lightning,
-};
+export { default as Duel } from './Duel';
+export { default as Dismantle } from './Dismantle';
+export { default as Snatch } from './Snatch';
+export { default as BorrowSword } from './BorrowSword';
+export { default as Nullification } from './Nullification';
+export { default as BarbarianInvasion } from './BarbarianInvasion';
+export { default as ArrowBarrage } from './ArrowBarrage';
+export { default as PeachGarden } from './PeachGarden';
+export { default as Harvest } from './Harvest';
+export { default as ExNihilo } from './ExNihilo';
+export { default as Indulgence } from './Indulgence';
+export { default as Lightning } from './Lightning';

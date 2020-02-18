@@ -1,27 +1,12 @@
-const KylinBow = require('./KylinBow');
-const Axe = require('./Axe');
-const SerpentSpear = require('./SerpentSpear');
-const QinggangSword = require('./QinggangSword');
-const Crossbow = require('./Crossbow');
-const YinyangSword = require('./YinyangSword');
-const FrostSword = require('./FrostSword');
-const GreenDragonCrescentBlade = require('./GreenDragonCrescentBlade');
-const Halberd = require('./Halberd');
+export { default as KylinBow } from './KylinBow';
+export { default as Axe } from './Axe';
+export { default as SerpentSpear } from './SerpentSpear';
+export { default as QinggangSword } from './QinggangSword';
+export { default as Crossbow } from './Crossbow';
+export { default as YinyangSword } from './YinyangSword';
+export { default as FrostSword } from './FrostSword';
+export { default as GreenDragonCrescentBlade } from './GreenDragonCrescentBlade';
+export { default as Halberd } from './Halberd';
 
-const EightDiagram = require('./EightDiagram');
-const RenwangShield = require('./RenwangShield');
-
-module.exports = {
-	KylinBow,
-	Axe,
-	SerpentSpear,
-	QinggangSword,
-	Crossbow,
-	YinyangSword,
-	FrostSword,
-	GreenDragonCrescentBlade,
-	Halberd,
-
-	EightDiagram,
-	RenwangShield,
-};
+export { default as EightDiagram } from './EightDiagram';
+export { default as RenwangShield } from './RenwangShield';

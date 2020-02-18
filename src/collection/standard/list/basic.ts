@@ -1,8 +1,9 @@
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-const Suit = require('../../../core/Card/Suit');
-const std = require('../basic-card');
+import Card from '../../../driver/Card';
+import * as std from '../basic-card';
 
-function createBasicCards() {
+function createBasicCards(): Card[] {
 	return [
 		new std.Strike(Suit.Spade, 7),
 		new std.Strike(Suit.Spade, 8),
@@ -62,4 +63,4 @@ function createBasicCards() {
 	];
 }
 
-module.exports = createBasicCards;
+export default createBasicCards;

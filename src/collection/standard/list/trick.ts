@@ -1,8 +1,9 @@
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-const Suit = require('../../../core/Card/Suit');
-const std = require('../trick-card');
+import * as std from '../trick-card';
+import Card from '../../../driver/Card';
 
-function createTrickCards() {
+function createTrickCards(): Card[] {
 	return [
 		new std.Harvest(Suit.Heart, 3),
 		new std.Harvest(Suit.Heart, 4),
@@ -41,4 +42,4 @@ function createTrickCards() {
 	];
 }
 
-module.exports = createTrickCards;
+export default createTrickCards;

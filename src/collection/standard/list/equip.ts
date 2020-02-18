@@ -1,10 +1,12 @@
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-const Suit = require('../../../core/Card/Suit');
-const std = require('../equip-card');
-const OffensiveHorseCard = require('../../OffensiveHorseCard');
-const DefensiveHorseCard = require('../../DefensiveHorseCard');
+import Card from '../../../driver/Card';
 
-function createEquipCards() {
+import * as std from '../equip-card';
+import OffensiveHorseCard from '../../OffensiveHorseCard';
+import DefensiveHorseCard from '../../DefensiveHorseCard';
+
+function createEquipCards(): Card[] {
 	return [
 		new std.Crossbow(Suit.Club, 1),
 		new std.Crossbow(Suit.Diamond, 1),
@@ -28,4 +30,4 @@ function createEquipCards() {
 	];
 }
 
-module.exports = createEquipCards;
+export default createEquipCards;
