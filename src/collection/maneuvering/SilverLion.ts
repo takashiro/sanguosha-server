@@ -1,9 +1,11 @@
-const ArmorCard = require('../ArmorCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import ArmorCard from '../ArmorCard';
 
 class SilverLion extends ArmorCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('silver-lion', suit, number);
 	}
 }
 
-module.exports = SilverLion;
+export default SilverLion;

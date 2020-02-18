@@ -1,10 +1,12 @@
-const Strike = require('../standard/Strike');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import Strike from '../standard/Strike';
 
 class ThunderStrike extends Strike {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super(suit, number);
 		this.name = 'thunder-strike';
 	}
 }
 
-module.exports = ThunderStrike;
+export default ThunderStrike;

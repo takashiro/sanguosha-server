@@ -1,9 +1,11 @@
-const BasicCard = require('../BasicCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import BasicCard from '../BasicCard';
 
 class Wine extends BasicCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('wine', suit, number);
 	}
 }
 
-module.exports = Wine;
+export default Wine;

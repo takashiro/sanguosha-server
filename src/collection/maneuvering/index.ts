@@ -1,6 +1,19 @@
+import { General } from '@karuta/sanguosha-core';
 
-const Collection = require('../../core/Collection');
+import Collection from '../../driver/Collection';
+import Card from '../../driver/Card';
 
-const Maneuvering = new Collection('maneuvering');
+export default class ManeuveringCollection extends Collection {
+	constructor() {
+		super('maneuvering');
+	}
 
-module.exports = Maneuvering;
+	getGenerals(): General[] {
+		return [];
+	}
+
+	createCards(): Card[] {
+		// TO-DO: Add cards
+		return [];
+	}
+}
