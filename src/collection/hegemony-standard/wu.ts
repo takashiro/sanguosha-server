@@ -1,9 +1,10 @@
+import {
+	General,
+	Gender,
+	Kingdom,
+} from '@karuta/sanguosha-core';
 
-const General = require('../../core/General');
-const Gender = require('../../core/Gender');
-const Kingdom = require('../../core/Kingdom');
-
-const generals = [];
+const generals: General[] = [];
 
 const SunQuan = new General('sunquan', Kingdom.Wu, 4, Gender.Male);
 generals.push(SunQuan);
@@ -50,4 +51,4 @@ generals.push(ZhouTai);
 const ZhangZhaoZhangHong = new General('zhangzhaozhanghong', Kingdom.Wu, 3, Gender.Male);
 generals.push(ZhangZhaoZhangHong);
 
-module.exports = generals;
+export default generals;

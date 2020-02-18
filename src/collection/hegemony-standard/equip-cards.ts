@@ -1,20 +1,22 @@
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-const Suit = require('../../core/Card/Suit');
-const std = require('../standard/equip-card');
-const mnv = require('../maneuvering/card');
+import Card from '../../driver/Card';
 
-const WuliuSword = require('./WuliuSword');
-const Triblade = require('./Triblade');
-const DefensiveHorseCard = require('../DefensiveHorseCard');
-const OffensiveHorseCard = require('../OffensiveHorseCard');
+import * as std from '../standard/equip-card';
+import * as mnv from '../maneuvering/cards';
 
-module.exports = function () {
+import WuliuSword from './WuliuSword';
+import Triblade from './Triblade';
+import DefensiveHorseCard from '../DefensiveHorseCard';
+import OffensiveHorseCard from '../OffensiveHorseCard';
+
+export default function createEquipCards(): Card[] {
 	return [
 		new std.Crossbow(Suit.Diamond, 1),
 		new std.YinyangSword(Suit.Spade, 2),
 		new std.QinggangSword(Suit.Spade, 6),
 		new std.FrostSword(Suit.Spade, 2),
-		new std.Spear(Suit.Spade, 12),
+		new std.SerpentSpear(Suit.Spade, 12),
 		new mnv.PheonixFan(Suit.Diamond, 1),
 		new std.Axe(Suit.Diamond, 5),
 		new std.KylinBow(Suit.Heart, 5),
@@ -33,4 +35,4 @@ module.exports = function () {
 		new OffensiveHorseCard('ferghana', Suit.Spade, 13),
 		new OffensiveHorseCard('violet', Suit.Diamond, 13),
 	];
-};
+}

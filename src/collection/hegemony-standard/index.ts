@@ -1,33 +1,36 @@
+import { General } from '@karuta/sanguosha-core';
 
-const Collection = require('../../core/Collection');
+import Collection from '../../driver/Collection';
+import Card from '../../driver/Card';
 
-const HegemonyStandard = new Collection('hegemony-standard');
+import wei from './wei';
+import shu from './shu';
+import wu from './wu';
+import qun from './qun';
 
-const wei = require('./wei');
-const shu = require('./shu');
-const wu = require('./wu');
-const qun = require('./qun');
+import createBasicCards from './basic-cards';
+import createEquipCards from './equip-cards';
+import createTrickCards from './trick-cards';
 
-HegemonyStandard.generals = [
-	...wei,
-	...shu,
-	...wu,
-	...qun,
-];
+export default class HegemonyStandardCollection extends Collection {
+	constructor() {
+		super('hegemony-standard');
+	}
 
-const createBasicCards = require('./basic-cards');
-const createEquipCards = require('./equip-cards');
-const createTrickCards = require('./trick-cards');
+	getGenerals(): General[] {
+		return [
+			...wei,
+			...shu,
+			...wu,
+			...qun,
+		];
+	}
 
-HegemonyStandard.createCards = function () {
-	const basicCards = createBasicCards();
-	const equipCards = createEquipCards();
-	const trickCards = createTrickCards();
-	return [
-		...basicCards,
-		...equipCards,
-		...trickCards,
-	];
-};
-
-module.exports = HegemonyStandard;
+	createCards(): Card[] {
+		return [
+			...createBasicCards(),
+			...createEquipCards(),
+			...createTrickCards(),
+		];
+	}
+}

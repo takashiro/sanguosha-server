@@ -1,15 +1,16 @@
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-const Suit = require('../../core/Card/Suit');
+import Card from '../../driver/Card';
 
-const std = require('../standard/trick-card');
-const mnv = require('../maneuvering/card');
+import * as std from '../standard/trick-card';
+import * as mnv from '../maneuvering/cards';
 
-const HegNullification = require('./HegNullification');
-const Ease = require('./Ease');
-const Scout = require('./Scout');
-const Ally = require('./Ally');
+import HegNullification from './HegNullification';
+import Ease from './Ease';
+import Scout from './Scout';
+import Ally from './Ally';
 
-module.exports = function () {
+export default function createTrickCards(): Card[] {
 	return [
 		new std.Harvest(Suit.Heart, 3),
 		new std.PeachGarden(Suit.Heart, 1),
@@ -46,4 +47,4 @@ module.exports = function () {
 		new mnv.SupplyShortage(Suit.Club, 10),
 		new std.Lightning(Suit.Spade, 1),
 	];
-};
+}

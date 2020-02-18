@@ -1,9 +1,11 @@
-const WeaponCard = require('../WeaponCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import WeaponCard from '../WeaponCard';
 
 class WuliuSword extends WeaponCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('wuliu-sword', suit, number);
 	}
 }
 
-module.exports = WuliuSword;
+export default WuliuSword;
