@@ -1,8 +1,15 @@
+import { CardType as Type } from '@karuta/sanguosha-core';
+import Card from '../driver/Card';
 
-const Card = require('../core/Card');
+import GameDriver from '../driver/GameDriver';
+import CardUseStruct from '../driver/CardUseStruct';
 
 class BasicCard extends Card {
-	async use(driver, use) {
+	getType(): Type {
+		return Type.Basic;
+	}
+
+	async use(driver: GameDriver, use: CardUseStruct): Promise<void> {
 		const { card } = use;
 		if (!card.isReal()) {
 			return;
@@ -13,7 +20,7 @@ class BasicCard extends Card {
 		driver.moveCards([card], handArea, processArea, { open: true });
 	}
 
-	async complete(driver, use) {
+	async complete(driver: GameDriver, use: CardUseStruct): Promise<void> {
 		const { card } = use;
 		if (!card.isReal()) {
 			return;
@@ -25,4 +32,4 @@ class BasicCard extends Card {
 	}
 }
 
-module.exports = BasicCard;
+export default BasicCard;
