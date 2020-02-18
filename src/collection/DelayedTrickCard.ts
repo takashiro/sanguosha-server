@@ -1,7 +1,6 @@
-
-const TrickCard = require('./TrickCard');
+import TrickCard from './TrickCard';
 
 class DelayedTrickCard extends TrickCard {
 }
 
-module.exports = DelayedTrickCard;
+export default DelayedTrickCard;
