@@ -1,7 +1,7 @@
 
-const HorseCard = require('./HorseCard');
+import HorseCard from './HorseCard';
 
 class OffensiveHorseCard extends HorseCard {
 }
 
-module.exports = OffensiveHorseCard;
+export default OffensiveHorseCard;

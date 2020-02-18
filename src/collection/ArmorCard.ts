@@ -1,7 +1,7 @@
 
-const EquipCard = require('./EquipCard');
+import EquipCard from './EquipCard';
 
 class ArmorCard extends EquipCard {
 }
 
-module.exports = ArmorCard;
+export default ArmorCard;

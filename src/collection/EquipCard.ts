@@ -1,7 +1,11 @@
+import { CardType as Type } from '@karuta/sanguosha-core';
 
-const Card = require('../core/Card');
+import Card from '../driver/Card';
 
 class EquipCard extends Card {
+	getType(): Type {
+		return Type.Equip;
+	}
 }
 
-module.exports = EquipCard;
+export default EquipCard;

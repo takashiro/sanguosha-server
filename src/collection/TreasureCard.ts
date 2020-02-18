@@ -1,7 +1,6 @@
-
-const EquipCard = require('./EquipCard');
+import EquipCard from './EquipCard';
 
 class TreasureCard extends EquipCard {
 }
 
-module.exports = TreasureCard;
+export default TreasureCard;
