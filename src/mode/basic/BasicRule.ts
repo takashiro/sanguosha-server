@@ -1,31 +1,35 @@
+import {
+	Command as cmd,
+	PlayerPhase as Phase,
+} from '@karuta/sanguosha-core';
 
-const GameRule = require('../../driver/GameRule');
+import GameRule from '../../driver/GameRule';
 
-const cmd = require('../../cmd');
-const Phase = require('../../core/Player/Phase');
-const GameEvent = require('../../driver/GameEvent');
-const ServerPlayer = require('../../driver/ServerPlayer');
-const PhaseChangeStruct = require('../../driver/PhaseChangeStruct');
-const shuffle = require('../../util/shuffle');
-const delay = require('../../util/delay');
+import GameEvent from '../../driver/GameEvent';
+import ServerPlayer from '../../driver/ServerPlayer';
+import PhaseChangeStruct from '../../driver/PhaseChangeStruct';
+import shuffle from '../../util/shuffle';
+import delay from '../../util/delay';
 
-class BasicRule extends GameRule {
+class BasicRule extends GameRule<void> {
+	protected idle: number;
+
 	constructor() {
 		super(GameEvent.StartGame);
 		this.idle = 1000;
 	}
 
-	preparePlayers() {
-		const { driver } = this;
+	preparePlayers(): void {
+		const driver = this.getDriver();
 		const users = driver.getUsers();
 
 		const players = users.map((user) => new ServerPlayer(user));
-		driver.players = players;
+		driver.setPlayers(players);
 	}
 
-	prepareSeats() {
-		const { driver } = this;
-		const { players } = driver;
+	prepareSeats(): void {
+		const driver = this.getDriver();
+		const players = driver.getPlayers();
 
 		let seat = 1;
 		for (const player of players) {
@@ -33,25 +37,26 @@ class BasicRule extends GameRule {
 			seat++;
 		}
 
-		driver.room.broadcast(cmd.ArrangeSeats, players.map((player) => ({
-			uid: player.id,
+		const room = driver.getRoom();
+		room.broadcast(cmd.ArrangeSeats, players.map((player) => ({
+			uid: player.getId(),
 			seat: player.getSeat(),
-			name: player.name,
+			name: player.getName(),
 		})));
 	}
 
-	prepareCards() {
-		const { driver } = this;
+	prepareCards(): void {
+		const driver = this.getDriver();
 		const cards = driver.createCards();
 		shuffle(cards);
 		driver.resetDrawPile(cards);
 
-		for (const player of driver.players) {
+		for (const player of driver.getPlayers()) {
 			driver.drawCards(player, 4);
 		}
 	}
 
-	async activatePlayer(player) {
+	async activatePlayer(player: ServerPlayer): Promise<void> {
 		const phases = [
 			Phase.Start,
 			Phase.Judge,
@@ -61,20 +66,24 @@ class BasicRule extends GameRule {
 			Phase.End,
 		];
 
-		const { driver } = this;
+		const driver = this.getDriver();
 		driver.setCurrentPlayer(player);
 
 		for (const phase of phases) {
-			const data = new PhaseChangeStruct(player, player.getPhase(), phase);
-			if (await driver.trigger(GameEvent.StartPhase, player, data)) {
+			const data: PhaseChangeStruct = {
+				player,
+				from: player.getPhase(),
+				to: phase,
+			};
+			if (await driver.trigger(GameEvent.StartPhase, data)) {
 				continue;
 			}
 
 			player.setPhase(data.to);
 			player.broadcastProperty('phase', data.to);
-			await driver.trigger(GameEvent.ProceedPhase, player, data);
+			await driver.trigger(GameEvent.ProceedPhase, data);
 
-			await driver.trigger(GameEvent.EndPhase, player, data);
+			await driver.trigger(GameEvent.EndPhase, data);
 
 			await delay(this.idle);
 		}
@@ -85,15 +94,16 @@ class BasicRule extends GameRule {
 		driver.setCurrentPlayer(null);
 	}
 
-	prepareBattleField() {
-		const { driver } = this;
-		driver.room.broadcast(cmd.ToBattle);
+	prepareBattleField(): void {
+		const driver = this.getDriver();
+		const room = driver.getRoom();
+		room.broadcast(cmd.ToBattle);
 	}
 
-	async proceed() {
-		const { driver } = this;
+	async proceed(): Promise<void> {
+		const driver = this.getDriver();
 		let i = 0;
-		const { players } = driver;
+		const players = driver.getPlayers();
 		while (driver.isRunning()) {
 			const player = players[i];
 			await this.activatePlayer(player);
@@ -106,4 +116,4 @@ class BasicRule extends GameRule {
 	}
 }
 
-module.exports = BasicRule;
+export default BasicRule;
