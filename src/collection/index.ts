@@ -1,26 +1,10 @@
+import HegemonyStandard from './hegemony-standard';
+import Maneuvering from './maneuvering';
+import Standard from './standard';
 
-const fs = require('fs');
-const path = require('path');
+const collections = new Map();
+collections.set('standard', new Standard());
+collections.set('maneuvering', new Maneuvering());
+collections.set('hegemony-standard', new HegemonyStandard());
 
-const collectionDir = path.resolve(__dirname);
-
-const collectionDirs = fs.readdirSync(collectionDir);
-
-const collections = [];
-for (const dir of collectionDirs) {
-	const fullPath = path.resolve(__dirname, dir);
-	const stat = fs.statSync(fullPath);
-	if (!stat.isDirectory()) {
-		continue;
-	}
-
-	try {
-		// eslint-disable-next-line global-require, import/no-dynamic-require
-		const collection = require(fullPath);
-		collections.push(collection);
-	} catch (e) {
-		console.log(e);
-	}
-}
-
-module.exports = collections;
+export default collections;

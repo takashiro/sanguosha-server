@@ -22,6 +22,8 @@ import CardUseStruct from './CardUseStruct';
 import CardEffectStruct from './CardEffectStruct';
 import DamageStruct from './DamageStruct';
 
+import CollectionMap from '../collection';
+
 interface CardMoveOptions {
 	openTo?: ServerPlayer;
 	open?: boolean;
@@ -122,8 +124,10 @@ class GameDriver extends EventDriver<GameEvent> {
 	}
 
 	loadCollection(name: string): void {
-		// eslint-disable-next-line global-require, import/no-dynamic-require
-		const collection = require(`../collection/${name}`);
+		const collection = CollectionMap.get(name);
+		if (!collection) {
+			return;
+		}
 		this.collections.push(collection);
 	}
 
