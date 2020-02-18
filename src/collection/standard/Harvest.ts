@@ -1,9 +1,11 @@
-const TrickCard = require('../TrickCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import TrickCard from '../TrickCard';
 
 class Harvest extends TrickCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('harvest', suit, number);
 	}
 }
 
-module.exports = Harvest;
+export default Harvest;

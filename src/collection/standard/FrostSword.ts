@@ -1,9 +1,11 @@
-const WeaponCard = require('../WeaponCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import WeaponCard from '../WeaponCard';
 
 class FrostSword extends WeaponCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('frost-sword', suit, number);
 	}
 }
 
-module.exports = FrostSword;
+export default FrostSword;

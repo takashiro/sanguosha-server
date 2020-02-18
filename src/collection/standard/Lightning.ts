@@ -1,9 +1,11 @@
-const DelayedTrickCard = require('../DelayedTrickCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import DelayedTrickCard from '../DelayedTrickCard';
 
 class Lightning extends DelayedTrickCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('lightning', suit, number);
 	}
 }
 
-module.exports = Lightning;
+export default Lightning;

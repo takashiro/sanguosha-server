@@ -1,9 +1,11 @@
-const TrickCard = require('../TrickCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import TrickCard from '../TrickCard';
 
 class Nullification extends TrickCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('nullification', suit, number);
 	}
 }
 
-module.exports = Nullification;
+export default Nullification;

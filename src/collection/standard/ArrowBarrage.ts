@@ -1,9 +1,11 @@
-const TrickCard = require('../TrickCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import TrickCard from '../TrickCard';
 
 class ArrowBarrage extends TrickCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('arrow-barrage', suit, number);
 	}
 }
 
-module.exports = ArrowBarrage;
+export default ArrowBarrage;

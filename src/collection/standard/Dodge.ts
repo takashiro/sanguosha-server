@@ -1,9 +1,11 @@
-const BasicCard = require('../BasicCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import BasicCard from '../BasicCard';
 
 class Dodge extends BasicCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('dodge', suit, number);
 	}
 }
 
-module.exports = Dodge;
+export default Dodge;

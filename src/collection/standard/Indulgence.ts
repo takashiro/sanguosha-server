@@ -1,9 +1,11 @@
-const DelayedTrickCard = require('../DelayedTrickCard');
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
+
+import DelayedTrickCard from '../DelayedTrickCard';
 
 class Indulgence extends DelayedTrickCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('indulgence', suit, number);
 	}
 }
 
-module.exports = Indulgence;
+export default Indulgence;

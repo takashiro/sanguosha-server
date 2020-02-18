@@ -1,24 +1,26 @@
-const BasicCard = require('../BasicCard');
-const Phase = require('../../core/Player/Phase');
+import {
+	PlayerPhase as Phase,
+	CardSuit as Suit,
+} from '@karuta/sanguosha-core';
 
-const DamageStruct = require('../../driver/DamageStruct');
+import BasicCard from '../BasicCard';
+
+import GameDriver from '../../driver/GameDriver';
+import ServerPlayer from '../../driver/ServerPlayer';
+import DamageStruct from '../../driver/DamageStruct';
+import CardEffectStruct from '../../driver/CardEffectStruct';
 
 class Strike extends BasicCard {
-	constructor(suit, number) {
+	constructor(suit: Suit, number: number) {
 		super('strike', suit, number);
 	}
 
-	async isAvailable(source) {
-		return source && source.getPhase() === Phase.Play;
+	async isAvailable(driver: GameDriver, source: ServerPlayer): Promise<boolean> {
+		return driver && source && source.getPhase() === Phase.Play;
 	}
 
-	async targetFilter(selected, target, source) {
+	async targetFilter(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
 		if (selected.length > 0 || !target) {
-			return false;
-		}
-
-		const driver = target.getDriver();
-		if (!driver) {
 			return false;
 		}
 
@@ -30,14 +32,14 @@ class Strike extends BasicCard {
 		return inRange;
 	}
 
-	async targetFeasible(selected) {
-		return selected.length === 1;
+	async targetFeasible(driver: GameDriver, selected: ServerPlayer[]): Promise<boolean> {
+		return driver && selected.length === 1;
 	}
 
-	async effect(driver, effect) {
+	async effect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
 		const damage = new DamageStruct(effect.from, effect.to, 1);
 		driver.damage(damage);
 	}
 }
 
-module.exports = Strike;
+export default Strike;
