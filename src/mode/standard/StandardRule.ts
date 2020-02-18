@@ -1,24 +1,32 @@
 
-const BasicRule = require('../basic/BasicRule');
+import {
+	General,
+	PlayerRole as Role,
+} from '@karuta/sanguosha-core';
 
-const Role = require('../../core/Player/Role');
-const shuffle = require('../../util/shuffle');
-const randsub = require('../../util/randsub');
+import BasicRule from '../basic/BasicRule';
 
-function fillArray(arr, value, n) {
+import ServerPlayer from '../../driver/ServerPlayer';
+
+import shuffle from '../../util/shuffle';
+import randsub from '../../util/randsub';
+
+function fillArray<Element>(arr: Element[], value: Element, n: number): void {
 	for (let i = 0; i < n; i++) {
 		arr.push(value);
 	}
 }
 
 class StandardRule extends BasicRule {
+	private candidateGeneralNum: number;
+
 	constructor() {
 		super();
 
 		this.candidateGeneralNum = 3;
 	}
 
-	async effect() {
+	async effect(): Promise<boolean> {
 		await this.preparePlayers();
 		await this.prepareRoles();
 		await this.prepareSeats();
@@ -26,10 +34,12 @@ class StandardRule extends BasicRule {
 		await this.prepareBattleField();
 		await this.prepareCards();
 		await this.proceed();
+		return false;
 	}
 
-	prepareRoles() {
-		const { players } = this.driver;
+	prepareRoles(): void {
+		const driver = this.getDriver();
+		const players = driver.getPlayers();
 		if (!players || players.length <= 1) {
 			return;
 		}
@@ -43,7 +53,7 @@ class StandardRule extends BasicRule {
 			loyalistNum--;
 		}
 
-		const roles = [];
+		const roles: Role[] = [];
 		fillArray(roles, Role.Rebel, rebelNum);
 		fillArray(roles, Role.Loyalist, loyalistNum);
 		fillArray(roles, Role.Renegade, renegadeNum);
@@ -56,15 +66,19 @@ class StandardRule extends BasicRule {
 		}
 	}
 
-	async prepareGenerals() {
-		const { driver } = this;
+	async prepareGenerals(): Promise<void> {
+		const driver = this.getDriver();
 
 		driver.loadCollection('standard');
-		const generals = driver.createGenerals();
+		const generals = driver.getGenerals();
 
 		// Set up the Emperor first
-		const { players } = driver;
+		const players = driver.getPlayers();
 		const emperor = players.find((player) => player.getRole() === Role.Emperor);
+		if (!emperor) {
+			return;
+		}
+
 		await this.prepareEmperor(emperor, generals);
 		const emperorGeneral = emperor.getGeneral();
 		emperor.setKingdom(emperorGeneral.getKingdom());
@@ -93,7 +107,7 @@ class StandardRule extends BasicRule {
 		}
 	}
 
-	async prepareEmperor(player, generals) {
+	async prepareEmperor(player: ServerPlayer, generals: General[]): Promise<void> {
 		const candidates = generals.filter((general) => general.isEmperor());
 
 		const others = generals.filter((general) => !general.isEmperor());
@@ -110,7 +124,7 @@ class StandardRule extends BasicRule {
 		player.broadcastProperty('hp', hp);
 	}
 
-	async prepareGeneral(player, generals) {
+	async prepareGeneral(player: ServerPlayer, generals: General[]): Promise<void> {
 		const offset = this.candidateGeneralNum * (player.getSeat() - 2);
 		const candidates = generals.slice(offset, offset + this.candidateGeneralNum);
 		const res = await player.askForGeneral(candidates, { num: 1 });
@@ -126,4 +140,4 @@ class StandardRule extends BasicRule {
 	}
 }
 
-module.exports = StandardRule;
+export default StandardRule;
