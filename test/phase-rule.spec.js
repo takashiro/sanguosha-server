@@ -1,79 +1,91 @@
-const assert = require('assert');
-const sinon = require('sinon');
+import PhaseRule from '../src/mode/basic/PhaseRule';
+import { PlayerPhase as Phase } from '@karuta/sanguosha-core';
 
-const PhaseRule = require('../src/mode/basic/PhaseRule');
-const Phase = require('../src/core/Player/Phase');
-
-describe('Phase Rule', function () {
+describe('Phase Rule', () => {
 	const rule = new PhaseRule();
 
-	it('checks driver and target', function () {
+	it('checks driver and target', () => {
 		rule.setDriver(null);
-		assert.strictEqual(rule.isTriggerable(null), false);
-		assert.strictEqual(rule.isTriggerable({}), false);
+		expect(rule.isTriggerable(null)).toBe(false);
+		expect(rule.isTriggerable({})).toBe(false);
 
 		rule.setDriver({});
-		assert.strictEqual(rule.isTriggerable(null), false);
-		assert.strictEqual(rule.isTriggerable({}), true);
+		expect(rule.isTriggerable(null)).toBe(false);
+		expect(rule.isTriggerable({ player: 1 })).toBe(true);
 	});
 
-	it('draws 2 cards', async function () {
+	it('draws 2 cards', async () => {
 		const player = {};
 		const driver = {
 			trigger() {},
-			drawCards: sinon.spy(),
+			drawCards: jest.fn(),
 		};
 		rule.setDriver(driver);
 
-		await rule.effect(player, {
+		await rule.effect({
 			to: Phase.Draw,
+			player,
 		});
 
-		sinon.assert.calledOnceWithExactly(driver.drawCards, player, 2);
+		expect(driver.drawCards).toBeCalledWith(player, 2);
 	});
 
-	it('activates a player', async function () {
-		let count = 0;
-		const player = {
-			async play() {
-				count++;
-				return count < 3;
+	it('activates a player', async () => {
+		const play = jest.fn().mockResolvedValue(false);
+		for (let i = 0; i < 2; i++) {
+			play.mockResolvedValueOnce(true);
+		}
+
+		const handArea = {
+			getCards() {
+				return [];
 			},
 		};
 
-		await rule.effect(player, {
+		const player = {
+			play,
+			getHandArea() {
+				return handArea;
+			},
+		};
+
+		await rule.effect({
 			to: Phase.Play,
+			player,
 		});
 
-		assert.strictEqual(count, 3);
+		expect(play).toBeCalledTimes(3);
 	});
 
-	it('discards overflow hand cards', async function () {
+	it('discards overflow hand cards', async () => {
+		const handArea = {
+			size: 10,
+		};
 		const selected = [1, 2, 3];
 		const player = {
-			handArea: {
-				size: 10,
-			},
+			getHandArea: jest.fn().mockReturnValue(handArea),
 			getHp() {
 				return 3;
 			},
-			askForCards: sinon.stub().returns(selected),
+			askForCards: jest.fn().mockResolvedValue(selected),
 		};
+		const discardPile = {};
 		const driver = {
-			discardPile: {},
-			trigger: sinon.fake(),
-			moveCards: sinon.spy(),
+			getDiscardPile: () => discardPile,
+			trigger: jest.fn(),
+			moveCards: jest.fn(),
 		};
 		rule.setDriver(driver);
 
-		await rule.effect(player, {
+		await rule.effect({
+			player,
 			to: Phase.Discard,
 		});
 
-		sinon.assert.calledOnceWithExactly(driver.moveCards, selected, player.handArea, driver.discardPile, { open: true });
+		expect(driver.moveCards).toBeCalledWith(selected, handArea, discardPile, { open: true });
 	});
 
-	it('does nothing by default', async function () {
+	it('does nothing by default', async () => {
 		await rule.effect({}, {});
 	});
 });
