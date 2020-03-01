@@ -1,55 +1,47 @@
+import GameDriver from '../src/driver';
+import GameEvent from '../src/driver/GameEvent';
 
-const assert = require('assert');
-const sinon = require('sinon');
-
-const GameDriver = require('../src/driver');
-const GameEvent = require('../src/driver/GameEvent');
-
-describe('GameDriver', function () {
-	this.afterEach(function () {
-		sinon.restore();
-	});
-
+describe('GameDriver', () => {
 	const room = {
-		broadcast: sinon.fake(),
+		broadcast: jest.fn(),
 	};
 	const driver = new GameDriver(room);
 
-	it('loads the standard collection', function () {
+	it('loads the standard collection', () => {
 		driver.loadCollection('standard');
-		assert(driver.collections.length === 1);
+		expect(driver.collections).toHaveLength(1);
 
-		const col = driver.collections[0];
-		const generals = col.createGenerals();
-		assert(generals.length === 25);
+		const [col] = driver.collections;
+		const generals = col.getGenerals();
+		expect(generals).toHaveLength(25);
 	});
 
-	it('creates generals', function () {
-		const generals = driver.createGenerals();
-		assert(generals.length === 25);
+	it('creates generals', () => {
+		const generals = driver.getGenerals();
+		expect(generals).toHaveLength(25);
 	});
 
-	it('creates cards', function () {
+	it('creates cards', () => {
 		const cards = driver.createCards();
-		assert(cards.length > 0);
-		assert(cards.every((card) => card.getId() > 0));
+		expect(cards.length).toBeGreaterThan(0);
+		expect(cards.every((card) => card.getId() > 0)).toBe(true);
 	});
 
-	it('finds a player', function () {
+	it('finds a player', () => {
 		driver.players = [
 			{ getSeat() { return 2; } },
 			{ getSeat() { return 1; } },
 		];
-		assert.strictEqual(driver.getPlayers(), driver.players);
-		assert.strictEqual(driver.findPlayer(2), driver.players[0]);
+		expect(driver.getPlayers()).toBe(driver.players);
+		expect(driver.findPlayer(2)).toBe(driver.players[0]);
 	});
 
-	it('starts game', async function () {
+	it('starts game', async () => {
 		await driver.start();
-		sinon.assert.calledWith(room.broadcast, GameEvent.StartGame);
+		expect(room.broadcast).toBeCalledWith(GameEvent.StartGame);
 	});
 
-	describe('#getDistance()', function () {
+	describe('#getDistance()', () => {
 		const players = [
 			{ isDead() { return true; }, isAlive() { return false; }, getSeat() { return 1; } },
 			{ isDead() { return false; }, isAlive() { return true; }, getSeat() { return 2; } },
@@ -59,39 +51,39 @@ describe('GameDriver', function () {
 			{ isDead() { return true; }, isAlive() { return false; }, getSeat() { return 6; } },
 		];
 
-		it('refuses dead players', async function () {
+		it('refuses dead players', async () => {
 			driver.players = players;
-			assert(!Number.isFinite(await driver.getDistance(players[0], players[1])));
-			assert(!Number.isFinite(await driver.getDistance(players[1], players[5])));
-			assert(!Number.isFinite(driver.getDistance(players[0], players[5])));
+			expect(Number.isFinite(await driver.getDistance(players[0], players[1]))).toBe(false);
+			expect(Number.isFinite(await driver.getDistance(players[1], players[5]))).toBe(false);
+			expect(Number.isFinite(driver.getDistance(players[0], players[5]))).toBe(false);
 		});
 
-		it('calculates shorter distance', async function () {
+		it('calculates shorter distance', async () => {
 			driver.players = players;
 			const dist = await driver.getDistance(players[2], players[4]);
-			assert.strictEqual(dist, 2);
+			expect(dist).toBe(2);
 		});
 
-		it('calculates shorter distance', async function () {
+		it('calculates shorter distance', async () => {
 			driver.players = players;
 			const dist = await driver.getDistance(players[1], players[4]);
-			assert.strictEqual(dist, 1);
+			expect(dist).toBe(1);
 		});
 	});
 
-	describe('#isInAttackRange()', function () {
-		it('checks attack range', async function () {
-			const getDistance = sinon.stub(driver, 'getDistance');
+	describe('#isInAttackRange()', () => {
+		it('checks attack range', async () => {
+			const getDistance = jest.spyOn(driver, 'getDistance');
 
-			getDistance.returns(2);
+			getDistance.mockReturnValue(2);
 			const source = {
 				getAttackRange() { return 2; },
 			};
-			assert(await driver.isInAttackRange(source, {}));
-			getDistance.returns(3);
-			assert(!await driver.isInAttackRange(source, {}));
+			expect(await driver.isInAttackRange(source, {})).toBe(true);
+			getDistance.mockReturnValue(3);
+			expect(await driver.isInAttackRange(source, {})).toBe(false);
 
-			getDistance.restore();
+			getDistance.mockRestore();
 		});
 	});
 });
