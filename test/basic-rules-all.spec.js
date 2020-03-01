@@ -1,29 +1,52 @@
+import {
+	Command as cmd,
+	PlayerPhase as Phase,
+} from '@karuta/sanguosha-core';
 
-const assert = require('assert');
-const sinon = require('sinon');
+import GameEvent from '../src/driver/GameEvent';
+import BasicRule from '../src/mode/basic/BasicRule';
 
-const cmd = require('../src/cmd');
-const GameEvent = require('../src/driver/GameEvent');
+class MockUser {
+	constructor(room, id, name) {
+		this.room = room;
+		this.id = id;
+		this.name = name;
+	}
 
-const BasicRule = require('../src/mode/basic/BasicRule');
+	getRoom() {
+		return this.room;
+	}
 
-const Phase = require('../src/core/Player/Phase');
+	getId() {
+		return this.id;
+	}
 
-describe('Basic Rule', function () {
-	this.afterEach(function () {
-		sinon.restore();
-	});
+	getName() {
+		return this.name;
+	}
+}
+
+describe('Basic Rule', () => {
+	const room = {
+		broadcast: jest.fn(),
+	};
 
 	const users = [
-		{ id: 1, name: 'user1' },
-		{ id: 2, name: 'user2' },
+		new MockUser(room, 1, 'user1'),
+		new MockUser(room, 2, 'user2'),
 	];
 
 	const driver = {
-		room: {
-			broadcast: sinon.fake(),
+		getRoom() {
+			return room;
 		},
-		setCurrentPlayer: sinon.fake(),
+		setCurrentPlayer: jest.fn(),
+		setPlayers(players) {
+			this.players = players;
+		},
+		getPlayers() {
+			return this.players;
+		},
 		getUsers() { return users; },
 		stop() {
 			this.finished = true;
@@ -38,59 +61,59 @@ describe('Basic Rule', function () {
 	rule.setDriver(driver);
 	rule.idle = 0;
 
-	it('binds to start event', function () {
-		assert(rule.event === GameEvent.StartGame);
+	it('binds to start event', () => {
+		expect(rule.event).toBe(GameEvent.StartGame);
 	});
 
-	it('prepares players', function () {
+	it('prepares players', () => {
 		rule.preparePlayers();
 
-		const { players } = driver;
-		assert(players.length === users.length);
+		const players = driver.getPlayers();
+		expect(players.length).toBe(users.length);
 		for (let i = 0; i < players.length; i++) {
-			assert(players[i].getId() === users[i].id);
-			assert(players[i].getName() === users[i].name);
+			expect(players[i].getId()).toBe(users[i].id);
+			expect(players[i].getName()).toBe(users[i].name);
 		}
 	});
 
-	it('prepares seats', function () {
+	it('prepares seats', () => {
 		rule.prepareSeats();
-		const players = driver.players.map((player) => ({
-			uid: player.id,
+		const players = driver.getPlayers().map((player) => ({
+			uid: player.getId(),
 			seat: player.getSeat(),
-			name: player.name,
+			name: player.getName(),
 		}));
-		sinon.assert.calledWith(driver.room.broadcast, cmd.ArrangeSeats, players);
+		expect(room.broadcast).toBeCalledWith(cmd.ArrangeSeats, players);
 	});
 
-	it('activates a player', async function () {
-		const player = driver.players[0];
-		const phases = [];
-		player.setPhase = function (phase) {
-			phases.push(phase);
-		};
+	it('activates a player', async () => {
+		const player = driver.getPlayers()[0];
+		const setPhase = jest.spyOn(player, 'setPhase');
 		await rule.activatePlayer(player);
-		delete player.setPhase;
 
+		expect(setPhase).toBeCalledTimes(7);
 		for (let i = 0; i < 6; i++) {
-			assert(phases[i] === i + 1);
+			expect(setPhase).nthCalledWith(i + 1, i + 1);
 		}
-		assert(phases[6] === 0);
+		expect(setPhase).nthCalledWith(7, Phase.Inactive);
+
+		setPhase.mockRestore();
 	});
 
-	it('proceeds the game', async function () {
-		const { players } = driver;
+	it('proceeds the game', async () => {
+		const players = driver.getPlayers();
 		for (const player of players) {
-			player.setPhase = sinon.spy();
+			player.setPhase = jest.fn();
 		}
 
-		driver.trigger = function (event, player, data) {
+		driver.trigger = (event, data) => {
+			const { player } = data;
 			if (player === players[1]) {
 				if (event === GameEvent.StartPhase && data.to === Phase.Draw) {
 					return true;
 				}
 				if (event === GameEvent.EndPhase && data.to === Phase.End) {
-					this.stop();
+					driver.stop();
 					return true;
 				}
 			}
@@ -99,21 +122,24 @@ describe('Basic Rule', function () {
 
 		await rule.proceed();
 
-		const phases = [Phase.Start, Phase.Judge, Phase.Draw, Phase.Play, Phase.Discard, Phase.End, Phase.Inactive];
-		assert.strictEqual(players[0].setPhase.callCount, 7);
+		const phases = [
+			Phase.Start,
+			Phase.Judge,
+			Phase.Draw,
+			Phase.Play,
+			Phase.Discard,
+			Phase.End,
+			Phase.Inactive,
+		];
+		expect(players[0].setPhase).toBeCalledTimes(7);
 		for (let i = 0; i < 7; i++) {
-			assert(players[0].setPhase.getCall(i).calledWith(phases[i]));
+			expect(players[0].setPhase).nthCalledWith(i + 1, phases[i]);
 		}
 
 		phases.splice(2, 1);
-		assert.strictEqual(players[1].setPhase.callCount, 6);
+		expect(players[1].setPhase).toBeCalledTimes(6);
 		for (let i = 0; i < 6; i++) {
-			assert(players[1].setPhase.getCall(i).calledWith(phases[i]));
+			expect(players[1].setPhase).nthCalledWith(i + 1, phases[i]);
 		}
-
-		for (const player of players) {
-			delete player.setPhase;
-		}
-		delete driver.trigger;
 	});
 });
