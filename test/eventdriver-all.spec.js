@@ -1,8 +1,5 @@
-
-const assert = require('assert');
-
-const EventListener = require('../src/driver/EventListener');
-const EventDriver = require('../src/driver/EventDriver');
+import EventListener from '../src/driver/EventListener';
+import EventDriver from '../src/driver/EventDriver';
 
 class FakeTrigger extends EventListener {
 	constructor(event, name) {
@@ -10,42 +7,40 @@ class FakeTrigger extends EventListener {
 		this.name = name;
 	}
 
-	// eslint-disable-next-line no-unused-vars
-	cost(target, data) {
+	cost({ target }) {
 		return target && target.invoke;
 	}
 
-	// eslint-disable-next-line no-unused-vars
-	effect(target, data) {
-		data.push(this.name);
+	effect({ names }) {
+		names.push(this.name);
 	}
 }
 
-describe('EventDriver', function () {
+describe('EventDriver', () => {
 	const driver = new EventDriver();
 
-	it('registers event listners', function () {
+	it('registers event listners', () => {
 		driver.register(new FakeTrigger(1, 'test1-1'));
 		driver.register(new FakeTrigger(1, 'test1-2'));
 		driver.register(new FakeTrigger(2, 'test2-1'));
 		driver.register(new FakeTrigger(2, 'test2-2'));
 	});
 
-	it('triggers events with cost rejected', async function () {
+	it('triggers events with cost rejected', async () => {
 		const target = { invoke: false };
 		const names = [];
 
-		await driver.trigger(1, target, names);
-		assert(names.length === 0);
+		await driver.trigger(1, { target, names });
+		expect(names.length).toBe(0);
 	});
 
-	it('triggers events with cost resolved', async function () {
+	it('triggers events with cost resolved', async () => {
 		const target = { invoke: true };
 		const names = [];
 
-		await driver.trigger(1, target, names);
-		assert(names.length === 2);
-		assert(names.indexOf('test1-1') >= 0);
-		assert(names.indexOf('test1-2') >= 0);
+		await driver.trigger(1, { target, names });
+		expect(names.length).toBe(2);
+		expect(names.indexOf('test1-1')).toBeGreaterThanOrEqual(0);
+		expect(names.indexOf('test1-2')).toBeGreaterThanOrEqual(0);
 	});
 });
