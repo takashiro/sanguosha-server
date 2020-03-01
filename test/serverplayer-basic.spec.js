@@ -1,50 +1,59 @@
+import {
+	CardArea,
+	CardAreaType,
+} from '@karuta/sanguosha-core';
 
-const assert = require('assert');
+import ServerPlayer from '../src/driver/ServerPlayer';
 
-const ServerPlayer = require('../src/driver/ServerPlayer');
-const CardAreaType = require('../src/core/CardArea/Type');
-
-describe('ServerPlayer', function () {
+describe('ServerPlayer', () => {
 	const player = new ServerPlayer();
 
-	it('has user id', function () {
-		assert(player.getId() === 0);
-		player.user = { id: 123 };
-		assert(player.getId() === 123);
+	it('has user id', () => {
+		expect(player.getId()).toBe(0);
+		player.user = {
+			getId() {
+				return 123;
+			},
+		};
+		expect(player.getId()).toBe(123);
 	});
 
-	it('has hand-card area', function () {
-		assert(player.handArea);
-		assert(CardAreaType.Hand);
-		assert(player.handArea.type === CardAreaType.Hand);
+	it('has hand-card area', () => {
+		const area = player.getHandArea();
+		expect(area).toBeInstanceOf(CardArea);
+		expect(CardAreaType.Hand).toBeTruthy();
+		expect(area.getType()).toBe(CardAreaType.Hand);
 	});
 
-	it('has equip area', function () {
-		assert(player.equipArea);
-		assert(CardAreaType.Equip);
-		assert(player.equipArea.type === CardAreaType.Equip);
+	it('has equip area', () => {
+		const area = player.getEquipArea();
+		expect(area).toBeInstanceOf(CardArea);
+		expect(CardAreaType.Equip).toBeTruthy();
+		expect(area.getType()).toBe(CardAreaType.Equip);
 	});
 
-	it('has delayed-trick area', function () {
-		assert(player.judgeArea);
-		assert(CardAreaType.Judge);
-		assert(player.judgeArea.type === CardAreaType.Judge);
+	it('has judge area', () => {
+		const area = player.getJudgeArea();
+		expect(area).toBeInstanceOf(CardArea);
+		expect(CardAreaType.Judge).toBeTruthy();
+		expect(area.getType()).toBe(CardAreaType.Judge);
 	});
 
-	it('has process area', function () {
-		assert(player.processArea);
-		assert(CardAreaType.Process);
-		assert(player.processArea.type === CardAreaType.Process);
+	it('has process area', () => {
+		const area = player.getProcessArea();
+		expect(area).toBeInstanceOf(CardArea);
+		expect(CardAreaType.Process).toBeTruthy();
+		expect(area.getType()).toBe(CardAreaType.Process);
 	});
 
-	it('has request timeout', function () {
+	it('has request timeout', () => {
 		const timeout = Math.floor(Math.random() * 0xFFFF);
 		player.setRequestTimeout(timeout);
-		assert.strictEqual(player.getRequestTimeout(), timeout);
+		expect(player.getRequestTimeout()).toEqual(timeout);
 	});
 
-	it('generates null reply if no user is connected', function () {
+	it('generates null reply if no user is connected', async () => {
 		player.user = null;
-		assert.strictEqual(player.request(), null);
+		expect(await player.request()).toBeNull();
 	});
 });
