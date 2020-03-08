@@ -1,7 +1,5 @@
 {
 	"env": {
-		"mocha": true
-	},
-	"rules": {
+		"jest": true
 	}
 }

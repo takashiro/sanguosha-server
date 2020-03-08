@@ -28,7 +28,7 @@ module.exports = function (env, argv) {
 		output: {
 			filename: '[name].js',
 			path: path.join(__dirname, 'dist'),
-			devtoolModuleFilenameTemplate : '[absolute-resource-path]',
+			devtoolModuleFilenameTemplate: '[absolute-resource-path]',
 		},
 		devtool: mode !== 'production' ? 'source-map' : undefined,
 	};

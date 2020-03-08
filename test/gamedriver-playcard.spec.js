@@ -1,7 +1,3 @@
-import {
-	Command as cmd,
-} from '@karuta/sanguosha-core';
-
 import GameDriver from '../src/driver/GameDriver';
 import ServerPlayer from '../src/driver/ServerPlayer';
 
