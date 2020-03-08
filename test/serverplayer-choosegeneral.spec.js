@@ -1,11 +1,11 @@
-const assert = require('assert');
-const sinon = require('sinon');
+import {
+	Command as cmd,
+	General,
+} from '@karuta/sanguosha-core';
 
-const cmd = require('../src/cmd');
-const General = require('../src/core/General');
-const ServerPlayer = require('../src/driver/ServerPlayer');
+import ServerPlayer from '../src/driver/ServerPlayer';
 
-describe('ServerPlayer: Choose Generals', function () {
+describe('ServerPlayer: Choose Generals', () => {
 	const generals = [];
 	for (let i = 0; i < 10; i++) {
 		const kingdom = (i % 4) + 1;
@@ -14,39 +14,56 @@ describe('ServerPlayer: Choose Generals', function () {
 		generals.push(general);
 	}
 
+	const metaGenerals = generals.map((general, id) => ({ id, ...general.toJSON() }));
+
 	const user = {
 		id: 1,
-		request: sinon.spy(),
+		request: jest.fn(),
 	};
 
 	const player = new ServerPlayer(user);
 
-	this.afterEach(function () {
-		user.request.resetHistory();
+	afterEach(() => {
+		user.request.mockClear();
 	});
 
-	it('asks for 1 general', async function () {
+	it('asks for 1 general', async () => {
 		const chosen = await player.askForGeneral(generals);
 
-		assert(chosen.length === 1);
-		assert(generals.includes(chosen[0]));
-		assert(user.request.calledOnceWith(cmd.ChooseGeneral));
+		expect(chosen).toHaveLength(1);
+		expect(generals).toContain(chosen[0]);
+		expect(user.request).toBeCalledWith(cmd.ChooseGeneral, {
+			generals: metaGenerals,
+			num: 1,
+			sameKingdom: false,
+		}, 40000);
 	});
 
-	it('asks for 2 generals', async function () {
+	it('asks for 2 generals', async () => {
 		const chosen = await player.askForGeneral(generals);
 
-		assert(chosen.length === 1);
+		expect(chosen).toHaveLength(1);
 		for (const general of chosen) {
-			assert(generals.includes(general));
+			expect(generals).toContain(general);
 		}
-		assert(user.request.calledOnceWith(cmd.ChooseGeneral));
+
+		expect(user.request).toBeCalledTimes(1);
+		expect(user.request).toBeCalledWith(cmd.ChooseGeneral, {
+			generals: metaGenerals,
+			num: 1,
+			sameKingdom: false,
+		}, 40000);
 	});
 
-	it('asks for 1 general (not required)', async function () {
+	it('asks for 1 general (not required)', async () => {
 		const chosen = await player.askForGeneral(generals, { forced: false });
 
-		assert(chosen.length === 0);
-		assert(user.request.calledOnceWith(cmd.ChooseGeneral));
+		expect(chosen).toHaveLength(0);
+		expect(user.request).toBeCalledTimes(1);
+		expect(user.request).toBeCalledWith(cmd.ChooseGeneral, {
+			generals: metaGenerals,
+			num: 1,
+			sameKingdom: false,
+		}, 40000);
 	});
 });
