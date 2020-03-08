@@ -8,7 +8,9 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Launch Program",
-			"program": "${workspaceFolder}/../karuta-node-server/app.js"
+			"program": "${workspaceFolder}/../karuta-node-server/dist/app.js",
+			"cwd": "${workspaceFolder}/../karuta-node-server",
+			"preLaunchTask": "npm: debug"
 		},
 		{
 			"name": "Debug Current Test",
