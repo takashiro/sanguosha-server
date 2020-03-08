@@ -1,6 +1,7 @@
-/* eslint-disable global-require */
+import StandardRule from './StandardRule';
+import PhaseRule from '../basic/PhaseRule';
 
-module.exports = [
-	require('./StandardRule'),
-	require('../basic/PhaseRule'),
+export default [
+	StandardRule,
+	PhaseRule,
 ];
