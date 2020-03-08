@@ -202,7 +202,7 @@ class ServerPlayer extends Player {
 				selected.splice(options.num, -delta);
 			} else if (delta > 0) {
 				delta = Math.min(delta, area.size - selected.length);
-				const cards = area.cards.filter((card) => !selected.includes(card));
+				const cards = area.getCards().filter((card) => !selected.includes(card));
 				selected.push(...cards.slice(0, delta));
 			}
 		}

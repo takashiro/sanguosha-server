@@ -1,225 +1,96 @@
-const assert = require('assert');
-const sinon = require('sinon');
+import {
+	Command as cmd,
+} from '@karuta/sanguosha-core';
 
-const cmd = require('../src/cmd');
-const ServerPlayer = require('../src/driver/ServerPlayer');
+import ServerPlayer from '../src/driver/ServerPlayer';
 
-describe('ServerPlayer: Play Cards', function () {
+describe('ServerPlayer: Play Cards', () => {
 	const user = {};
 	const player = new ServerPlayer(user);
 
-	it('records use counts of cards', function () {
-		assert(player.getUseCount('strike') === 0);
+	it('records use counts of cards', () => {
+		expect(player.getUseCount('strike')).toBe(0);
 
 		player.addUseCount('strike', 1);
 		player.addUseCount('strike', 2);
 		player.addUseCount('jink', 1);
-		assert(player.getUseCount('strike') === 3);
+		expect(player.getUseCount('strike')).toBe(3);
 
 		player.resetUseCount('jink');
-		assert(player.getUseCount('jink') === 0);
+		expect(player.getUseCount('jink')).toBe(0);
 
 		player.clearUseCount();
-		assert(player.getUseCount('strike') === 0);
-		assert(player.getUseCount('jink') === 0);
+		expect(player.getUseCount('strike')).toBe(0);
+		expect(player.getUseCount('jink')).toBe(0);
 	});
 
-	it('sets use limit of cards', function () {
-		assert(player.getUseLimit('strike') === Infinity);
+	it('sets use limit of cards', () => {
+		expect(player.getUseLimit('strike')).toBe(Infinity);
 		player.setUseLimit('strike', 1);
-		assert(player.getUseLimit('strike') === 1);
+		expect(player.getUseLimit('strike')).toBe(1);
 		player.clearUseLimit();
-		assert(player.getUseLimit('strike') === Infinity);
+		expect(player.getUseLimit('strike')).toBe(Infinity);
 	});
 
-	describe('#play()', function () {
+	describe('#play()', () => {
 		const card1 = {
 			getId() {
 				return 1;
-			},
-			isAvailable() {
-				return true;
 			},
 		};
 		const card2 = {
 			getId() {
 				return 2;
 			},
-			isAvailable() {
-				return false;
-			},
 		};
 
-		player.handArea.add(card1);
-		player.handArea.add(card2);
+		const availableCards = [card1, card2];
+		const cards = [card1.getId(), card2.getId()];
+		const requestTimeout = player.getRequestTimeout();
 
-		it('handles timeout error', async function () {
-			user.request = sinon.stub().throws(new Error('timeout'));
-			const res = await player.play();
-			assert(!res);
-			assert(user.request.calledWith(cmd.Play));
+		const handArea = player.getHandArea();
+		handArea.add(card1);
+		handArea.add(card2);
+
+		const request = jest.fn();
+		user.request = request;
+		beforeEach(() => {
+			request.mockClear();
 		});
 
-		it('filters available cards from hand area', async function () {
-			user.request = sinon.spy();
-			const res = await player.play();
-			assert(!res);
-			assert(user.request.calledOnceWith(cmd.Play, { cards: [1] }));
+		it('handles timeout error', async () => {
+			request.mockImplementation(() => {
+				throw new Error('timeout');
+			});
+
+			const res = await player.play(availableCards);
+			expect(res).toBeNull();
+			expect(request).toBeCalledWith(cmd.Play, { cards }, requestTimeout);
 		});
 
 		it('handles invalid card id from user response', async function () {
-			user.request = sinon.stub().returns(null);
-			assert(!await player.play());
+			request.mockReturnValue(null);
+			expect(await player.play(availableCards)).toBeNull();
 
-			user.request = sinon.stub().returns({ cards: [] });
-			assert(!await player.play());
+			request.mockReturnValue({ cards: [] });
+			expect(await player.play(availableCards)).toBeNull();
 
-			user.request = sinon.stub().returns({ cards: ['test', 'wer'] });
-			assert(!await player.play());
+			request.mockReturnValue({ cards: ['test', 'wer'] });
+			expect(await player.play(availableCards)).toBeNull();
 
-			user.request = sinon.stub().returns({ cards: [3] });
-			assert(!await player.play());
-
-			user.request = sinon.stub().returns({ cards: [card2.getId()] });
-			assert(!await player.play());
+			request.mockReturnValue({ cards: [3] });
+			expect(await player.play(availableCards)).toBeNull();
 		});
 
-		it('plays a card', async function () {
+		it('plays a card', async () => {
 			const driver = {
-				useCard: sinon.spy(),
+				useCard: jest.fn(),
 			};
-			user.getDriver = sinon.stub().returns(driver);
-			user.request = sinon.stub().returns({ cards: [card1.getId()] });
-			const playCard = sinon.stub(player, 'playCard');
-			playCard.withArgs(card1).returns(true);
-			assert(await player.play());
-			assert(playCard.calledOnceWith(card1));
+			user.getDriver = jest.fn().mockReturnValue(driver);
+			request.mockResolvedValue({ cards: [card1.getId()] });
 
-			delete user.getDriver;
-			delete user.request;
-			playCard.restore();
-		});
-	});
-
-	describe('#playCard()', function () {
-		const driver = {
-			players: [
-				new ServerPlayer(),
-				new ServerPlayer(),
-				new ServerPlayer(),
-				new ServerPlayer(),
-			],
-			findPlayer(seat) { return this.players[seat - 1]; },
-			getPlayers() { return this.players; },
-			useCard: sinon.spy(),
-		};
-
-		this.beforeAll(function () {
-			user.getDriver = sinon.stub().returns(driver);
-		});
-
-		this.afterAll(function () {
-			delete user.getDriver;
-			delete user.request;
-		});
-
-		const fakeCard = {
-			isAvailable() { return true; },
-			targetFilter: sinon.fake(),
-			targetFeasible: sinon.fake(),
-		};
-
-		const someCard = {
-			isAvailable() { return true; },
-			targetFeasible() { return true; },
-			targetFilter() { return true; },
-		};
-
-		it('should reject unavailable cards', async function () {
-			const card = {
-				isAvailable: sinon.stub().returns(false),
-			};
-			assert(!await player.playCard(card));
-			assert(card.isAvailable.calledOnceWith(player));
-		});
-
-		it('should handle timeout error', async function () {
-			user.request = sinon.stub().throws(new Error('timeout'));
-			assert(!await player.playCard(fakeCard));
-		});
-
-		it('should handle cancel command', async function () {
-			user.request = sinon.stub().returns({ cancel: true });
-			assert(await player.playCard(fakeCard));
-			user.request = sinon.stub().returns(null);
-			assert(await player.playCard(fakeCard));
-		});
-
-		it('should handle non-existing player', async function () {
-			user.request = sinon.stub().returns({ player: 100 });
-			assert(!await player.playCard(fakeCard));
-		});
-
-		it('should reject invalid card targets', async function () {
-			const card = {
-				isAvailable() { return true; },
-				targetFeasible(selected) {
-					return selected.length === 1;
-				},
-				targetFilter(selected, target) {
-					return selected.length === 0 && target !== null;
-				},
-			};
-
-			user.request = sinon.stub()
-				.onCall(0)
-				.returns({ player: 1, selected: false })
-				.onCall(1)
-				.returns({ player: 1, selected: true })
-				.onCall(2)
-				.returns({ player: 1, selected: true });
-
-			assert(!await player.playCard(card));
-		});
-
-		it('should stop if no confirm or selection command is received', async function () {
-			user.request = sinon.stub().returns({});
-			assert(!await player.playCard(someCard));
-		});
-
-		it('should stop if targets are not feasible', async function () {
-			const card = {
-				isAvailable() { return true; },
-				targetFeasible() { return false; },
-				targetFilter() { return true; },
-			};
-
-			user.request = sinon.stub().returns({ confirm: true });
-			assert(!await player.playCard(card));
-		});
-
-		it('should handle duplicate add or removal', async function () {
-			user.request = sinon.stub()
-				.onCall(0)
-				.returns({ player: 1, selected: true })
-				.onCall(1)
-				.returns({ player: 1, selected: true })
-				.onCall(2)
-				.returns({ player: 2, selected: true })
-				.onCall(3)
-				.returns({ player: 2, selected: false })
-				.onCall(4)
-				.returns({ player: 2, selected: false })
-				.onCall(5)
-				.returns({ confirm: true });
-
-			assert(await player.playCard(someCard));
-			const use = driver.useCard.firstCall.args[0];
-			assert(use.to && use.to.length === 1);
-			assert(use.from === player);
-			assert(use.to[0] === driver.players[0]);
-			assert(use.card === someCard);
-			driver.useCard.resetHistory();
+			const action = await player.play(availableCards);
+			expect(action).toBeTruthy();
 		});
 	});
 });
