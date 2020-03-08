@@ -6,17 +6,13 @@ module.exports = function (env, argv) {
 		mode,
 		target: 'node',
 		entry: {
-			app: './src/index.ts',
+			index: './src/index.ts',
 		},
 		module: {
 			rules: [
 				{
 					test: /\.ts$/,
 					use: 'ts-loader',
-					exclude: /node_modules/,
-					parser: {
-						commonjs: false,
-					},
 				},
 			],
 		},
@@ -28,6 +24,8 @@ module.exports = function (env, argv) {
 		output: {
 			filename: '[name].js',
 			path: path.join(__dirname, 'dist'),
+			libraryExport: 'default',
+			libraryTarget: 'commonjs2',
 			devtoolModuleFilenameTemplate: '[absolute-resource-path]',
 		},
 		devtool: mode !== 'production' ? 'source-map' : undefined,

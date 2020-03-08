@@ -157,7 +157,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	}
 
 	resetDrawPile(cards: Card[]): void {
-		this.drawPile.cards = cards;
+		this.drawPile.setCards(cards);
 	}
 
 	getDiscardPile(): CardArea {

@@ -2,8 +2,10 @@
   "name": "@karuta/sanguosha",
   "version": "0.1.0",
   "description": "Sanguosha (Karuta Extension)",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
+    "build": "webpack",
+    "debug": "webpack --mode=development",
     "test": "npm run lint && jest",
     "lint": "eslint --ext ts,js .",
     "jest": "jest"
@@ -32,6 +34,7 @@
     "eslint-plugin-import": "^2.18.2",
     "jest": "^25.1.0",
     "ts-jest": "^25.2.1",
+    "ts-loader": "^6.2.1",
     "typescript": "^3.7.4",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
