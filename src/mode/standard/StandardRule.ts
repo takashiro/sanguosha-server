@@ -79,8 +79,7 @@ class StandardRule extends BasicRule {
 			return;
 		}
 
-		await this.prepareEmperor(emperor, generals);
-		const emperorGeneral = emperor.getGeneral();
+		const emperorGeneral = await this.prepareEmperor(emperor, generals);
 		emperor.setKingdom(emperorGeneral.getKingdom());
 		emperor.broadcastProperty('kingdom', emperor.getKingdom());
 		emperor.broadcastProperty('general', emperorGeneral.toJSON());
@@ -107,7 +106,7 @@ class StandardRule extends BasicRule {
 		}
 	}
 
-	async prepareEmperor(player: ServerPlayer, generals: General[]): Promise<void> {
+	async prepareEmperor(player: ServerPlayer, generals: General[]): Promise<General> {
 		const candidates = generals.filter((general) => general.isEmperor());
 
 		const others = generals.filter((general) => !general.isEmperor());
@@ -122,6 +121,8 @@ class StandardRule extends BasicRule {
 		player.setHp(hp);
 		player.broadcastProperty('maxHp', hp);
 		player.broadcastProperty('hp', hp);
+
+		return general;
 	}
 
 	async prepareGeneral(player: ServerPlayer, generals: General[]): Promise<void> {

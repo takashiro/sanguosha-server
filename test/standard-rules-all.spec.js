@@ -1,13 +1,12 @@
-const assert = require('assert');
-const sinon = require('sinon');
+import {
+	Command as cmd,
+	PlayerRole as Role,
+} from '@karuta/sanguosha-core';
 
-const GameDriver = require('../src/driver');
-const GameEvent = require('../src/driver/GameEvent');
+import GameDriver from '../src/driver';
+import GameEvent from '../src/driver/GameEvent';
 
-const StandardRule = require('../src/mode/standard/StandardRule');
-
-const cmd = require('../src/cmd');
-const Role = require('../src/core/Player/Role');
+import StandardRule from '../src/mode/standard/StandardRule';
 
 function countArray(arr, condition) {
 	let count = 0;
@@ -19,14 +18,16 @@ function countArray(arr, condition) {
 	return count;
 }
 
-describe('StandardRule', function () {
+describe('StandardRule', () => {
 	const users = [];
 
-	const driver = new GameDriver({
+	const room = {
 		broadcast() {},
 		broadcastExcept() {},
 		getUsers() { return users; },
-	});
+	};
+
+	const driver = new GameDriver(room);
 
 	const candidateDuplicates = [];
 
@@ -40,12 +41,13 @@ describe('StandardRule', function () {
 		}
 		return null;
 	}
-	const send = sinon.fake();
+	const send = jest.fn();
 
 	for (let i = 1; i <= 8; i++) {
 		users.push({
-			id: i,
-			name: `user${i}`,
+			getId() { return i; },
+			getName() { return `user${i}`; },
+			getRoom() { return room; },
 			send,
 			request,
 		});
@@ -54,85 +56,85 @@ describe('StandardRule', function () {
 	const rule = new StandardRule();
 	rule.setDriver(driver);
 
-	it('binds to start event', function () {
-		assert(rule.event === GameEvent.StartGame);
+	it('binds to start event', () => {
+		expect(rule.event).toBe(GameEvent.StartGame);
 	});
 
-	describe('#preparePlayers()', function () {
-		it('prepares players', function () {
+	describe('#preparePlayers()', () => {
+		it('prepares players', () => {
 			rule.preparePlayers();
 		});
 	});
 
-	describe('#prepareRules()', function () {
-		it('prepares roles', function () {
+	describe('#prepareRules()', () => {
+		it('prepares roles', () => {
 			rule.prepareRoles();
 
 			const { players } = driver;
-			assert(players[0].getRole() === Role.Emperor);
+			expect(players[0].getRole()).toBe(Role.Emperor);
 
 			const rebelNum = countArray(players, (player) => player.getRole() === Role.Rebel);
-			assert(rebelNum === 4);
+			expect(rebelNum).toBe(4);
 
 			const emperorNum = countArray(players, (player) => player.getRole() === Role.Emperor);
-			assert(emperorNum === 1);
+			expect(emperorNum).toBe(1);
 
 			const renegadeNum = countArray(players, (player) => player.getRole() === Role.Renegade);
-			assert(renegadeNum === 1);
+			expect(renegadeNum).toBe(1);
 
 			const loyalistNum = countArray(players, (player) => player.getRole() === Role.Loyalist);
-			assert(loyalistNum === 2);
+			expect(loyalistNum).toBe(2);
 		});
 	});
 
-	describe('#prepareSeats()', function () {
-		it('prepares seats', function () {
+	describe('#prepareSeats()', () => {
+		it('prepares seats', () => {
 			rule.prepareSeats();
 
 			const seats = [];
 			for (const player of driver.players) {
 				seats.push(player.getSeat());
-				assert(player.getSeat() > 0);
+				expect(player.getSeat()).toBeGreaterThan(0);
 			}
 
 			seats.sort();
 			for (let i = 0; i < seats.length; i++) {
-				assert(seats[i] === i + 1);
+				expect(seats[i]).toBe(i + 1);
 			}
 		});
 	});
 
-	describe('#prepareGenerals()', function () {
-		it('prepares generals', async function () {
+	describe('#prepareGenerals()', () => {
+		it('prepares generals', async () => {
 			await rule.prepareGenerals();
 			for (const player of driver.players) {
 				const general = player.getGeneral();
-				assert(general);
+				expect(general).toBeTruthy();
 			}
 		});
 	});
 
-	it('checks candidate duplicates', function () {
+	it('checks candidate duplicates', () => {
 		candidateDuplicates.splice(0, 5);
 		for (let i = 0; i < candidateDuplicates.length; i++) {
 			const name = candidateDuplicates[i];
 			for (let j = i + 1; j < candidateDuplicates.length; j++) {
-				assert(candidateDuplicates[j] !== name);
+				expect(candidateDuplicates[j]).not.toBe(name);
 			}
 		}
 	});
 
-	describe('#prepareCards()', function () {
-		it('prepares cards', function () {
+	describe('#prepareCards()', () => {
+		it('prepares cards', () => {
 			rule.prepareCards();
 
 			for (const player of driver.players) {
-				assert(player.handArea.size === 4);
+				expect(player.getHandArea().size).toBe(4);
 			}
 		});
 	});
 
-	it('handles invalid values', async function () {
+	it('handles invalid values', async () => {
 		driver.users = [];
 		driver.players = [];
 		await rule.prepareRoles();
