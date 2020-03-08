@@ -1,40 +1,34 @@
-const assert = require('assert');
-const sinon = require('sinon');
+import {
+	Command as cmd,
+} from '@karuta/sanguosha-core';
 
-const cmd = require('../src/cmd');
+import Card from '../src/driver/Card';
+import Player from '../src/driver/ServerPlayer';
 
-const Card = require('../src/core/Card');
-const Player = require('../src/core/Player');
+import GameDriver from '../src/driver';
+import CardUseStruct from '../src/driver/CardUseStruct';
 
-const GameDriver = require('../src/driver');
-const CardUseStruct = require('../src/driver/CardUseStruct');
-
-describe('GameDriver: Use a Card', function () {
-	this.afterEach(function () {
-		sinon.restore();
-	});
-
+describe('GameDriver: Use a Card', () => {
 	const room = {
-		broadcast: sinon.spy(),
+		broadcast: jest.fn(),
 	};
 	const driver = new GameDriver(room);
 
-	it('accepts invalid parameter', async function () {
+	it('accepts invalid parameter', async () => {
 		const use = new CardUseStruct();
-		const success = await driver.useCard(use);
-		assert(!success);
+		expect(await driver.useCard(use)).toBe(false);
 	});
 
-	it('proceed card effects', async function () {
+	it('proceed card effects', async () => {
 		const card = new Card();
-		card.onUse = sinon.spy();
-		card.use = sinon.spy();
+		card.onUse = jest.fn();
+		card.use = jest.fn();
 
 		const use = new CardUseStruct(new Player(), card);
 		await driver.useCard(use);
 
-		assert(card.onUse.calledOnceWith(driver, use));
-		assert(room.broadcast.calledOnceWith(cmd.UseCard, use.toJSON()));
-		assert(card.use.calledOnceWith(driver, use));
+		expect(card.onUse).toBeCalledWith(driver, use);
+		expect(room.broadcast).toBeCalledWith(cmd.UseCard, use.toJSON());
+		expect(card.use).toBeCalledWith(driver, use);
 	});
 });
