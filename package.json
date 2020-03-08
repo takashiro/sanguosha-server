@@ -4,7 +4,7 @@
   "description": "Sanguosha (Karuta Extension)",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint",
+    "test": "npm run lint && jest",
     "lint": "eslint --ext ts .",
     "jest": "jest"
   },
