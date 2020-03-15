@@ -12,6 +12,7 @@ module.exports = function (env, argv) {
 			rules: [
 				{
 					test: /\.ts$/,
+					exclude: /node_modules/,
 					use: 'ts-loader',
 				},
 			],
