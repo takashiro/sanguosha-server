@@ -14,26 +14,36 @@
 		"ecmaVersion": 2018
 	},
 	"rules": {
+		"class-methods-use-this": "off",
+		"func-names": "off",
+		"linebreak-style": "off",
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+        "ts": "never",
+        "tsx": "never",
+        "js": "never",
+        "jsx": "never"
+			}
+    ],
 		"indent": [
 			"error",
 			"tab"
 		],
+		"max-len": "off",
+		"no-await-in-loop": "off",
+		"no-console": "off",
+		"no-continue": "off",
+		"no-param-reassign": "off",
+		"no-plusplus": "off",
 		"no-restricted-syntax": [
 			"error",
 			"WithStatement"
 		],
-		"max-len": "off",
 		"no-tabs": "off",
-		"no-plusplus": "off",
-		"linebreak-style": "off",
-		"prefer-arrow-callback": "off",
-		"func-names": "off",
-		"no-await-in-loop": "off",
-		"class-methods-use-this": "off",
-		"no-param-reassign": "off",
-		"no-continue": "off",
-		"no-console": "off",
-		"no-undef": "off"
+		"no-undef": "off",
+		"prefer-arrow-callback": "off"
 	},
 	"settings": {
 		"import/resolver": {
