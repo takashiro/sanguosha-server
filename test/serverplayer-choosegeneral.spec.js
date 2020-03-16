@@ -14,7 +14,7 @@ describe('ServerPlayer: Choose Generals', () => {
 		generals.push(general);
 	}
 
-	const metaGenerals = generals.map((general, id) => ({ id, ...general.toJSON() }));
+	const metaGenerals = generals.map((general, id) => ({ ...general.toJSON(), id }));
 
 	const user = {
 		id: 1,
