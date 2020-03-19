@@ -182,6 +182,14 @@ class GameDriver extends EventDriver<GameEvent> {
 		this.broadcastCardMove(cards, this.drawPile, area, { openTo: player });
 	}
 
+	summonCard(player: ServerPlayer, cardName: string): void {
+		const cards = this.drawPile.getCards();
+		const card = cards.find((c) => c.getName() === cardName);
+		if (card) {
+			this.moveCards([card], this.drawPile, player.getHandArea(), { openTo: player });
+		}
+	}
+
 	/**
 	 * Move cards and broadcast to clients
 	 * @param cards
