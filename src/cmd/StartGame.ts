@@ -17,7 +17,6 @@ class StartGame extends Action<void, void> {
 			return;
 		}
 
-
 		const config = driver.getConfig();
 		const { mode = 'standard' } = config;
 		const rules = ModeMap.get(mode);

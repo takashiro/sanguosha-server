@@ -6,7 +6,6 @@
 		"sourceMap": true,
 		"moduleResolution": "node",
 		"esModuleInterop": true,
-		"declaration": true,
 		"strict": true,
 		"allowJs": true
 	},
