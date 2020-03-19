@@ -23,6 +23,7 @@ import CardEffectStruct from './CardEffectStruct';
 import DamageStruct from './DamageStruct';
 
 import CollectionMap from '../collection';
+import RecoverStruct from './RecoverStruct';
 
 interface CardMoveOptions {
 	openTo?: ServerPlayer;
@@ -444,6 +445,27 @@ class GameDriver extends EventDriver<GameEvent> {
 		const hp = damage.to.getHp() - damage.num;
 		damage.to.setHp(hp);
 		damage.to.broadcastProperty('hp', hp);
+
+		return true;
+	}
+
+	/**
+	 * Proceed a recover event.
+	 * @param recover
+	 * @return Whether it takes effect.
+	 */
+	async recover(recover: RecoverStruct): Promise<boolean> {
+		const { to } = recover;
+		if (recover.num <= 0 || !to) {
+			return false;
+		}
+
+		const num = Math.min(to.getMaxHp() - to.getHp(), recover.num);
+		if (num > 0) {
+			const hp = to.getHp() + num;
+			to.setHp(hp);
+			to.broadcastProperty('hp', hp);
+		}
 
 		return true;
 	}
