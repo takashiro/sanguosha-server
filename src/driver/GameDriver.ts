@@ -60,6 +60,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		this.config = {
 			mode: 'standard',
 			capacity: 8,
+			requestTimeout: 24 * 3600 * 3600,
 		};
 
 		this.collections = [];

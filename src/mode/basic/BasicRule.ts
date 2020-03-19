@@ -21,9 +21,13 @@ class BasicRule extends GameRule<void> {
 
 	preparePlayers(): void {
 		const driver = this.getDriver();
-		const users = driver.getUsers();
+		const config = driver.getConfig();
 
+		const users = driver.getUsers();
 		const players = users.map((user) => new ServerPlayer(user));
+		for (const player of players) {
+			player.setRequestTimeout(config.requestTimeout);
+		}
 		driver.setPlayers(players);
 	}
 
