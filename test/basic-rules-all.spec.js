@@ -37,6 +37,7 @@ describe('Basic Rule', () => {
 	];
 
 	const driver = {
+		getConfig() { return {}; },
 		getRoom() {
 			return room;
 		},

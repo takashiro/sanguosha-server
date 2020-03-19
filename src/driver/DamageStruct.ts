@@ -19,7 +19,7 @@ class DamageStruct {
 
 	card: Card | undefined;
 
-	constructor(from: ServerPlayer, to: ServerPlayer, num = 1) {
+	constructor(from: ServerPlayer, to: ServerPlayer, num: number) {
 		this.from = from;
 		this.to = to;
 		this.num = num;
