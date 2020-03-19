@@ -29,6 +29,6 @@ module.exports = function (env, argv) {
 			libraryTarget: 'commonjs2',
 			devtoolModuleFilenameTemplate: '[absolute-resource-path]',
 		},
-		devtool: mode !== 'production' ? 'source-map' : undefined,
+		devtool: mode !== 'production' ? 'inline-source-map' : undefined,
 	};
 };
