@@ -47,15 +47,16 @@ class PhaseRule extends GameRule<PhaseChangeStruct> {
 	async play(player: ServerPlayer): Promise<void> {
 		const driver = this.getDriver();
 		const handArea = player.getHandArea();
-		const cards = handArea.getCards();
-		const availableCards: Card[] = [];
-		for (const ccard of cards) {
-			const card = ccard as Card;
-			if (await card.isAvailable(driver, player)) {
-				availableCards.push(card);
-			}
-		}
 		for (;;) {
+			const cards = handArea.getCards();
+			const availableCards: Card[] = [];
+			for (const ccard of cards) {
+				const card = ccard as Card;
+				if (await card.isAvailable(driver, player)) {
+					availableCards.push(card);
+				}
+			}
+
 			const action = await player.play(availableCards);
 			if (!action) {
 				break;
@@ -63,7 +64,7 @@ class PhaseRule extends GameRule<PhaseChangeStruct> {
 
 			const card = action.card as Card;
 			if (card) {
-				driver.playCard(player, card);
+				await driver.playCard(player, card);
 			}
 		}
 	}

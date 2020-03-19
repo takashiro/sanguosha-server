@@ -247,13 +247,16 @@ class GameDriver extends EventDriver<GameEvent> {
 			}
 
 			const target = this.findPlayer(reply.player);
-			if (!target || !await card.targetFilter(this, targets, target, source)) {
-				// Ends play phase
+			if (!target) {
 				return false;
 			}
 
 			const i = targets.indexOf(target);
 			if (reply.selected) {
+				if (!target || !await card.targetFilter(this, targets, target, source)) {
+					// Ends play phase
+					return false;
+				}
 				if (i < 0) {
 					targets.push(target);
 				}
