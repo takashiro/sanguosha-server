@@ -33,6 +33,10 @@ class Peach extends BasicCard {
 	}
 
 	async effect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
+		if (!effect.to) {
+			return;
+		}
+
 		const recover = new RecoverStruct(effect.from, effect.to, 1);
 		driver.recover(recover);
 	}

@@ -10,6 +10,8 @@ enum GameEvent {
 	EndPhase,
 
 	DrawNCards,
+
+	TakeCardEffect,
 }
 
 export default GameEvent;

@@ -34,7 +34,9 @@ class ExNihilo extends TrickCard {
 
 	async effect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
 		const { to } = effect;
-		driver.drawCards(to, 2);
+		if (to) {
+			driver.drawCards(to, 2);
+		}
 	}
 }
 

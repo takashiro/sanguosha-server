@@ -289,8 +289,9 @@ class GameDriver extends EventDriver<GameEvent> {
 	/**
 	 * A player uses a card.
 	 * @param use
+	 * @param origin
 	 */
-	async useCard(use: CardUseStruct): Promise<boolean> {
+	async useCard(use: CardUseStruct, origin?: CardEffectStruct): Promise<boolean> {
 		if (!use.from || !use.card) {
 			return false;
 		}
@@ -306,19 +307,34 @@ class GameDriver extends EventDriver<GameEvent> {
 
 		await card.use(this, use);
 
-		if (use.to.length > 1) {
+		if (use.to.length > 0) {
 			this.sortPlayersByActionOrder(use.to);
-		}
-
-		for (const target of use.to) {
-			const effect = new CardEffectStruct(use, target);
-			await card.onEffect(this, effect);
-			await card.effect(this, effect);
+			for (const target of use.to) {
+				const effect = new CardEffectStruct(use, target);
+				await this.takeCardEffect(effect);
+			}
+		} else if (origin) {
+			const effect = new CardEffectStruct(use, origin);
+			await this.takeCardEffect(effect);
 		}
 
 		await card.complete(this, use);
 
 		return true;
+	}
+
+	protected async takeCardEffect(effect: CardEffectStruct): Promise<void> {
+		await this.trigger(GameEvent.TakeCardEffect, effect);
+
+		const { card } = effect;
+		if (!card) {
+			return;
+		}
+
+		if (effect.isValid()) {
+			await card.onEffect(this, effect);
+			await card.effect(this, effect);
+		}
 	}
 
 	/**
