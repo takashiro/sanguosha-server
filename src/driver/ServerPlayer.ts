@@ -12,6 +12,9 @@ import {
 	General,
 } from '@karuta/sanguosha-core';
 
+import CardPattern from '../core/CardPattern';
+import CardAction from '../core/CardAction';
+
 interface ChooseGeneralOptions {
 	timeout: number;
 	num: number;
@@ -26,8 +29,10 @@ const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 	forced: true,
 };
 
-interface AskForCardOptions {
+interface ChooseCardOptions {
+	action: CardAction;
 	num: number;
+	pattern?: CardPattern;
 }
 
 type PropertyValue = string | number | boolean | object | null;
@@ -173,13 +178,16 @@ class ServerPlayer extends Player {
 		return chosenGenerals;
 	}
 
-	async askForCards(area: CardArea, options: AskForCardOptions): Promise<Card[]> {
+	async askForCards(area: CardArea, options: ChooseCardOptions): Promise<Card[]> {
 		let reply = null;
 
+		const { pattern } = options;
+		const cards = pattern ? area.getCards().filter((card) => pattern.match(card)) : undefined;
 		try {
 			reply = await this.user.request(cmd.ChooseCards, {
 				area: area.toJSON(),
-				...options,
+				num: options.num,
+				cards: cards && cards.map((card) => card.getId()),
 			}, this.requestTimeout);
 		} catch (error) {
 			// No response from client
@@ -202,12 +210,16 @@ class ServerPlayer extends Player {
 				selected.splice(options.num, -delta);
 			} else if (delta > 0) {
 				delta = Math.min(delta, area.size - selected.length);
-				const cards = area.getCards().filter((card) => !selected.includes(card));
-				selected.push(...cards.slice(0, delta));
+				const otherCards = area.getCards().filter((card) => !selected.includes(card));
+				selected.push(...otherCards.slice(0, delta));
 			}
 		}
 
-		return selected;
+		if (!pattern) {
+			return selected;
+		}
+
+		return selected.filter((card) => pattern.match(card));
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
