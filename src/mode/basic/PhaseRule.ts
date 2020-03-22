@@ -6,6 +6,7 @@ import PhaseChangeStruct from '../../driver/PhaseChangeStruct';
 import DrawCardStruct from '../../driver/DrawCardStruct';
 import Card from '../../driver/Card';
 import ServerPlayer from '../../driver/ServerPlayer';
+import CardAction from '../../core/CardAction';
 
 class PhaseRule extends GameRule<PhaseChangeStruct> {
 	constructor() {
@@ -74,6 +75,7 @@ class PhaseRule extends GameRule<PhaseChangeStruct> {
 		const discardNum = handArea.size - player.getHp();
 		if (discardNum > 0) {
 			const selected = await player.askForCards(handArea, {
+				action: CardAction.Discard,
 				num: discardNum,
 			});
 			const driver = this.getDriver();
