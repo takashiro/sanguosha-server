@@ -1,10 +1,10 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import TrickCard from '../TrickCard';
+import GlobalEffectTrickCard from './GlobalEffectTrickCard';
 
-class PeachGarden extends TrickCard {
+class PeachGarden extends GlobalEffectTrickCard {
 	constructor(suit: Suit, number: number) {
-		super('nullification', suit, number);
+		super('peach-garden', suit, number);
 	}
 }
 

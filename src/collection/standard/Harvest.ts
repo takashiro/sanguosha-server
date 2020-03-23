@@ -1,8 +1,8 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import TrickCard from '../TrickCard';
+import GlobalEffectTrickCard from './GlobalEffectTrickCard';
 
-class Harvest extends TrickCard {
+class Harvest extends GlobalEffectTrickCard {
 	constructor(suit: Suit, number: number) {
 		super('harvest', suit, number);
 	}
