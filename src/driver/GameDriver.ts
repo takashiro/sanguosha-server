@@ -20,7 +20,7 @@ import ServerPlayer from './ServerPlayer';
 
 import CardUse from './CardUse';
 import CardEffect from './CardEffect';
-import DamageStruct from './DamageStruct';
+import Damage from './Damage';
 
 import CollectionMap from '../collection';
 import RecoverStruct from './RecoverStruct';
@@ -472,7 +472,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param damage
 	 * @return Whether it takes effect.
 	 */
-	async damage(damage: DamageStruct): Promise<boolean> {
+	async damage(damage: Damage): Promise<boolean> {
 		if (damage.num <= 0 || !damage.to) {
 			return false;
 		}

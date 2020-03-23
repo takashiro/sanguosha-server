@@ -7,7 +7,7 @@ import BasicCard from '../BasicCard';
 
 import GameDriver from '../../driver/GameDriver';
 import ServerPlayer from '../../driver/ServerPlayer';
-import DamageStruct from '../../driver/DamageStruct';
+import Damage from '../../driver/Damage';
 import CardEffect from '../../driver/CardEffect';
 
 class Strike extends BasicCard {
@@ -41,7 +41,7 @@ class Strike extends BasicCard {
 			return;
 		}
 
-		const damage = new DamageStruct(effect.from, effect.to, 1);
+		const damage = new Damage(effect.from, effect.to, 1);
 		driver.damage(damage);
 	}
 }

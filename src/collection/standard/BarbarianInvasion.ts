@@ -7,7 +7,7 @@ import CardPattern from '../../core/CardPattern';
 import Card from '../../driver/Card';
 import CardEffect from '../../driver/CardEffect';
 import CardExpense from '../../driver/CardExpense';
-import DamageStruct from '../../driver/DamageStruct';
+import Damage from '../../driver/Damage';
 import GameDriver from '../../driver/GameDriver';
 
 class BarbarianInvasion extends AreaEffectTrickCard {
@@ -29,7 +29,7 @@ class BarbarianInvasion extends AreaEffectTrickCard {
 		});
 
 		if (cards.length <= 0) {
-			const damage = new DamageStruct(effect.from, to, 1);
+			const damage = new Damage(effect.from, to, 1);
 			damage.card = this;
 			await driver.damage(damage);
 		} else {

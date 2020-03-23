@@ -1,13 +1,14 @@
 import {
 	Card,
+	DamageStruct,
 	DamageType,
 	Skill,
 } from '@karuta/sanguosha-core';
 
 import ServerPlayer from './ServerPlayer';
 
-class DamageStruct {
-	from: ServerPlayer;
+class Damage {
+	from: ServerPlayer | null;
 
 	to: ServerPlayer;
 
@@ -25,6 +26,15 @@ class DamageStruct {
 		this.num = num;
 		this.type = DamageType.Normal;
 	}
+
+	toJSON(): DamageStruct {
+		return {
+			from: this.from ? this.from.getSeat() : undefined,
+			to: this.to.getSeat(),
+			num: this.num,
+			type: this.type,
+		};
+	}
 }
 
-export default DamageStruct;
+export default Damage;
