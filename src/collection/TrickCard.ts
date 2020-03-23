@@ -5,7 +5,7 @@ import {
 
 import Card from '../driver/Card';
 import GameDriver from '../driver/GameDriver';
-import CardUseStruct from '../driver/CardUseStruct';
+import CardUse from '../driver/CardUse';
 import ServerPlayer from '../driver/ServerPlayer';
 
 class TrickCard extends Card {
@@ -17,7 +17,7 @@ class TrickCard extends Card {
 		return driver && source && source.getPhase() === Phase.Play;
 	}
 
-	async use(driver: GameDriver, use: CardUseStruct): Promise<void> {
+	async use(driver: GameDriver, use: CardUse): Promise<void> {
 		const { card } = use;
 		if (!card.isReal()) {
 			return;
@@ -28,7 +28,7 @@ class TrickCard extends Card {
 		driver.moveCards([card], handArea, processArea, { open: true });
 	}
 
-	async complete(driver: GameDriver, use: CardUseStruct): Promise<void> {
+	async complete(driver: GameDriver, use: CardUse): Promise<void> {
 		const { card } = use;
 		if (!card.isReal()) {
 			return;

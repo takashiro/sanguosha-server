@@ -2,7 +2,7 @@ import { Card as MetaCard } from '@karuta/sanguosha-core';
 
 import GameDriver from './GameDriver';
 import ServerPlayer from './ServerPlayer';
-import CardUseStruct from './CardUseStruct';
+import CardUse from './CardUse';
 import CardEffectStruct from './CardEffectStruct';
 
 abstract class Card extends MetaCard {
@@ -48,7 +48,7 @@ abstract class Card extends MetaCard {
 	 * @param use
 	 */
 	// eslint-disable-next-line no-unused-vars, no-empty-function, @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-	async onUse(driver: GameDriver, use: CardUseStruct): Promise<void> {
+	async onUse(driver: GameDriver, use: CardUse): Promise<void> {
 	}
 
 	/**
@@ -57,7 +57,7 @@ abstract class Card extends MetaCard {
 	 * @param use
 	 */
 	// eslint-disable-next-line no-unused-vars, no-empty-function, @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-	async use(driver: GameDriver, use: CardUseStruct): Promise<void> {
+	async use(driver: GameDriver, use: CardUse): Promise<void> {
 	}
 
 	/**
@@ -84,7 +84,7 @@ abstract class Card extends MetaCard {
 	 * @param use
 	 */
 	// eslint-disable-next-line no-unused-vars, no-empty-function, @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-	async complete(driver: GameDriver, use: CardUseStruct): Promise<void> {
+	async complete(driver: GameDriver, use: CardUse): Promise<void> {
 	}
 }
 

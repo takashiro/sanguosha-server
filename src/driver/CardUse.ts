@@ -1,18 +1,9 @@
+import { CardUseStruct } from '@karuta/sanguosha-core';
+
 import Card from './Card';
 import ServerPlayer from './ServerPlayer';
 
-interface CardUseMeta {
-	from: number;
-	card: {
-		id: number;
-		name: string;
-		suit: number;
-		number: number;
-	};
-	to: number[] | undefined;
-}
-
-class CardUseStruct {
+class CardUse {
 	from: ServerPlayer;
 
 	card: Card;
@@ -25,7 +16,7 @@ class CardUseStruct {
 		this.to = to || [];
 	}
 
-	toJSON(): CardUseMeta {
+	toJSON(): CardUseStruct {
 		return {
 			from: this.from.getSeat(),
 			card: this.card.toJSON(),
@@ -34,4 +25,4 @@ class CardUseStruct {
 	}
 }
 
-export default CardUseStruct;
+export default CardUse;

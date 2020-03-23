@@ -5,7 +5,7 @@ import Card from '../../driver/Card';
 import GameEvent from '../../driver/GameEvent';
 import GameRule from '../../driver/GameRule';
 import CardEffectStruct from '../../driver/CardEffectStruct';
-import CardUseStruct from '../../driver/CardUseStruct';
+import CardUse from '../../driver/CardUse';
 
 class StrikeRule extends GameRule<CardEffectStruct> {
 	constructor() {
@@ -58,7 +58,7 @@ class StrikeRule extends GameRule<CardEffectStruct> {
 				return false;
 			}
 
-			const use = new CardUseStruct(to, dodge);
+			const use = new CardUse(to, dodge);
 			const driver = this.getDriver();
 			await driver.useCard(use, effect);
 		}

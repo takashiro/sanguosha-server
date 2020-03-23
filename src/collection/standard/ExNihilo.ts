@@ -8,7 +8,7 @@ import TrickCard from '../TrickCard';
 import GameDriver from '../../driver/GameDriver';
 import ServerPlayer from '../../driver/ServerPlayer';
 import CardEffectStruct from '../../driver/CardEffectStruct';
-import CardUseStruct from '../../driver/CardUseStruct';
+import CardUse from '../../driver/CardUse';
 
 class ExNihilo extends TrickCard {
 	constructor(suit: Suit, number: number) {
@@ -27,7 +27,7 @@ class ExNihilo extends TrickCard {
 		return true;
 	}
 
-	async onUse(driver: GameDriver, use: CardUseStruct): Promise<void> {
+	async onUse(driver: GameDriver, use: CardUse): Promise<void> {
 		const { from } = use;
 		use.to.push(from);
 	}

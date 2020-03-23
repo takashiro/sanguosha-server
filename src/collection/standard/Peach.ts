@@ -8,7 +8,7 @@ import GameDriver from '../../driver/GameDriver';
 import ServerPlayer from '../../driver/ServerPlayer';
 import CardEffectStruct from '../../driver/CardEffectStruct';
 import RecoverStruct from '../../driver/RecoverStruct';
-import CardUseStruct from '../../driver/CardUseStruct';
+import CardUse from '../../driver/CardUse';
 
 class Peach extends BasicCard {
 	constructor(suit: Suit, number: number) {
@@ -27,7 +27,7 @@ class Peach extends BasicCard {
 		return true;
 	}
 
-	async onUse(driver: GameDriver, use: CardUseStruct): Promise<void> {
+	async onUse(driver: GameDriver, use: CardUse): Promise<void> {
 		const { from } = use;
 		use.to.push(from);
 	}

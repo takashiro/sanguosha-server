@@ -1,9 +1,9 @@
 import Card from './Card';
-import CardUseStruct from './CardUseStruct';
+import CardUse from './CardUse';
 import ServerPlayer from './ServerPlayer';
 
 class CardEffectStruct {
-	readonly use: CardUseStruct;
+	readonly use: CardUse;
 
 	weight: number;
 
@@ -15,7 +15,7 @@ class CardEffectStruct {
 	 * @param use
 	 * @param to
 	 */
-	constructor(use: CardUseStruct, to?: ServerPlayer | CardEffectStruct) {
+	constructor(use: CardUse, to?: ServerPlayer | CardEffectStruct) {
 		this.use = use;
 		this.weight = 1;
 

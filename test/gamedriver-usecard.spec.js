@@ -6,7 +6,7 @@ import Card from '../src/driver/Card';
 import Player from '../src/driver/ServerPlayer';
 
 import GameDriver from '../src/driver';
-import CardUseStruct from '../src/driver/CardUseStruct';
+import CardUse from '../src/driver/CardUse';
 
 describe('GameDriver: Use a Card', () => {
 	const room = {
@@ -15,7 +15,7 @@ describe('GameDriver: Use a Card', () => {
 	const driver = new GameDriver(room);
 
 	it('accepts invalid parameter', async () => {
-		const use = new CardUseStruct();
+		const use = new CardUse();
 		expect(await driver.useCard(use)).toBe(false);
 	});
 
@@ -24,7 +24,7 @@ describe('GameDriver: Use a Card', () => {
 		card.onUse = jest.fn();
 		card.use = jest.fn();
 
-		const use = new CardUseStruct(new Player(), card);
+		const use = new CardUse(new Player(), card);
 		await driver.useCard(use);
 
 		expect(card.onUse).toBeCalledWith(driver, use);
