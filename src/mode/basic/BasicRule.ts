@@ -7,7 +7,7 @@ import GameRule from '../../driver/GameRule';
 
 import GameEvent from '../../driver/GameEvent';
 import ServerPlayer from '../../driver/ServerPlayer';
-import PhaseChangeStruct from '../../driver/PhaseChangeStruct';
+import PhaseChange from '../../driver/PhaseChange';
 import shuffle from '../../util/shuffle';
 import delay from '../../util/delay';
 
@@ -74,11 +74,7 @@ class BasicRule extends GameRule<void> {
 		driver.setCurrentPlayer(player);
 
 		for (const phase of phases) {
-			const data: PhaseChangeStruct = {
-				player,
-				from: player.getPhase(),
-				to: phase,
-			};
+			const data = new PhaseChange(player, player.getPhase(), phase);
 			if (await driver.trigger(GameEvent.StartPhase, data)) {
 				continue;
 			}

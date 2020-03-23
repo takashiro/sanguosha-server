@@ -2,22 +2,22 @@ import { PlayerPhase as Phase } from '@karuta/sanguosha-core';
 
 import GameRule from '../../driver/GameRule';
 import GameEvent from '../../driver/GameEvent';
-import PhaseChangeStruct from '../../driver/PhaseChangeStruct';
+import PhaseChange from '../../driver/PhaseChange';
 import DrawCardStruct from '../../driver/DrawCardStruct';
 import Card from '../../driver/Card';
 import ServerPlayer from '../../driver/ServerPlayer';
 import CardAction from '../../core/CardAction';
 
-class PhaseRule extends GameRule<PhaseChangeStruct> {
+class PhaseRule extends GameRule<PhaseChange> {
 	constructor() {
 		super(GameEvent.ProceedPhase);
 	}
 
-	isTriggerable(data: PhaseChangeStruct): boolean {
+	isTriggerable(data: PhaseChange): boolean {
 		return Boolean(this.driver && data && data.player);
 	}
 
-	async effect(data: PhaseChangeStruct): Promise<boolean> {
+	async effect(data: PhaseChange): Promise<boolean> {
 		switch (data.to) {
 		case Phase.Draw:
 			await this.drawCards(data.player);
