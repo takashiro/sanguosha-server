@@ -1,30 +1,14 @@
-import {
-	CardSuit as Suit,
-	PlayerPhase as Phase,
-} from '@karuta/sanguosha-core';
+import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import TrickCard from '../TrickCard';
+import FixedTargetTrickCard from './FixedTargetTrickCard';
 
 import GameDriver from '../../driver/GameDriver';
-import ServerPlayer from '../../driver/ServerPlayer';
 import CardEffectStruct from '../../driver/CardEffectStruct';
 import CardUse from '../../driver/CardUse';
 
-class ExNihilo extends TrickCard {
+class ExNihilo extends FixedTargetTrickCard {
 	constructor(suit: Suit, number: number) {
 		super('ex-nihilo', suit, number);
-	}
-
-	async isAvailable(driver: GameDriver, source: ServerPlayer): Promise<boolean> {
-		return driver && source && source.getPhase() === Phase.Play;
-	}
-
-	async targetFilter(): Promise<boolean> {
-		return false;
-	}
-
-	async targetFeasible(): Promise<boolean> {
-		return true;
 	}
 
 	async onUse(driver: GameDriver, use: CardUse): Promise<void> {
