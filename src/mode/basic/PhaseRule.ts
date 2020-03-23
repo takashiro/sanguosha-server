@@ -76,7 +76,8 @@ class PhaseRule extends GameRule<PhaseChangeStruct> {
 		if (discardNum > 0) {
 			const selected = await player.askForCards(handArea, {
 				action: CardAction.Discard,
-				num: discardNum,
+				minNum: discardNum,
+				maxNum: discardNum,
 			});
 			const driver = this.getDriver();
 			driver.moveCards(selected, handArea, driver.getDiscardPile(), { open: true });

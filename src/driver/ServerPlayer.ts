@@ -31,7 +31,8 @@ const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 
 interface ChooseCardOptions {
 	action: CardAction;
-	num: number;
+	minNum: number;
+	maxNum: number;
 	pattern?: CardPattern;
 }
 
@@ -179,15 +180,26 @@ class ServerPlayer extends Player {
 	}
 
 	async askForCards(area: CardArea, options: ChooseCardOptions): Promise<Card[]> {
+		if (options.minNum < 0) {
+			throw new Error('minNum must be >= 0');
+		}
+		if (options.maxNum < options.minNum) {
+			throw new Error('maxNum must be >= minNum.');
+		}
+
 		let reply = null;
 
 		const { pattern } = options;
-		const cards = pattern ? area.getCards().filter((card) => pattern.match(card)) : undefined;
+		let acceptableCards = area.getCards();
+		if (pattern) {
+			acceptableCards = acceptableCards.filter((card) => pattern.match(card));
+		}
 		try {
 			reply = await this.user.request(cmd.ChooseCards, {
 				area: area.toJSON(),
-				num: options.num,
-				cards: cards && cards.map((card) => card.getId()),
+				minNum: options.minNum,
+				maxNum: options.maxNum,
+				cards: pattern ? acceptableCards.map((card) => card.getId()) : undefined,
 			}, this.requestTimeout);
 		} catch (error) {
 			// No response from client
@@ -203,23 +215,20 @@ class ServerPlayer extends Player {
 			}
 		}
 
-		const selected = Array.from(cardSet);
-		if (options.num > 0) {
-			let delta = options.num - selected.length;
-			if (delta < 0) {
-				selected.splice(options.num, -delta);
-			} else if (delta > 0) {
-				delta = Math.min(delta, area.size - selected.length);
-				const otherCards = area.getCards().filter((card) => !selected.includes(card));
-				selected.push(...otherCards.slice(0, delta));
-			}
+		let selected = Array.from(cardSet);
+		if (pattern) {
+			selected = selected.filter((card) => pattern.match(card));
+		}
+		if (selected.length < options.minNum) {
+			const delta = Math.min(options.minNum - selected.length, area.size - selected.length);
+			const otherCards = acceptableCards.filter((card) => !selected.includes(card));
+			selected.push(...otherCards.slice(0, delta));
+		} else if (selected.length > options.maxNum) {
+			const delta = selected.length - options.maxNum;
+			selected.splice(0, delta);
 		}
 
-		if (!pattern) {
-			return selected;
-		}
-
-		return selected.filter((card) => pattern.match(card));
+		return selected;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

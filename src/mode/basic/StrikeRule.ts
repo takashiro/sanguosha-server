@@ -42,7 +42,8 @@ class StrikeRule extends GameRule<CardEffectStruct> {
 			try {
 				const cards = await to.askForCards(to.getHandArea(), {
 					action: CardAction.Use,
-					num: 1,
+					minNum: 0,
+					maxNum: 1,
 					pattern: new CardPattern({ name: 'dodge' }),
 				});
 				if (!cards || cards.length < 1) {
