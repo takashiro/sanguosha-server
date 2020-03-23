@@ -8,7 +8,7 @@ import BasicCard from '../BasicCard';
 import GameDriver from '../../driver/GameDriver';
 import ServerPlayer from '../../driver/ServerPlayer';
 import DamageStruct from '../../driver/DamageStruct';
-import CardEffectStruct from '../../driver/CardEffectStruct';
+import CardEffect from '../../driver/CardEffect';
 
 class Strike extends BasicCard {
 	constructor(suit: Suit, number: number) {
@@ -36,7 +36,7 @@ class Strike extends BasicCard {
 		return driver && selected.length === 1;
 	}
 
-	async effect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
+	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
 		if (!effect.to) {
 			return;
 		}

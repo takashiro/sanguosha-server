@@ -4,15 +4,15 @@ import CardPattern from '../../core/CardPattern';
 import Card from '../../driver/Card';
 import GameEvent from '../../driver/GameEvent';
 import GameRule from '../../driver/GameRule';
-import CardEffectStruct from '../../driver/CardEffectStruct';
+import CardEffect from '../../driver/CardEffect';
 import CardUse from '../../driver/CardUse';
 
-class StrikeRule extends GameRule<CardEffectStruct> {
+class StrikeRule extends GameRule<CardEffect> {
 	constructor() {
 		super(GameEvent.TakeCardEffect);
 	}
 
-	isTriggerable(effect: CardEffectStruct): boolean {
+	isTriggerable(effect: CardEffect): boolean {
 		const { use } = effect;
 		if (!use.card) {
 			return false;
@@ -31,7 +31,7 @@ class StrikeRule extends GameRule<CardEffectStruct> {
 		return to.isAlive();
 	}
 
-	async effect(effect: CardEffectStruct): Promise<boolean> {
+	async effect(effect: CardEffect): Promise<boolean> {
 		const { to } = effect;
 		if (!to || !to.isAlive()) {
 			return false;

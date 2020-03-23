@@ -6,7 +6,7 @@ import {
 import BasicCard from '../BasicCard';
 import GameDriver from '../../driver/GameDriver';
 import ServerPlayer from '../../driver/ServerPlayer';
-import CardEffectStruct from '../../driver/CardEffectStruct';
+import CardEffect from '../../driver/CardEffect';
 import RecoverStruct from '../../driver/RecoverStruct';
 import CardUse from '../../driver/CardUse';
 
@@ -32,7 +32,7 @@ class Peach extends BasicCard {
 		use.to.push(from);
 	}
 
-	async effect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
+	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
 		if (!effect.to) {
 			return;
 		}

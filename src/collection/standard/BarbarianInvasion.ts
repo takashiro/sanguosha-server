@@ -5,7 +5,7 @@ import CardAction from '../../core/CardAction';
 import CardPattern from '../../core/CardPattern';
 
 import Card from '../../driver/Card';
-import CardEffectStruct from '../../driver/CardEffectStruct';
+import CardEffect from '../../driver/CardEffect';
 import CardExpense from '../../driver/CardExpense';
 import DamageStruct from '../../driver/DamageStruct';
 import GameDriver from '../../driver/GameDriver';
@@ -15,7 +15,7 @@ class BarbarianInvasion extends AreaEffectTrickCard {
 		super('barbarian-invasion', suit, number);
 	}
 
-	async effect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
+	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
 		const { to } = effect;
 		if (!to) {
 			return;

@@ -2,27 +2,27 @@ import Card from './Card';
 import CardUse from './CardUse';
 import ServerPlayer from './ServerPlayer';
 
-class CardEffectStruct {
+class CardEffect {
 	readonly use: CardUse;
 
 	weight: number;
 
 	to?: ServerPlayer;
 
-	origin?: CardEffectStruct;
+	origin?: CardEffect;
 
 	/**
 	 * @param use
 	 * @param to
 	 */
-	constructor(use: CardUse, to?: ServerPlayer | CardEffectStruct) {
+	constructor(use: CardUse, to?: ServerPlayer | CardEffect) {
 		this.use = use;
 		this.weight = 1;
 
 		if (to) {
 			if (to instanceof ServerPlayer) {
 				this.to = to;
-			} else if (to instanceof CardEffectStruct) {
+			} else if (to instanceof CardEffect) {
 				this.origin = to;
 			}
 		}
@@ -41,4 +41,4 @@ class CardEffectStruct {
 	}
 }
 
-export default CardEffectStruct;
+export default CardEffect;

@@ -3,7 +3,7 @@ import { Card as MetaCard } from '@karuta/sanguosha-core';
 import GameDriver from './GameDriver';
 import ServerPlayer from './ServerPlayer';
 import CardUse from './CardUse';
-import CardEffectStruct from './CardEffectStruct';
+import CardEffect from './CardEffect';
 
 abstract class Card extends MetaCard {
 	/**
@@ -66,7 +66,7 @@ abstract class Card extends MetaCard {
 	 * @param effect
 	 */
 	// eslint-disable-next-line no-unused-vars, no-empty-function, @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-	async onEffect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
+	async onEffect(driver: GameDriver, effect: CardEffect): Promise<void> {
 	}
 
 	/**
@@ -75,7 +75,7 @@ abstract class Card extends MetaCard {
 	 * @param effect
 	 */
 	// eslint-disable-next-line no-unused-vars, no-empty-function, @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-	async effect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
+	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
 	}
 
 	/**

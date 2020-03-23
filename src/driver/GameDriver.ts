@@ -19,7 +19,7 @@ import Collection from './Collection';
 import ServerPlayer from './ServerPlayer';
 
 import CardUse from './CardUse';
-import CardEffectStruct from './CardEffectStruct';
+import CardEffect from './CardEffect';
 import DamageStruct from './DamageStruct';
 
 import CollectionMap from '../collection';
@@ -292,7 +292,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param use
 	 * @param origin
 	 */
-	async useCard(use: CardUse, origin?: CardEffectStruct): Promise<boolean> {
+	async useCard(use: CardUse, origin?: CardEffect): Promise<boolean> {
 		if (!use.from || !use.card) {
 			return false;
 		}
@@ -311,11 +311,11 @@ class GameDriver extends EventDriver<GameEvent> {
 		if (use.to.length > 0) {
 			this.sortPlayersByActionOrder(use.to);
 			for (const target of use.to) {
-				const effect = new CardEffectStruct(use, target);
+				const effect = new CardEffect(use, target);
 				await this.takeCardEffect(effect);
 			}
 		} else if (origin) {
-			const effect = new CardEffectStruct(use, origin);
+			const effect = new CardEffect(use, origin);
 			await this.takeCardEffect(effect);
 		}
 
@@ -324,7 +324,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		return true;
 	}
 
-	protected async takeCardEffect(effect: CardEffectStruct): Promise<void> {
+	protected async takeCardEffect(effect: CardEffect): Promise<void> {
 		await this.trigger(GameEvent.TakeCardEffect, effect);
 
 		const { card } = effect;

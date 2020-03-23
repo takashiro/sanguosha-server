@@ -2,14 +2,14 @@ import { CardExpenseStruct } from '@karuta/sanguosha-core';
 
 import Card from './Card';
 import ServerPlayer from './ServerPlayer';
-import CardEffectStruct from './CardEffectStruct';
+import CardEffect from './CardEffect';
 
 export default class CardExpense {
 	player: ServerPlayer;
 
 	card: Card;
 
-	origin?: CardEffectStruct;
+	origin?: CardEffect;
 
 	constructor(player: ServerPlayer, card: Card) {
 		this.player = player;

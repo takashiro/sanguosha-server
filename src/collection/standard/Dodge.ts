@@ -1,7 +1,7 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
 import BasicCard from '../BasicCard';
-import CardEffectStruct from '../../driver/CardEffectStruct';
+import CardEffect from '../../driver/CardEffect';
 import GameDriver from '../../driver/GameDriver';
 
 class Dodge extends BasicCard {
@@ -9,7 +9,7 @@ class Dodge extends BasicCard {
 		super('dodge', suit, number);
 	}
 
-	async effect(driver: GameDriver, effect: CardEffectStruct): Promise<void> {
+	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
 		const { origin } = effect;
 		if (!origin) {
 			return;
