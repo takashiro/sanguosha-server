@@ -1,6 +1,6 @@
 const enum CardAction {
 	Use,
-	Respond,
+	Expend,
 	Discard,
 }
 

@@ -24,6 +24,7 @@ import DamageStruct from './DamageStruct';
 
 import CollectionMap from '../collection';
 import RecoverStruct from './RecoverStruct';
+import CardExpenseStruct from './CardExpense';
 
 interface CardMoveOptions {
 	openTo?: ServerPlayer;
@@ -335,6 +336,24 @@ class GameDriver extends EventDriver<GameEvent> {
 			await card.onEffect(this, effect);
 			await card.effect(this, effect);
 		}
+	}
+
+	async expendCard(expense: CardExpenseStruct): Promise<boolean> {
+		if (!expense.player || !expense.card) {
+			return false;
+		}
+
+		this.room.broadcast(cmd.ExpendCard, expense.toJSON());
+
+		const handArea = expense.player.getHandArea();
+		const processArea = expense.player.getProcessArea();
+		const cards = [expense.card];
+		this.moveCards(cards, handArea, processArea, { open: true });
+
+		// TO-DO: Trigger skills
+
+		this.moveCards(cards, processArea, this.getDiscardPile(), { open: true });
+		return true;
 	}
 
 	/**
