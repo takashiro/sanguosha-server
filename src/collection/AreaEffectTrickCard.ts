@@ -1,6 +1,6 @@
 import FixedTargetTrickCard from './FixedTargetTrickCard';
-import GameDriver from '../../driver';
-import CardUse from '../../driver/CardUse';
+import GameDriver from '../driver';
+import CardUse from '../driver/CardUse';
 
 class AreaEffectTrickCard extends FixedTargetTrickCard {
 	async onUse(driver: GameDriver, use: CardUse): Promise<void> {

@@ -2,7 +2,7 @@ import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
 import Card from '../../../driver/Card';
 
-import * as std from '../equip-card';
+import * as std from '../equip';
 import OffensiveHorseCard from '../../OffensiveHorseCard';
 import DefensiveHorseCard from '../../DefensiveHorseCard';
 

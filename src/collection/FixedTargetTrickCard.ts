@@ -1,4 +1,4 @@
-import TrickCard from '../TrickCard';
+import TrickCard from './TrickCard';
 
 class FixedTargetTrickCard extends TrickCard {
 	async targetFilter(): Promise<boolean> {

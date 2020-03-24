@@ -1,10 +1,10 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import FixedTargetTrickCard from './FixedTargetTrickCard';
+import FixedTargetTrickCard from '../../FixedTargetTrickCard';
 
-import GameDriver from '../../driver/GameDriver';
-import CardEffect from '../../driver/CardEffect';
-import CardUse from '../../driver/CardUse';
+import GameDriver from '../../../driver/GameDriver';
+import CardEffect from '../../../driver/CardEffect';
+import CardUse from '../../../driver/CardUse';
 
 class ExNihilo extends FixedTargetTrickCard {
 	constructor(suit: Suit, number: number) {

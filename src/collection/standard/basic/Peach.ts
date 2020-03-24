@@ -3,12 +3,12 @@ import {
 	PlayerPhase as Phase,
 } from '@karuta/sanguosha-core';
 
-import BasicCard from '../BasicCard';
-import GameDriver from '../../driver/GameDriver';
-import ServerPlayer from '../../driver/ServerPlayer';
-import CardEffect from '../../driver/CardEffect';
-import RecoverStruct from '../../driver/RecoverStruct';
-import CardUse from '../../driver/CardUse';
+import BasicCard from '../../BasicCard';
+import GameDriver from '../../../driver/GameDriver';
+import ServerPlayer from '../../../driver/ServerPlayer';
+import CardEffect from '../../../driver/CardEffect';
+import RecoverStruct from '../../../driver/RecoverStruct';
+import CardUse from '../../../driver/CardUse';
 
 class Peach extends BasicCard {
 	constructor(suit: Suit, number: number) {

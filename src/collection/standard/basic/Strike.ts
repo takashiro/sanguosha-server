@@ -3,12 +3,12 @@ import {
 	CardSuit as Suit,
 } from '@karuta/sanguosha-core';
 
-import BasicCard from '../BasicCard';
+import BasicCard from '../../BasicCard';
 
-import GameDriver from '../../driver/GameDriver';
-import ServerPlayer from '../../driver/ServerPlayer';
-import Damage from '../../driver/Damage';
-import CardEffect from '../../driver/CardEffect';
+import GameDriver from '../../../driver/GameDriver';
+import ServerPlayer from '../../../driver/ServerPlayer';
+import Damage from '../../../driver/Damage';
+import CardEffect from '../../../driver/CardEffect';
 
 class Strike extends BasicCard {
 	constructor(suit: Suit, number: number) {

@@ -1,8 +1,8 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import BasicCard from '../BasicCard';
-import CardEffect from '../../driver/CardEffect';
-import GameDriver from '../../driver/GameDriver';
+import BasicCard from '../../BasicCard';
+import CardEffect from '../../../driver/CardEffect';
+import GameDriver from '../../../driver/GameDriver';
 
 class Dodge extends BasicCard {
 	constructor(suit: Suit, number: number) {

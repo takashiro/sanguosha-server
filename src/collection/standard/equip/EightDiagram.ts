@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import ArmorCard from '../ArmorCard';
+import ArmorCard from '../../ArmorCard';
 
 class EightDiagram extends ArmorCard {
 	constructor(suit: Suit, number: number) {

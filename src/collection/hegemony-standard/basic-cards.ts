@@ -2,7 +2,7 @@ import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
 import Card from '../../driver/Card';
 
-import * as std from '../standard/basic-card';
+import * as std from '../standard/basic';
 import * as mnv from '../maneuvering/cards';
 
 export default function createBasicCards(): Card[] {

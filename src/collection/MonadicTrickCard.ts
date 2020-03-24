@@ -1,6 +1,6 @@
-import TrickCard from '../TrickCard';
-import GameDriver from '../../driver';
-import ServerPlayer from '../../driver/ServerPlayer';
+import TrickCard from './TrickCard';
+import GameDriver from '../driver/GameDriver';
+import ServerPlayer from '../driver/ServerPlayer';
 
 export default class MonadicTrickCard extends TrickCard {
 	async targetFeasible(driver: GameDriver, selected: ServerPlayer[], source: ServerPlayer): Promise<boolean> {
