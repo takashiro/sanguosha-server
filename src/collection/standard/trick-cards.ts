@@ -1,7 +1,7 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import * as std from '../trick';
-import Card from '../../../driver/Card';
+import * as std from './trick';
+import Card from '../../driver/Card';
 
 function createTrickCards(): Card[] {
 	return [

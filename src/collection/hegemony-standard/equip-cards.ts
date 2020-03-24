@@ -3,10 +3,10 @@ import { CardSuit as Suit } from '@karuta/sanguosha-core';
 import Card from '../../driver/Card';
 
 import * as std from '../standard/equip';
-import * as mnv from '../maneuvering/cards';
+import * as mnv from '../maneuvering/equip';
 
-import WuliuSword from './WuliuSword';
-import Triblade from './Triblade';
+import WuliuSword from './equip/WuliuSword';
+import Triblade from './equip/Triblade';
 import DefensiveHorseCard from '../DefensiveHorseCard';
 import OffensiveHorseCard from '../OffensiveHorseCard';
 

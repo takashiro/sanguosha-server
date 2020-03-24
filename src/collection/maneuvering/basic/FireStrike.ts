@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import Strike from '../standard/basic/Strike';
+import Strike from '../../standard/basic/Strike';
 
 class FireStrike extends Strike {
 	constructor(suit: Suit, number: number) {

@@ -3,12 +3,12 @@ import { CardSuit as Suit } from '@karuta/sanguosha-core';
 import Card from '../../driver/Card';
 
 import * as std from '../standard/trick';
-import * as mnv from '../maneuvering/cards';
+import * as mnv from '../maneuvering/trick';
 
-import HegNullification from './HegNullification';
-import Ease from './Ease';
-import Scout from './Scout';
-import Ally from './Ally';
+import HegNullification from './trick/HegNullification';
+import Ease from './trick/Ease';
+import Scout from './trick/Scout';
+import Ally from './trick/Ally';
 
 export default function createTrickCards(): Card[] {
 	return [
