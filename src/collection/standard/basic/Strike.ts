@@ -37,11 +37,12 @@ class Strike extends BasicCard {
 	}
 
 	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
-		if (!effect.to) {
+		if (!effect.to || effect.to.isDead()) {
 			return;
 		}
 
 		const damage = new Damage(effect.from, effect.to, 1);
+		damage.card = this;
 		driver.damage(damage);
 	}
 }

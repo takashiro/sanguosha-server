@@ -17,7 +17,7 @@ class ArrowBarrage extends AreaEffectTrickCard {
 
 	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
 		const { to } = effect;
-		if (!to) {
+		if (!to || to.isDead()) {
 			return;
 		}
 
