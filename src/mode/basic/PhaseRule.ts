@@ -3,7 +3,7 @@ import { PlayerPhase as Phase } from '@karuta/sanguosha-core';
 import GameRule from '../../driver/GameRule';
 import GameEvent from '../../driver/GameEvent';
 import PhaseChange from '../../driver/PhaseChange';
-import DrawCardStruct from '../../driver/DrawCardStruct';
+import CardDraw from '../../driver/CardDraw';
 import Card from '../../driver/Card';
 import ServerPlayer from '../../driver/ServerPlayer';
 import CardAction from '../../core/CardAction';
@@ -35,11 +35,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 	}
 
 	async drawCards(player: ServerPlayer): Promise<void> {
-		const data: DrawCardStruct = {
-			player,
-			num: 2,
-		};
-
+		const data = new CardDraw(player, 2);
 		const driver = this.getDriver();
 		await driver.trigger(GameEvent.DrawNCards, data);
 		await driver.drawCards(player, data.num);
