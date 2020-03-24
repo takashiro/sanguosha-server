@@ -23,7 +23,7 @@ import CardEffect from './CardEffect';
 import Damage from './Damage';
 
 import CollectionMap from '../collection';
-import RecoverStruct from './RecoverStruct';
+import RecoverStruct from './Recover';
 import CardExpenseStruct from './CardExpense';
 
 interface CardMoveOptions {

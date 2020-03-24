@@ -7,7 +7,7 @@ import BasicCard from '../../BasicCard';
 import GameDriver from '../../../driver/GameDriver';
 import ServerPlayer from '../../../driver/ServerPlayer';
 import CardEffect from '../../../driver/CardEffect';
-import RecoverStruct from '../../../driver/RecoverStruct';
+import Recover from '../../../driver/Recover';
 import CardUse from '../../../driver/CardUse';
 
 class Peach extends BasicCard {
@@ -37,7 +37,7 @@ class Peach extends BasicCard {
 			return;
 		}
 
-		const recover = new RecoverStruct(effect.from, effect.to, 1);
+		const recover = new Recover(effect.from, effect.to, 1);
 		driver.recover(recover);
 	}
 }
