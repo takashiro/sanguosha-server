@@ -1,8 +1,10 @@
+import Collection from '../driver/Collection';
+
 import HegemonyStandard from './hegemony-standard';
 import Maneuvering from './maneuvering';
 import Standard from './standard';
 
-const collections = new Map();
+const collections = new Map<string, Collection>();
 collections.set('standard', new Standard());
 collections.set('maneuvering', new Maneuvering());
 collections.set('hegemony-standard', new HegemonyStandard());
