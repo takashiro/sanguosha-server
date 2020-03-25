@@ -1,17 +1,17 @@
 
-enum GameEvent {
+const enum GameEvent {
 	Invalid,
 
-	StartGame,
-	EndGame,
+	StartingGame,
+	EndingGame,
 
-	StartPhase,
-	ProceedPhase,
-	EndPhase,
+	StartingPhase,
+	ProceedingPhase,
+	EndingPhase,
 
-	DrawNCards,
+	DrawingNCards,
 
-	TakeCardEffect,
+	TakingCardEffect,
 }
 
 export default GameEvent;

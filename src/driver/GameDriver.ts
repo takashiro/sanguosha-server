@@ -99,7 +99,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	async start(): Promise<void> {
 		super.start();
 		this.room.broadcast(cmd.StartGame);
-		await this.trigger(GameEvent.StartGame);
+		await this.trigger(GameEvent.StartingGame);
 	}
 
 	getRoom(): Room {
@@ -325,7 +325,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	}
 
 	protected async takeCardEffect(effect: CardEffect): Promise<void> {
-		await this.trigger(GameEvent.TakeCardEffect, effect);
+		await this.trigger(GameEvent.TakingCardEffect, effect);
 
 		const { card } = effect;
 		if (!card) {

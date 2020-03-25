@@ -15,7 +15,7 @@ class BasicRule extends GameRule<void> {
 	protected idle: number;
 
 	constructor() {
-		super(GameEvent.StartGame);
+		super(GameEvent.StartingGame);
 		this.idle = 1000;
 	}
 
@@ -75,15 +75,15 @@ class BasicRule extends GameRule<void> {
 
 		for (const phase of phases) {
 			const data = new PhaseChange(player, player.getPhase(), phase);
-			if (await driver.trigger(GameEvent.StartPhase, data)) {
+			if (await driver.trigger(GameEvent.StartingPhase, data)) {
 				continue;
 			}
 
 			player.setPhase(data.to);
 			player.broadcastProperty('phase', data.to);
-			await driver.trigger(GameEvent.ProceedPhase, data);
+			await driver.trigger(GameEvent.ProceedingPhase, data);
 
-			await driver.trigger(GameEvent.EndPhase, data);
+			await driver.trigger(GameEvent.EndingPhase, data);
 
 			await delay(this.idle);
 		}

@@ -57,7 +57,7 @@ describe('StandardRule', () => {
 	rule.setDriver(driver);
 
 	it('binds to start event', () => {
-		expect(rule.event).toBe(GameEvent.StartGame);
+		expect(rule.event).toBe(GameEvent.StartingGame);
 	});
 
 	describe('#preparePlayers()', () => {

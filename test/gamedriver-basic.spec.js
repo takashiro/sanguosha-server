@@ -38,7 +38,7 @@ describe('GameDriver', () => {
 
 	it('starts game', async () => {
 		await driver.start();
-		expect(room.broadcast).toBeCalledWith(GameEvent.StartGame);
+		expect(room.broadcast).toBeCalledWith(GameEvent.StartingGame);
 	});
 
 	describe('#getDistance()', () => {

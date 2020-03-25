@@ -9,7 +9,7 @@ import CardUse from '../../driver/CardUse';
 
 class StrikeRule extends GameRule<CardEffect> {
 	constructor() {
-		super(GameEvent.TakeCardEffect);
+		super(GameEvent.TakingCardEffect);
 	}
 
 	isTriggerable(effect: CardEffect): boolean {

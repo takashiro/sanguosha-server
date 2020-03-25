@@ -10,7 +10,7 @@ import CardAction from '../../core/CardAction';
 
 class PhaseRule extends GameRule<PhaseChange> {
 	constructor() {
-		super(GameEvent.ProceedPhase);
+		super(GameEvent.ProceedingPhase);
 	}
 
 	isTriggerable(data: PhaseChange): boolean {
@@ -37,7 +37,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 	async drawCards(player: ServerPlayer): Promise<void> {
 		const data = new CardDraw(player, 2);
 		const driver = this.getDriver();
-		await driver.trigger(GameEvent.DrawNCards, data);
+		await driver.trigger(GameEvent.DrawingNCards, data);
 		await driver.drawCards(player, data.num);
 	}
 

@@ -63,7 +63,7 @@ describe('Basic Rule', () => {
 	rule.idle = 0;
 
 	it('binds to start event', () => {
-		expect(rule.event).toBe(GameEvent.StartGame);
+		expect(rule.event).toBe(GameEvent.StartingGame);
 	});
 
 	it('prepares players', () => {
@@ -110,10 +110,10 @@ describe('Basic Rule', () => {
 		driver.trigger = (event, data) => {
 			const { player } = data;
 			if (player === players[1]) {
-				if (event === GameEvent.StartPhase && data.to === Phase.Draw) {
+				if (event === GameEvent.StartingPhase && data.to === Phase.Draw) {
 					return true;
 				}
-				if (event === GameEvent.EndPhase && data.to === Phase.End) {
+				if (event === GameEvent.EndingPhase && data.to === Phase.End) {
 					driver.stop();
 					return true;
 				}
