@@ -7,7 +7,7 @@ export default class MonadicTrickCard extends TrickCard {
 		return driver && source && selected.length === 1;
 	}
 
-	async targetFilter(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer): Promise<boolean> {
-		return driver && target && selected.length < 1;
+	async targetFilter(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
+		return driver && target && source && selected.length < 1;
 	}
 }
