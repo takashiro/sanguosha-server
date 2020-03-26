@@ -1,8 +1,8 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import TrickCard from '../../TrickCard';
+import MonadicTrickCard from '../../MonadicTrickCard';
 
-class Scout extends TrickCard {
+class Scout extends MonadicTrickCard {
 	constructor(suit: Suit, number: number) {
 		super('scout', suit, number);
 	}

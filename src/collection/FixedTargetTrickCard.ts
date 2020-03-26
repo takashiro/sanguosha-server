@@ -1,6 +1,6 @@
-import TrickCard from './TrickCard';
+import InstantTrickCard from './InstantTrickCard';
 
-class FixedTargetTrickCard extends TrickCard {
+class FixedTargetTrickCard extends InstantTrickCard {
 	async targetFilter(): Promise<boolean> {
 		return false;
 	}

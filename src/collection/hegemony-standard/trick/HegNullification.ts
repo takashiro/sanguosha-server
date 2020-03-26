@@ -1,8 +1,8 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import TrickCard from '../../TrickCard';
+import FixedTargetTrickCard from '../../FixedTargetTrickCard';
 
-class HegNullification extends TrickCard {
+class HegNullification extends FixedTargetTrickCard {
 	constructor(suit: Suit, number: number) {
 		super('heg-nullification', suit, number);
 	}

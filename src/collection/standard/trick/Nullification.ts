@@ -1,8 +1,8 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import TrickCard from '../../TrickCard';
+import FixedTargetTrickCard from '../../FixedTargetTrickCard';
 
-class Nullification extends TrickCard {
+class Nullification extends FixedTargetTrickCard {
 	constructor(suit: Suit, number: number) {
 		super('nullification', suit, number);
 	}

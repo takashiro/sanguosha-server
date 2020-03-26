@@ -1,6 +1,6 @@
 import EquipCard from './EquipCard';
 
-class HorseCard extends EquipCard {
+abstract class HorseCard extends EquipCard {
 }
 
 export default HorseCard;

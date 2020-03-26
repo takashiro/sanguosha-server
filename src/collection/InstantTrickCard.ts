@@ -1,19 +1,14 @@
 import {
-	CardType as Type,
 	CardSubtype as Subtype,
 } from '@karuta/sanguosha-core';
-import Card from '../driver/Card';
 
+import TrickCard from './TrickCard';
 import GameDriver from '../driver/GameDriver';
 import CardUse from '../driver/CardUse';
 
-class BasicCard extends Card {
-	getType(): Type {
-		return Type.Basic;
-	}
-
+class InstantTrickCard extends TrickCard {
 	getSubtype(): Subtype {
-		return Subtype.None;
+		return Subtype.InstantTrick;
 	}
 
 	async use(driver: GameDriver, use: CardUse): Promise<void> {
@@ -39,4 +34,4 @@ class BasicCard extends Card {
 	}
 }
 
-export default BasicCard;
+export default InstantTrickCard;
