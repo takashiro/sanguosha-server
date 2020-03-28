@@ -1,4 +1,4 @@
-import randsub from '../src/util/randsub';
+import randsub from '../../src/util/randsub';
 
 describe('Util - randsub()', () => {
 	it('returns the array if num >= its length', () => {
