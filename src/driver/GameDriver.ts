@@ -126,6 +126,10 @@ class GameDriver extends EventDriver<GameEvent> {
 		return this.players.filter((player) => player.isAlive());
 	}
 
+	getAlivePlayersExcept(except: ServerPlayer): ServerPlayer[] {
+		return this.players.filter((player) => player.isAlive() && player !== except);
+	}
+
 	loadCollection(name: string): void {
 		const collection = CollectionMap.get(name);
 		if (!collection) {
