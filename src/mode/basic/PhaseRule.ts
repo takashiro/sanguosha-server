@@ -45,6 +45,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 		const driver = this.getDriver();
 		const handArea = player.getHandArea();
 		for (;;) {
+			player.setUseLimit('strike', 1);
 			const cards = handArea.getCards();
 			const availableCards: Card[] = [];
 			for (const ccard of cards) {
@@ -64,6 +65,9 @@ class PhaseRule extends GameRule<PhaseChange> {
 				await driver.playCard(player, card);
 			}
 		}
+
+		player.clearUseCount();
+		player.clearUseLimit();
 	}
 
 	async discardCards(player: ServerPlayer): Promise<void> {

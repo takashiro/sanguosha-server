@@ -42,11 +42,18 @@ describe('Phase Rule', () => {
 			},
 		};
 
+		const setUseLimit = jest.fn();
+		const clearUseCount = jest.fn();
+		const clearUseLimit = jest.fn();
+
 		const player = {
 			play,
 			getHandArea() {
 				return handArea;
 			},
+			setUseLimit,
+			clearUseCount,
+			clearUseLimit,
 		};
 
 		await rule.effect({
@@ -55,6 +62,9 @@ describe('Phase Rule', () => {
 		});
 
 		expect(play).toBeCalledTimes(3);
+		expect(setUseLimit).toBeCalledWith('strike', 1);
+		expect(clearUseCount).toBeCalledTimes(1);
+		expect(clearUseLimit).toBeCalledTimes(1);
 	});
 
 	it('discards overflow hand cards', async () => {

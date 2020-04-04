@@ -3,11 +3,11 @@ import CardPattern from '../../core/CardPattern';
 
 import Card from '../../driver/Card';
 import GameEvent from '../../driver/GameEvent';
-import GameRule from '../../driver/GameRule';
 import CardEffect from '../../driver/CardEffect';
 import CardUse from '../../driver/CardUse';
+import AbstractStrikeRule from './AbstractStrikeRule';
 
-class StrikeRule extends GameRule<CardEffect> {
+class StrikeEffectRule extends AbstractStrikeRule<CardEffect> {
 	constructor() {
 		super(GameEvent.TakingCardEffect);
 	}
@@ -18,8 +18,7 @@ class StrikeRule extends GameRule<CardEffect> {
 			return false;
 		}
 
-		const cardName = use.card.getName();
-		if (cardName !== 'strike' && !cardName.endsWith('-strike')) {
+		if (!this.isStrike(use.card)) {
 			return false;
 		}
 
@@ -68,4 +67,4 @@ class StrikeRule extends GameRule<CardEffect> {
 	}
 }
 
-export default StrikeRule;
+export default StrikeEffectRule;

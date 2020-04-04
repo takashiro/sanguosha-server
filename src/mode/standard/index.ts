@@ -1,9 +1,7 @@
 import StandardRule from './StandardRule';
-import PhaseRule from '../basic/PhaseRule';
-import StrikeRule from '../basic/StrikeRule';
+import BasicRules from '../basic';
 
 export default [
 	StandardRule,
-	PhaseRule,
-	StrikeRule,
+	...BasicRules,
 ];
