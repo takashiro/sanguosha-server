@@ -11,6 +11,8 @@ const enum GameEvent {
 
 	DrawingNCards,
 
+	CheckingCardConstraint,
+	SelectingCardTargets,
 	TakingCardEffect,
 }
 

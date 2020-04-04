@@ -25,6 +25,7 @@ import Damage from './Damage';
 import CollectionMap from '../collection';
 import RecoverStruct from './Recover';
 import CardExpenseStruct from './CardExpense';
+import CardConstraint from './CardConstraint';
 
 interface CardMoveOptions {
 	openTo?: ServerPlayer;
@@ -211,6 +212,20 @@ class GameDriver extends EventDriver<GameEvent> {
 		this.broadcastCardMove(cards, from, to, options);
 	}
 
+	/**
+	 * Check card constraints.
+	 * @param player
+	 * @param card
+	 */
+	async isCardAvailable(player: ServerPlayer, card: Card): Promise<boolean> {
+		if (!await card.isAvailable(this, player)) {
+			return false;
+		}
+
+		const constraint = new CardConstraint(player, card);
+		await this.trigger(GameEvent.CheckingCardConstraint, constraint);
+		return constraint.isAvailable();
+	}
 
 	/**
 	 * Ask a player to choose and confirm card targets. And then make the card take effect.
@@ -309,6 +324,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 
 		this.room.broadcast(cmd.UseCard, use.toJSON());
+		await this.trigger(GameEvent.SelectingCardTargets, use);
 
 		await card.use(this, use);
 

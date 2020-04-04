@@ -49,7 +49,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 			const availableCards: Card[] = [];
 			for (const ccard of cards) {
 				const card = ccard as Card;
-				if (await card.isAvailable(driver, player)) {
+				if (await driver.isCardAvailable(player, card)) {
 					availableCards.push(card);
 				}
 			}
