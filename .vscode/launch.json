@@ -7,10 +7,17 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
+			"name": "Rebuild & Launch",
 			"program": "${workspaceFolder}/../karuta-node-server/dist/app.js",
 			"cwd": "${workspaceFolder}/../karuta-node-server",
 			"preLaunchTask": "npm: debug"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Launch",
+			"program": "${workspaceFolder}/../karuta-node-server/dist/app.js",
+			"cwd": "${workspaceFolder}/../karuta-node-server"
 		},
 		{
 			"name": "Debug Current Test",
