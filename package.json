@@ -6,9 +6,9 @@
   "scripts": {
     "build": "webpack",
     "debug": "webpack --mode=development",
-    "test": "npm run lint && jest",
+    "test": "npm run lint && npm run jest",
     "lint": "eslint --ext ts,js .",
-    "jest": "jest"
+    "jest": "jest --no-cache"
   },
   "repository": {
     "type": "git",

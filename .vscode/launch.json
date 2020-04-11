@@ -28,6 +28,7 @@
 				"${workspaceRoot}/node_modules/jest/bin/jest.js",
 				"--runInBand",
 				"--coverage=false",
+				"--no-cache",
 				"${fileBasenameNoExtension}"
 			],
 			"disableOptimisticBPs": true,
