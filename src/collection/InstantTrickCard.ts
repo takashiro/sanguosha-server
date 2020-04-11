@@ -17,9 +17,8 @@ class InstantTrickCard extends TrickCard {
 			return;
 		}
 
-		const handArea = use.from.getHandArea();
 		const processArea = use.from.getProcessArea();
-		driver.moveCards([card], handArea, processArea, { open: true });
+		await driver.moveCards([card], processArea, { open: true });
 	}
 
 	async complete(driver: GameDriver, use: CardUse): Promise<void> {
@@ -29,8 +28,10 @@ class InstantTrickCard extends TrickCard {
 		}
 
 		const processArea = use.from.getProcessArea();
-		const discardPile = driver.getDiscardPile();
-		driver.moveCards([use.card], processArea, discardPile, { open: true });
+		if (processArea.has(use.card)) {
+			const discardPile = driver.getDiscardPile();
+			await driver.moveCards([use.card], discardPile, { open: true });
+		}
 	}
 }
 

@@ -2,8 +2,8 @@ import {
 	CardType as Type,
 	CardSubtype as Subtype,
 } from '@karuta/sanguosha-core';
-import Card from '../driver/Card';
 
+import Card from '../driver/Card';
 import GameDriver from '../driver/GameDriver';
 import CardUse from '../driver/CardUse';
 
@@ -22,9 +22,8 @@ class BasicCard extends Card {
 			return;
 		}
 
-		const handArea = use.from.getHandArea();
 		const processArea = use.from.getProcessArea();
-		driver.moveCards([card], handArea, processArea, { open: true });
+		await driver.moveCards([card], processArea, { open: true });
 	}
 
 	async complete(driver: GameDriver, use: CardUse): Promise<void> {
@@ -34,8 +33,10 @@ class BasicCard extends Card {
 		}
 
 		const processArea = use.from.getProcessArea();
-		const discardPile = driver.getDiscardPile();
-		driver.moveCards([use.card], processArea, discardPile, { open: true });
+		if (processArea.has(use.card)) {
+			const discardPile = driver.getDiscardPile();
+			await driver.moveCards([use.card], discardPile, { open: true });
+		}
 	}
 }
 

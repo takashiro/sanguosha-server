@@ -8,7 +8,6 @@ import GameRule from '../../driver/GameRule';
 import GameEvent from '../../driver/GameEvent';
 import ServerPlayer from '../../driver/ServerPlayer';
 import PhaseChange from '../../driver/PhaseChange';
-import shuffle from '../../util/shuffle';
 import delay from '../../util/delay';
 
 class BasicRule extends GameRule<void> {
@@ -49,14 +48,12 @@ class BasicRule extends GameRule<void> {
 		})));
 	}
 
-	prepareCards(): void {
+	async prepareCards(): Promise<void> {
 		const driver = this.getDriver();
-		const cards = driver.createCards();
-		shuffle(cards);
-		driver.resetDrawPile(cards);
+		driver.prepareDrawPile();
 
 		for (const player of driver.getPlayers()) {
-			driver.drawCards(player, 4);
+			await driver.drawCards(player, 4);
 		}
 	}
 

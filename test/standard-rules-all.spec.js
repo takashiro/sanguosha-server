@@ -125,8 +125,8 @@ describe('StandardRule', () => {
 	});
 
 	describe('#prepareCards()', () => {
-		it('prepares cards', () => {
-			rule.prepareCards();
+		it('prepares cards', async () => {
+			await rule.prepareCards();
 
 			for (const player of driver.players) {
 				expect(player.getHandArea().size).toBe(4);

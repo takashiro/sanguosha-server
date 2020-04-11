@@ -10,7 +10,10 @@ import {
 import Action from '../core/Action';
 import Config from '../core/Config';
 
+import shuffle from '../util/shuffle';
+
 import { ActionMap } from '../cmd';
+import CollectionMap from '../collection';
 
 import EventDriver from './EventDriver';
 import GameEvent from './GameEvent';
@@ -18,26 +21,13 @@ import Card from './Card';
 import Collection from './Collection';
 import ServerPlayer from './ServerPlayer';
 
-import CardUse from './CardUse';
 import CardEffect from './CardEffect';
-import Damage from './Damage';
-
-import CollectionMap from '../collection';
-import RecoverStruct from './Recover';
 import CardExpenseStruct from './CardExpense';
 import CardConstraint from './CardConstraint';
-
-interface CardMoveOptions {
-	openTo?: ServerPlayer;
-	open?: boolean;
-}
-
-interface CardMovePath {
-	from: object;
-	to: object;
-	cards?: object[];
-	cardNum?: number;
-}
+import CardUse from './CardUse';
+import CardMove, { CardMoveOptions } from './CardMove';
+import Damage from './Damage';
+import RecoverStruct from './Recover';
 
 class GameDriver extends EventDriver<GameEvent> {
 	protected readonly room: Room;
@@ -147,25 +137,32 @@ class GameDriver extends EventDriver<GameEvent> {
 		return generals;
 	}
 
-	createCards(): Card[] {
-		const cards = [];
-		for (const col of this.collections) {
-			cards.push(...col.createCards());
+	prepareDrawPile(): void {
+		const cards = this.createCards();
+		for (const card of cards) {
+			card.setLocation(this.drawPile);
+		}
+		shuffle(cards);
+		this.drawPile.setCards(cards);
+	}
+
+	fillDrawPile(minNum = 0): void {
+		if (this.drawPile.size > minNum) {
+			return;
 		}
 
-		for (let i = 0; i < cards.length; i++) {
-			cards[i].setId(i + 1);
-		}
+		const cards = this.discardPile.getCards();
+		this.discardPile.setCards([]);
 
-		return cards;
+		shuffle(cards);
+		for (const card of cards) {
+			this.drawPile.add(card);
+			(card as Card).setLocation(this.drawPile);
+		}
 	}
 
 	getDrawPile(): CardArea {
 		return this.drawPile;
-	}
-
-	resetDrawPile(cards: Card[]): void {
-		this.drawPile.setCards(cards);
 	}
 
 	getDiscardPile(): CardArea {
@@ -177,39 +174,70 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param player
 	 * @param num
 	 */
-	drawCards(player: ServerPlayer, num: number): void {
-		const cards = this.drawPile.shift(num);
-		// TO-DO: Shuffle and shift more cards if there are insufficient cards.
-
-		const area = player.getHandArea();
-		for (const card of cards) {
-			area.add(card);
-		}
-
-		this.broadcastCardMove(cards, this.drawPile, area, { openTo: player });
+	async drawCards(player: ServerPlayer, num: number): Promise<void> {
+		this.fillDrawPile(num);
+		const cards = this.drawPile.getCards().slice(0, num);
+		await this.moveCards(cards, player.getHandArea(), { openTo: player });
 	}
 
-	summonCard(player: ServerPlayer, cardName: string): void {
+	async summonCard(player: ServerPlayer, cardName: string): Promise<void> {
 		const cards = this.drawPile.getCards();
 		const card = cards.find((c) => c.getName() === cardName);
 		if (card) {
-			this.moveCards([card], this.drawPile, player.getHandArea(), { openTo: player });
+			await this.moveCards([card], player.getHandArea(), { openTo: player });
 		}
 	}
 
 	/**
 	 * Move cards and broadcast to clients
 	 * @param cards
-	 * @param from
 	 * @param to
 	 * @param options
 	 */
-	moveCards(cards: MetaCard[], from: CardArea, to: CardArea, options?: CardMoveOptions): void {
-		cards = cards.filter((card) => from.remove(card));
-		for (const card of cards) {
-			to.add(card);
+	async moveCards(cards: MetaCard[], to: CardArea, options: CardMoveOptions): Promise<void> {
+		const sourceMap = new Map<CardArea, Card[]>();
+		for (const card of cards as Card[]) {
+			const location = card.getLocation();
+			if (!location || !location.has(card)) {
+				continue;
+			}
+
+			const peers = sourceMap.get(location);
+			if (peers) {
+				peers.push(card);
+			} else {
+				sourceMap.set(location, [card]);
+			}
 		}
-		this.broadcastCardMove(cards, from, to, options);
+
+		const moves: CardMove[] = [];
+		for (const [from, subset] of sourceMap) {
+			const move = new CardMove(from, to, subset);
+			moves.push(move);
+		}
+
+		await this.trigger(GameEvent.BeforeMovingCards, moves);
+
+		if (moves.length <= 0) {
+			return;
+		}
+
+		for (const move of moves) {
+			const moved = [];
+			for (const card of move.cards) {
+				if (!move.from.remove(card)) {
+					continue;
+				}
+
+				move.to.add(card);
+				card.setLocation(move.to);
+				moved.push(card);
+			}
+			move.cards = moved;
+		}
+		this.broadcastCardMove(moves, options);
+
+		await this.trigger(GameEvent.AfterMovingCards, moves);
 	}
 
 	/**
@@ -365,14 +393,15 @@ class GameDriver extends EventDriver<GameEvent> {
 
 		this.room.broadcast(cmd.ExpendCard, expense.toJSON());
 
-		const handArea = expense.player.getHandArea();
 		const processArea = expense.player.getProcessArea();
 		const cards = [expense.card];
-		this.moveCards(cards, handArea, processArea, { open: true });
+		await this.moveCards(cards, processArea, { open: true });
 
 		// TO-DO: Trigger skills
 
-		this.moveCards(cards, processArea, this.getDiscardPile(), { open: true });
+		if (processArea.has(expense.card)) {
+			await this.moveCards(cards, this.getDiscardPile(), { open: true });
+		}
 		return true;
 	}
 
@@ -423,36 +452,6 @@ class GameDriver extends EventDriver<GameEvent> {
 			seat += this.players.length;
 		}
 		return seat;
-	}
-
-	broadcastCardMove(cards: MetaCard[], from: CardArea, to: CardArea, options?: CardMoveOptions): void {
-		if (!this.room) {
-			return;
-		}
-
-		const movePath: CardMovePath = {
-			from: from.toJSON(),
-			to: to.toJSON(),
-		};
-
-		if (options && options.openTo) {
-			const user = options.openTo.getUser();
-			user.send(cmd.MoveCards, {
-				...movePath,
-				cards: cards.map((card) => card.toJSON()),
-			});
-			this.room.broadcastExcept(user, cmd.MoveCards, {
-				...movePath,
-				cardNum: cards.length,
-			});
-		} else {
-			if (options && options.open) {
-				movePath.cards = cards.map((card) => card.toJSON());
-			} else {
-				movePath.cardNum = cards.length;
-			}
-			this.room.broadcast(cmd.MoveCards, movePath);
-		}
 	}
 
 	/**
@@ -523,6 +522,37 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 
 		return true;
+	}
+
+	protected createCards(): Card[] {
+		const cards = [];
+		for (const col of this.collections) {
+			cards.push(...col.createCards());
+		}
+
+		for (let i = 0; i < cards.length; i++) {
+			cards[i].setId(i + 1);
+		}
+
+		return cards;
+	}
+
+	protected broadcastCardMove(moves: CardMove[], options: CardMoveOptions): void {
+		if (!this.room) {
+			return;
+		}
+
+		for (const move of moves) {
+			if (options.open) {
+				this.room.broadcast(cmd.MoveCards, move.toJSON(true));
+			} else if (options.openTo) {
+				const user = options.openTo.getUser();
+				user.send(cmd.MoveCards, move.toJSON(true));
+				this.room.broadcastExcept(user, cmd.MoveCards, move.toJSON(false));
+			} else {
+				this.room.broadcast(cmd.MoveCards, move.toJSON(false));
+			}
+		}
 	}
 }
 

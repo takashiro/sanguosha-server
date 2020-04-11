@@ -19,7 +19,7 @@ class ExNihilo extends FixedTargetTrickCard {
 	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
 		const { to } = effect;
 		if (to) {
-			driver.drawCards(to, 2);
+			await driver.drawCards(to, 2);
 		}
 	}
 }

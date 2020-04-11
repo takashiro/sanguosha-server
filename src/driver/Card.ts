@@ -1,4 +1,7 @@
-import { Card as MetaCard } from '@karuta/sanguosha-core';
+import {
+	Card as MetaCard,
+	CardArea,
+} from '@karuta/sanguosha-core';
 
 import GameDriver from './GameDriver';
 import ServerPlayer from './ServerPlayer';
@@ -6,6 +9,16 @@ import CardUse from './CardUse';
 import CardEffect from './CardEffect';
 
 abstract class Card extends MetaCard {
+	protected location?: CardArea;
+
+	getLocation(): CardArea | undefined {
+		return this.location;
+	}
+
+	setLocation(location: CardArea): void {
+		this.location = location;
+	}
+
 	/**
 	 * Check if the selected players are feasible
 	 * @param driver game driver

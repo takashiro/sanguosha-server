@@ -14,6 +14,9 @@ const enum GameEvent {
 	CheckingCardConstraint,
 	SelectingCardTargets,
 	TakingCardEffect,
+
+	BeforeMovingCards,
+	AfterMovingCards,
 }
 
 export default GameEvent;

@@ -80,7 +80,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 				maxNum: discardNum,
 			});
 			const driver = this.getDriver();
-			driver.moveCards(selected, handArea, driver.getDiscardPile(), { open: true });
+			await driver.moveCards(selected, driver.getDiscardPile(), { open: true });
 		}
 	}
 }

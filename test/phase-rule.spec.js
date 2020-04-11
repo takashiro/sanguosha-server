@@ -92,7 +92,7 @@ describe('Phase Rule', () => {
 			to: Phase.Discard,
 		});
 
-		expect(driver.moveCards).toBeCalledWith(selected, handArea, discardPile, { open: true });
+		expect(driver.moveCards).toBeCalledWith(selected, discardPile, { open: true });
 	});
 
 	it('does nothing by default', async () => {

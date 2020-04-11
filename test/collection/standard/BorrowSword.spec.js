@@ -91,6 +91,7 @@ describe('#effect()', () => {
 
 	const handArea = {};
 	const from = {
+		isAlive: jest.fn().mockReturnValue(true),
 		getHandArea: jest.fn().mockReturnValue(handArea),
 	};
 	const effect = {
@@ -117,7 +118,7 @@ describe('#effect()', () => {
 		card.victim = 'victim';
 		equipArea.push(weapon);
 		await card.effect(driver, effect);
-		expect(driver.moveCards).toBeCalledWith([weapon], equipArea, handArea, { open: true });
+		expect(driver.moveCards).toBeCalledWith([weapon], handArea, { open: true });
 		driver.moveCards.mockClear();
 	});
 
