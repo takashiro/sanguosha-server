@@ -16,14 +16,15 @@ class BasicCard extends Card {
 		return Subtype.None;
 	}
 
-	async use(driver: GameDriver, use: CardUse): Promise<void> {
+	async use(driver: GameDriver, use: CardUse): Promise<boolean> {
 		const { card } = use;
 		if (!card.isReal()) {
-			return;
+			return true;
 		}
 
 		const processArea = use.from.getProcessArea();
 		await driver.moveCards([card], processArea, { open: true });
+		return true;
 	}
 
 	async complete(driver: GameDriver, use: CardUse): Promise<void> {

@@ -354,33 +354,61 @@ class GameDriver extends EventDriver<GameEvent> {
 		this.room.broadcast(cmd.UseCard, use.toJSON());
 		await this.trigger(GameEvent.SelectingCardTargets, use);
 
-		await card.use(this, use);
+		const instant = await card.use(this, use);
+		await this.trigger(GameEvent.UsingCard, use);
 
 		if (use.to.length > 0) {
-			this.sortPlayersByActionOrder(use.to);
-			for (const target of use.to) {
-				const effect = new CardEffect(use, target);
-				await this.takeCardEffect(effect);
+			const effective = await this.confirmCardTargets(use);
+			if (effective) {
+				if (instant) {
+					for (const target of use.to) {
+						const effect = new CardEffect(use, target);
+						await this.takeCardEffect(effect);
+					}
+				}
+			} else {
+				await this.moveCards([use.card], this.discardPile, { open: true });
 			}
 		} else if (origin) {
 			const effect = new CardEffect(use, origin);
 			await this.takeCardEffect(effect);
 		}
 
-		await card.complete(this, use);
+		if (instant) {
+			await card.complete(this, use);
+		}
+		await this.trigger(GameEvent.AfterUsingCard, use);
 
 		return true;
 	}
 
-	protected async takeCardEffect(effect: CardEffect): Promise<void> {
-		await this.trigger(GameEvent.TakingCardEffect, effect);
+	protected async confirmCardTargets(use: CardUse): Promise<boolean> {
+		const events = [
+			GameEvent.ConfirmingCardTargets,
+			GameEvent.BeingCardTargets,
+			GameEvent.AfterConfirmingCardTargets,
+			GameEvent.AfterBeingCardTargets,
+		];
+		for (const event of events) {
+			await this.trigger(event, use);
+			if (use.to.length <= 0) {
+				return false;
+			}
+		}
 
-		const { card } = effect;
-		if (!card) {
+		this.sortPlayersByActionOrder(use.to);
+		return true;
+	}
+
+	protected async takeCardEffect(effect: CardEffect): Promise<void> {
+		if (await this.trigger(GameEvent.PreparingCardEffect, effect)) {
 			return;
 		}
 
+		await this.trigger(GameEvent.BeforeTakingCardEffect, effect);
 		if (effect.isValid()) {
+			await this.trigger(GameEvent.TakingCardEffect, effect);
+			const { card } = effect;
 			await card.onEffect(this, effect);
 			await card.effect(this, effect);
 		}

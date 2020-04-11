@@ -9,7 +9,7 @@ import AbstractStrikeRule from './AbstractStrikeRule';
 
 class StrikeEffectRule extends AbstractStrikeRule<CardEffect> {
 	constructor() {
-		super(GameEvent.TakingCardEffect);
+		super(GameEvent.BeforeTakingCardEffect);
 	}
 
 	isTriggerable(effect: CardEffect): boolean {

@@ -68,9 +68,11 @@ abstract class Card extends MetaCard {
 	 * The second procedure of using a card
 	 * @param driver
 	 * @param use
+	 * @return Whether card effect is instant
 	 */
 	// eslint-disable-next-line no-unused-vars, no-empty-function, @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-	async use(driver: GameDriver, use: CardUse): Promise<void> {
+	async use(driver: GameDriver, use: CardUse): Promise<boolean> {
+		return true;
 	}
 
 	/**
