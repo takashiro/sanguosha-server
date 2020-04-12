@@ -12,7 +12,7 @@ class PeachGarden extends GlobalEffectTrickCard {
 
 	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
 		const { to } = effect;
-		if (!to || !to.isDead()) {
+		if (!to || to.isDead()) {
 			return;
 		}
 

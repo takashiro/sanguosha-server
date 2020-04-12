@@ -22,12 +22,12 @@ import Collection from './Collection';
 import ServerPlayer from './ServerPlayer';
 
 import CardEffect from './CardEffect';
-import CardExpenseStruct from './CardExpense';
+import CardExpense from './CardExpense';
 import CardConstraint from './CardConstraint';
 import CardUse from './CardUse';
 import CardMove, { CardMoveOptions } from './CardMove';
 import Damage from './Damage';
-import RecoverStruct from './Recover';
+import Recover from './Recover';
 
 class GameDriver extends EventDriver<GameEvent> {
 	protected readonly room: Room;
@@ -414,7 +414,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 	}
 
-	async expendCard(expense: CardExpenseStruct): Promise<boolean> {
+	async expendCard(expense: CardExpense): Promise<boolean> {
 		if (!expense.player || !expense.card) {
 			return false;
 		}
@@ -536,7 +536,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param recover
 	 * @return Whether it takes effect.
 	 */
-	async recover(recover: RecoverStruct): Promise<boolean> {
+	async recover(recover: Recover): Promise<boolean> {
 		const { to } = recover;
 		if (recover.num <= 0 || !to) {
 			return false;
