@@ -21,19 +21,6 @@ class InstantTrickCard extends TrickCard {
 		await driver.moveCards([card], processArea, { open: true });
 		return true;
 	}
-
-	async complete(driver: GameDriver, use: CardUse): Promise<void> {
-		const { card } = use;
-		if (!card.isReal()) {
-			return;
-		}
-
-		const processArea = use.from.getProcessArea();
-		if (processArea.has(use.card)) {
-			const discardPile = driver.getDiscardPile();
-			await driver.moveCards([use.card], discardPile, { open: true });
-		}
-	}
 }
 
 export default InstantTrickCard;
