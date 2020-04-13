@@ -14,7 +14,7 @@ class StrikeEffectRule extends AbstractStrikeRule<CardEffect> {
 
 	isTriggerable(effect: CardEffect): boolean {
 		const { use } = effect;
-		if (!use.card) {
+		if (!use || use.card) {
 			return false;
 		}
 

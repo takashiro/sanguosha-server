@@ -89,7 +89,7 @@ class BorrowSword extends InstantTrickCard {
 		if (!cards || cards.length <= 0) {
 			const equipArea = to.getEquipArea();
 			const weapon = equipArea.find((card) => card.getSubtype() === Subtype.Weapon);
-			if (weapon) {
+			if (weapon && effect.from && effect.from.isAlive()) {
 				await driver.moveCards([weapon], effect.from.getHandArea(), { open: true });
 			}
 		} else {

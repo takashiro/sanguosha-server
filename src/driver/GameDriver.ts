@@ -22,6 +22,7 @@ import Collection from './Collection';
 import ServerPlayer from './ServerPlayer';
 
 import CardEffect from './CardEffect';
+import InstantCardEffect from './InstantCardEffect';
 import CardExpense from './CardExpense';
 import CardConstraint from './CardConstraint';
 import CardUse from './CardUse';
@@ -362,7 +363,7 @@ class GameDriver extends EventDriver<GameEvent> {
 			if (effective) {
 				if (instant) {
 					for (const target of use.to) {
-						const effect = new CardEffect(use, target);
+						const effect = new InstantCardEffect(use, target);
 						await this.takeCardEffect(effect);
 					}
 				}
@@ -370,7 +371,7 @@ class GameDriver extends EventDriver<GameEvent> {
 				await this.moveCards([use.card], this.discardPile, { open: true });
 			}
 		} else if (origin) {
-			const effect = new CardEffect(use, origin);
+			const effect = new InstantCardEffect(use, origin);
 			await this.takeCardEffect(effect);
 		}
 
@@ -400,7 +401,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		return true;
 	}
 
-	protected async takeCardEffect(effect: CardEffect): Promise<void> {
+	async takeCardEffect(effect: CardEffect): Promise<void> {
 		if (await this.trigger(GameEvent.PreparingCardEffect, effect)) {
 			return;
 		}

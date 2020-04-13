@@ -1,9 +1,9 @@
 import Card from './Card';
-import CardUse from './CardUse';
 import ServerPlayer from './ServerPlayer';
+import CardUse from './CardUse';
 
-class CardEffect {
-	readonly use: CardUse;
+abstract class CardEffect {
+	card: Card;
 
 	weight: number;
 
@@ -11,12 +11,8 @@ class CardEffect {
 
 	origin?: CardEffect;
 
-	/**
-	 * @param use
-	 * @param to
-	 */
-	constructor(use: CardUse, to?: ServerPlayer | CardEffect) {
-		this.use = use;
+	constructor(card: Card, to?: ServerPlayer | CardEffect) {
+		this.card = card;
 		this.weight = 1;
 
 		if (to) {
@@ -28,17 +24,13 @@ class CardEffect {
 		}
 	}
 
-	get from(): ServerPlayer {
-		return this.use.from;
-	}
-
-	get card(): Card {
-		return this.use.card;
-	}
-
 	isValid(): boolean {
 		return this.weight > 0;
 	}
+
+	abstract get from(): ServerPlayer | undefined;
+
+	abstract get use(): CardUse | undefined;
 }
 
 export default CardEffect;
