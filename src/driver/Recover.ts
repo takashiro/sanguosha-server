@@ -7,7 +7,7 @@ import {
 import ServerPlayer from './ServerPlayer';
 
 export default class Recover {
-	from: ServerPlayer;
+	from?: ServerPlayer;
 
 	to: ServerPlayer;
 
@@ -17,7 +17,7 @@ export default class Recover {
 
 	card?: Card;
 
-	constructor(from: ServerPlayer, to: ServerPlayer, num: number) {
+	constructor(from: ServerPlayer | undefined, to: ServerPlayer, num: number) {
 		this.from = from;
 		this.to = to;
 		this.num = num;
@@ -25,7 +25,7 @@ export default class Recover {
 
 	toJSON(): RecoverStruct {
 		return {
-			from: this.from.getSeat(),
+			from: this.from && this.from.getSeat(),
 			to: this.to.getSeat(),
 			num: this.num,
 			skill: this.skill && this.skill.getName(),

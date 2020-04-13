@@ -8,7 +8,7 @@ import {
 import ServerPlayer from './ServerPlayer';
 
 class Damage {
-	from: ServerPlayer | null;
+	from?: ServerPlayer;
 
 	to: ServerPlayer;
 
@@ -16,11 +16,11 @@ class Damage {
 
 	type: DamageType;
 
-	skill: Skill | undefined;
+	skill?: Skill;
 
-	card: Card | undefined;
+	card?: Card;
 
-	constructor(from: ServerPlayer, to: ServerPlayer, num: number) {
+	constructor(from: ServerPlayer | undefined, to: ServerPlayer, num: number) {
 		this.from = from;
 		this.to = to;
 		this.num = num;
