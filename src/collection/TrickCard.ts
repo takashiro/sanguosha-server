@@ -1,6 +1,7 @@
 import {
 	CardType as Type,
 	PlayerPhase as Phase,
+	CardAreaType,
 } from '@karuta/sanguosha-core';
 
 import Card from '../driver/Card';
@@ -17,16 +18,19 @@ abstract class TrickCard extends Card {
 		return driver && source && source.getPhase() === Phase.Play;
 	}
 
-	async complete(driver: GameDriver, use: CardUse): Promise<void> {
-		const { card } = use;
-		if (!card.isReal()) {
+	async complete(driver: GameDriver, use?: CardUse): Promise<void> {
+		if (!this.isReal()) {
 			return;
 		}
 
-		const processArea = use.from.getProcessArea();
-		if (processArea.has(use.card)) {
+		const processArea = use ? use.from.getProcessArea() : this.getLocation();
+		if (!processArea || processArea.getType() !== CardAreaType.Process) {
+			return;
+		}
+
+		if (processArea.has(this)) {
 			const discardPile = driver.getDiscardPile();
-			await driver.moveCards([use.card], discardPile, { open: true });
+			await driver.moveCards([this], discardPile, { open: true });
 		}
 	}
 }

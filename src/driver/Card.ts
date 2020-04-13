@@ -99,7 +99,7 @@ abstract class Card extends MetaCard {
 	 * @param use
 	 */
 	// eslint-disable-next-line no-unused-vars, no-empty-function, @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-	async complete(driver: GameDriver, use: CardUse): Promise<void> {
+	async complete(driver: GameDriver, use?: CardUse): Promise<void> {
 	}
 }
 

@@ -28,15 +28,14 @@ class BasicCard extends Card {
 	}
 
 	async complete(driver: GameDriver, use: CardUse): Promise<void> {
-		const { card } = use;
-		if (!card.isReal()) {
+		if (!this.isReal()) {
 			return;
 		}
 
 		const processArea = use.from.getProcessArea();
-		if (processArea.has(use.card)) {
+		if (processArea.has(this)) {
 			const discardPile = driver.getDiscardPile();
-			await driver.moveCards([use.card], discardPile, { open: true });
+			await driver.moveCards([this], discardPile, { open: true });
 		}
 	}
 }
