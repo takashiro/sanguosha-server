@@ -1,12 +1,13 @@
 import { PlayerPhase as Phase } from '@karuta/sanguosha-core';
 
-import GameRule from '../../driver/GameRule';
-import GameEvent from '../../driver/GameEvent';
-import PhaseChange from '../../driver/PhaseChange';
-import CardDraw from '../../driver/CardDraw';
 import Card from '../../driver/Card';
-import ServerPlayer from '../../driver/ServerPlayer';
 import CardAction from '../../core/CardAction';
+import CardDraw from '../../driver/CardDraw';
+import DelayedCardEffect from '../../driver/DelayedCardEffect';
+import GameEvent from '../../driver/GameEvent';
+import GameRule from '../../driver/GameRule';
+import PhaseChange from '../../driver/PhaseChange';
+import ServerPlayer from '../../driver/ServerPlayer';
 
 class PhaseRule extends GameRule<PhaseChange> {
 	constructor() {
@@ -19,6 +20,9 @@ class PhaseRule extends GameRule<PhaseChange> {
 
 	async effect(data: PhaseChange): Promise<boolean> {
 		switch (data.to) {
+		case Phase.Judge:
+			await this.processJudgements(data.player);
+			break;
 		case Phase.Draw:
 			await this.drawCards(data.player);
 			break;
@@ -32,6 +36,27 @@ class PhaseRule extends GameRule<PhaseChange> {
 			break;
 		}
 		return false;
+	}
+
+	async processJudgements(player: ServerPlayer): Promise<void> {
+		const driver = this.getDriver();
+		const judgeArea = player.getJudgeArea();
+		const processArea = player.getProcessArea();
+		while (judgeArea.size > 0) {
+			const meta = judgeArea.first();
+			if (!meta) {
+				judgeArea.takeFirst();
+				continue;
+			}
+
+			const card = meta as Card;
+			await driver.moveCards([card], processArea, { open: true });
+
+			const effect = new DelayedCardEffect(card, player);
+			await driver.takeCardEffect(effect);
+
+			await card.complete(driver);
+		}
 	}
 
 	async drawCards(player: ServerPlayer): Promise<void> {
