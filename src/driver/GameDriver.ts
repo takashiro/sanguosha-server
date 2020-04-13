@@ -29,6 +29,7 @@ import CardUse from './CardUse';
 import CardMove, { CardMoveOptions } from './CardMove';
 import Damage from './Damage';
 import Recover from './Recover';
+import Judgement from './Judgement';
 
 class GameDriver extends EventDriver<GameEvent> {
 	protected readonly room: Room;
@@ -551,6 +552,39 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 
 		return true;
+	}
+
+	async judge(judgement: Judgement): Promise<void> {
+		const judged = await this.trigger(GameEvent.Judging, judgement);
+
+		if (!judged) {
+			this.fillDrawPile(1);
+			const card = this.drawPile.first();
+			if (!card) {
+				// TO-DO: fair
+				return;
+			}
+
+			judgement.card = card;
+		}
+
+		const { card } = judgement;
+		if (!card) {
+			return;
+		}
+
+		const { who } = judgement;
+		const processArea = who.getProcessArea();
+		await this.moveCards([card], processArea, { open: true });
+		this.room.broadcast(cmd.Judge, judgement.toJSON());
+
+		await this.trigger(GameEvent.BeforeIssuingJudgement, judgement);
+		await this.trigger(GameEvent.AfterIssuingJudgement, judgement);
+
+		judgement.execute();
+
+		const cards = judgement.cards.filter((carta) => processArea.has(carta));
+		await this.moveCards(cards, this.discardPile, { open: true });
 	}
 
 	protected createCards(): Card[] {

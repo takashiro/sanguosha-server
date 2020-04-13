@@ -25,6 +25,10 @@ const enum GameEvent {
 
 	BeforeMovingCards,
 	AfterMovingCards,
+
+	Judging, // 判定时
+	BeforeIssuingJudgement, // 判定生效前
+	AfterIssuingJudgement, // 判定生效后
 }
 
 export default GameEvent;
