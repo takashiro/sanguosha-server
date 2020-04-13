@@ -6,6 +6,7 @@ import {
 import {
 	Command as cmd,
 	Player,
+	PlayerPhase as Phase,
 	Card,
 	CardArea,
 	CardAreaType,
@@ -57,6 +58,8 @@ class ServerPlayer extends Player {
 
 	protected useLimit: Map<string, number>;
 
+	protected phases: Phase[];
+
 	protected requestTimeout: number;
 
 	constructor(user: User) {
@@ -70,6 +73,7 @@ class ServerPlayer extends Player {
 
 		this.useCount = new Map();
 		this.useLimit = new Map();
+		this.phases = [];
 		this.requestTimeout = 15000;
 	}
 
@@ -288,6 +292,20 @@ class ServerPlayer extends Player {
 
 	clearUseLimit(): void {
 		this.useLimit.clear();
+	}
+
+	setPhases(phases: Phase[]): void {
+		this.phases = phases;
+	}
+
+	skipPhase(phase: Phase): boolean {
+		const cur = this.phases.indexOf(this.getPhase());
+		const i = this.phases.indexOf(phase, cur + 1);
+		if (i >= 0) {
+			this.phases.splice(i, 1);
+			return true;
+		}
+		return false;
 	}
 
 	async play(availableCards: Card[]): Promise<PlayAction | null> {

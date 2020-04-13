@@ -70,7 +70,10 @@ class BasicRule extends GameRule<void> {
 		const driver = this.getDriver();
 		driver.setCurrentPlayer(player);
 
-		for (const phase of phases) {
+		player.setPhases(phases);
+		for (let i = 0; i < phases.length; i++) {
+			const phase = phases[i];
+
 			const data = new PhaseChange(player, player.getPhase(), phase);
 			if (await driver.trigger(GameEvent.StartingPhase, data)) {
 				continue;
