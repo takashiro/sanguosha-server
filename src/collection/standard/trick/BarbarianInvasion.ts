@@ -21,7 +21,7 @@ class BarbarianInvasion extends AreaEffectTrickCard {
 			return;
 		}
 
-		const cards = await to.askForCards(to.getHandArea(), {
+		const cards = await to.askForCards([to.getHandArea()], {
 			action: CardAction.Expend,
 			minNum: 0,
 			maxNum: 1,

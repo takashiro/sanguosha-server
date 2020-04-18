@@ -29,7 +29,7 @@ class Duel extends MonadicTrickCard {
 		let i = 0;
 		for (;;) {
 			const current = players[i];
-			const cards = await current.askForCards(current.getHandArea(), {
+			const cards = await current.askForCards([current.getHandArea()], {
 				action: CardAction.Expend,
 				minNum: 0,
 				maxNum: 1,

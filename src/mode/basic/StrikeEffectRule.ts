@@ -39,7 +39,7 @@ class StrikeEffectRule extends AbstractStrikeRule<CardEffect> {
 		while (effect.isValid()) {
 			let dodge: Card;
 			try {
-				const cards = await to.askForCards(to.getHandArea(), {
+				const cards = await to.askForCards([to.getHandArea()], {
 					action: CardAction.Use,
 					minNum: 0,
 					maxNum: 1,

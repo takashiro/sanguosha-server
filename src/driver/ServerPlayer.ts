@@ -10,11 +10,11 @@ import {
 	Card,
 	CardArea,
 	CardAreaType,
+	CardOptionStruct,
 	General,
 } from '@karuta/sanguosha-core';
 
-import CardPattern from '../core/CardPattern';
-import CardAction from '../core/CardAction';
+import CardOption from './CardOption';
 
 interface ChooseGeneralOptions {
 	timeout: number;
@@ -29,13 +29,6 @@ const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 	sameKingdom: false,
 	forced: true,
 };
-
-interface ChooseCardOptions {
-	action: CardAction;
-	minNum: number;
-	maxNum: number;
-	pattern?: CardPattern;
-}
 
 type PropertyValue = string | number | boolean | object | null;
 
@@ -183,28 +176,38 @@ class ServerPlayer extends Player {
 		return chosenGenerals;
 	}
 
-	async askForCards(area: CardArea, options: ChooseCardOptions): Promise<Card[]> {
-		if (options.minNum < 0) {
+	async askForCards(areas: CardArea[], option: CardOption): Promise<Card[]> {
+		if (areas.length <= 0) {
+			return [];
+		}
+		if (option.minNum < 0) {
 			throw new Error('minNum must be >= 0');
 		}
-		if (options.maxNum < options.minNum) {
+		if (option.maxNum < option.minNum) {
 			throw new Error('maxNum must be >= minNum.');
 		}
 
 		let reply = null;
 
-		const { pattern } = options;
-		let acceptableCards = area.getCards();
-		if (pattern) {
-			acceptableCards = acceptableCards.filter((card) => pattern.match(card));
+		const { pattern } = option;
+		const acceptableCards = [];
+		for (const area of areas) {
+			const cards = area.getCards();
+			if (pattern) {
+				acceptableCards.push(...cards.filter((card) => pattern.match(card)));
+			} else {
+				acceptableCards.push(...cards);
+			}
 		}
+
 		try {
-			reply = await this.user.request(cmd.ChooseCards, {
-				area: area.toJSON(),
-				minNum: options.minNum,
-				maxNum: options.maxNum,
+			const args: CardOptionStruct = {
+				areas: areas.map((area) => area.toJSON()),
+				minNum: option.minNum,
+				maxNum: option.maxNum,
 				cards: pattern ? acceptableCards.map((card) => card.getId()) : undefined,
-			}, this.requestTimeout);
+			};
+			reply = await this.user.request(cmd.ChooseCards, args, this.requestTimeout);
 		} catch (error) {
 			// No response from client
 		}
@@ -212,7 +215,7 @@ class ServerPlayer extends Player {
 		const cardSet = new Set<Card>();
 		if (reply instanceof Array) {
 			for (const cardId of reply) {
-				const card = area.find((c) => c.getId() === cardId);
+				const card = acceptableCards.find((c) => c.getId() === cardId);
 				if (card) {
 					cardSet.add(card);
 				}
@@ -223,12 +226,12 @@ class ServerPlayer extends Player {
 		if (pattern) {
 			selected = selected.filter((card) => pattern.match(card));
 		}
-		if (selected.length < options.minNum) {
-			const delta = Math.min(options.minNum - selected.length, area.size - selected.length);
+		if (selected.length < option.minNum) {
+			const delta = Math.min(option.minNum - selected.length, acceptableCards.length - selected.length);
 			const otherCards = acceptableCards.filter((card) => !selected.includes(card));
 			selected.push(...otherCards.slice(0, delta));
-		} else if (selected.length > options.maxNum) {
-			const delta = selected.length - options.maxNum;
+		} else if (selected.length > option.maxNum) {
+			const delta = selected.length - option.maxNum;
 			selected.splice(0, delta);
 		}
 

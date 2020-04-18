@@ -99,7 +99,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 		const handArea = player.getHandArea();
 		const discardNum = handArea.size - player.getHp();
 		if (discardNum > 0) {
-			const selected = await player.askForCards(handArea, {
+			const selected = await player.askForCards([handArea], {
 				action: CardAction.Discard,
 				minNum: discardNum,
 				maxNum: discardNum,
