@@ -2,7 +2,7 @@ export { default as Duel } from './Duel';
 export { default as Dismantle } from './Dismantle';
 export { default as Snatch } from './Snatch';
 export { default as BorrowSword } from './BorrowSword';
-export { default as Nullification } from './Nullification';
+export { default as Nullify } from './Nullify';
 export { default as BarbarianInvasion } from './BarbarianInvasion';
 export { default as ArrowBarrage } from './ArrowBarrage';
 export { default as PeachGarden } from './PeachGarden';

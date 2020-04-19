@@ -5,7 +5,7 @@ import Card from '../../driver/Card';
 import * as std from '../standard/trick';
 import * as mnv from '../maneuvering/trick';
 
-import HegNullification from './trick/HegNullification';
+import HegNullify from './trick/HegNullify';
 import Ease from './trick/Ease';
 import Scout from './trick/Scout';
 import Ally from './trick/Ally';
@@ -33,9 +33,9 @@ export default function createTrickCards(): Card[] {
 		new mnv.FireAttack(Suit.Heart, 2),
 		new mnv.FireAttack(Suit.Heart, 3),
 		new std.BorrowSword(Suit.Club, 12),
-		new std.Nullification(Suit.Spade, 11),
-		new HegNullification(Suit.Club, 13),
-		new HegNullification(Suit.Diamond, 12),
+		new std.Nullify(Suit.Spade, 11),
+		new HegNullify(Suit.Club, 13),
+		new HegNullify(Suit.Diamond, 12),
 		new Ease(Suit.Heart, 11),
 		new Ease(Suit.Diamond, 4),
 		new Scout(Suit.Club, 3),

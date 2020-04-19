@@ -2,10 +2,14 @@ import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
 import FixedTargetTrickCard from '../../FixedTargetTrickCard';
 
-class HegNullification extends FixedTargetTrickCard {
+class Nullify extends FixedTargetTrickCard {
 	constructor(suit: Suit, number: number) {
-		super('heg-nullification', suit, number);
+		super('nullify', suit, number);
+	}
+
+	async isAvailable(): Promise<boolean> {
+		return false;
 	}
 }
 
-export default HegNullification;
+export default Nullify;
