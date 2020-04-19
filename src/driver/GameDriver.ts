@@ -609,9 +609,17 @@ class GameDriver extends EventDriver<GameEvent> {
 			if (options.open) {
 				this.room.broadcast(cmd.MoveCards, move.toJSON(true));
 			} else if (options.openTo) {
-				const user = options.openTo.getUser();
-				user.send(cmd.MoveCards, move.toJSON(true));
-				this.room.broadcastExcept(user, cmd.MoveCards, move.toJSON(false));
+				for (const openTo of options.openTo) {
+					const user = openTo.getUser();
+					user.send(cmd.MoveCards, move.toJSON(true));
+				}
+				for (const player of this.players) {
+					if (options.openTo.includes(player)) {
+						continue;
+					}
+					const user = player.getUser();
+					user.send(cmd.MoveCards, move.toJSON(false));
+				}
 			} else {
 				this.room.broadcast(cmd.MoveCards, move.toJSON(false));
 			}

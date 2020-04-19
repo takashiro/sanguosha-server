@@ -9,7 +9,7 @@ import ServerPlayer from './ServerPlayer';
 
 export interface CardMoveOptions {
 	open?: boolean;
-	openTo?: ServerPlayer;
+	openTo?: ServerPlayer[];
 }
 
 export default class CardMove {

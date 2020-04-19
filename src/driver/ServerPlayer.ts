@@ -102,6 +102,23 @@ class ServerPlayer extends Player {
 		return this.processArea;
 	}
 
+	getCardAreas(): CardArea[] {
+		return [
+			this.handArea,
+			this.equipArea,
+			this.judgeArea,
+		];
+	}
+
+	isEmpty(): boolean {
+		for (const area of this.getCardAreas()) {
+			if (area.size > 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	setRequestTimeout(msecs: number): void {
 		this.requestTimeout = msecs;
 	}
