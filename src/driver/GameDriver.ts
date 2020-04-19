@@ -44,6 +44,8 @@ class GameDriver extends EventDriver<GameEvent> {
 
 	protected discardPile: CardArea;
 
+	protected wuguArea: CardArea;
+
 	protected currentPlayer: ServerPlayer | null;
 
 	constructor(room: Room) {
@@ -62,6 +64,7 @@ class GameDriver extends EventDriver<GameEvent> {
 
 		this.drawPile = new CardArea(CardAreaType.DrawPile);
 		this.discardPile = new CardArea(CardAreaType.DiscardPile);
+		this.wuguArea = new CardArea(CardAreaType.Wugu);
 
 		this.currentPlayer = null;
 	}
@@ -171,22 +174,31 @@ class GameDriver extends EventDriver<GameEvent> {
 		return this.discardPile;
 	}
 
+	getWuguArea(): CardArea {
+		return this.wuguArea;
+	}
+
+	getCardsFromDrawPile(num: number): MetaCard[] {
+		this.fillDrawPile(num);
+		const cards = this.drawPile.getCards().slice(0, num);
+		return cards;
+	}
+
 	/**
 	 * Make player draw N cards
 	 * @param player
 	 * @param num
 	 */
 	async drawCards(player: ServerPlayer, num: number): Promise<void> {
-		this.fillDrawPile(num);
-		const cards = this.drawPile.getCards().slice(0, num);
-		await this.moveCards(cards, player.getHandArea(), { openTo: player });
+		const cards = this.getCardsFromDrawPile(num);
+		await this.moveCards(cards, player.getHandArea(), { openTo: [player] });
 	}
 
 	async summonCard(player: ServerPlayer, cardName: string): Promise<void> {
 		const cards = this.drawPile.getCards();
 		const card = cards.find((c) => c.getName() === cardName);
 		if (card) {
-			await this.moveCards([card], player.getHandArea(), { openTo: player });
+			await this.moveCards([card], player.getHandArea(), { openTo: [player] });
 		}
 	}
 
