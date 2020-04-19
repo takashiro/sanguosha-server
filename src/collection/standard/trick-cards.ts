@@ -35,9 +35,9 @@ function createTrickCards(): Card[] {
 		new std.Nullify(Suit.Spade, 11),
 		new std.Nullify(Suit.Club, 12),
 		new std.Nullify(Suit.Club, 13),
-		new std.Indulgence(Suit.Spade, 6),
-		new std.Indulgence(Suit.Club, 6),
-		new std.Indulgence(Suit.Heart, 6),
+		new std.Indulge(Suit.Spade, 6),
+		new std.Indulge(Suit.Club, 6),
+		new std.Indulge(Suit.Heart, 6),
 		new std.Lightning(Suit.Spade, 1),
 	];
 }

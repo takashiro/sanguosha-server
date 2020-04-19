@@ -8,5 +8,5 @@ export { default as ArrowBarrage } from './ArrowBarrage';
 export { default as PeachGarden } from './PeachGarden';
 export { default as Harvest } from './Harvest';
 export { default as ExNihilo } from './ExNihilo';
-export { default as Indulgence } from './Indulgence';
+export { default as Indulge } from './Indulge';
 export { default as Lightning } from './Lightning';

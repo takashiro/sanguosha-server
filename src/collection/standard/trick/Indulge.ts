@@ -17,9 +17,9 @@ const effectivePattern = new CardPattern({
 	],
 });
 
-class Indulgence extends DelayedTrickCard {
+class Indulge extends DelayedTrickCard {
 	constructor(suit: Suit, number: number) {
-		super('indulgence', suit, number);
+		super('indulge', suit, number);
 	}
 
 	async effect(driver: GameDriver, effect: CardEffect): Promise<void> {
@@ -37,4 +37,4 @@ class Indulgence extends DelayedTrickCard {
 	}
 }
 
-export default Indulgence;
+export default Indulge;
