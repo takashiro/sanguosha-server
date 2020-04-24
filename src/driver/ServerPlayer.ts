@@ -60,6 +60,7 @@ class ServerPlayer extends Player {
 		this.user = user;
 
 		this.handArea = new CardArea(CardAreaType.Hand, this);
+		this.handArea.setOpen(false);
 		this.equipArea = new CardArea(CardAreaType.Equip, this);
 		this.judgeArea = new CardArea(CardAreaType.Judge, this);
 		this.processArea = new CardArea(CardAreaType.Process, this);

@@ -63,6 +63,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		this.collections = [];
 
 		this.drawPile = new CardArea(CardAreaType.DrawPile);
+		this.drawPile.setOpen(false);
 		this.discardPile = new CardArea(CardAreaType.DiscardPile);
 		this.wuguArea = new CardArea(CardAreaType.Wugu);
 
@@ -618,7 +619,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 
 		for (const move of moves) {
-			if (options.open) {
+			if (options.open || move.from.isOpen() || move.to.isOpen()) {
 				this.room.broadcast(cmd.MoveCards, move.toJSON(true));
 			} else if (options.openTo) {
 				for (const openTo of options.openTo) {
