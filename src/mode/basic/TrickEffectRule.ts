@@ -62,6 +62,7 @@ class TrickEffectRule extends GameRule<CardEffect> {
 					minNum: 0,
 					maxNum: 1,
 					pattern: new CardPattern({ namePostfix: 'nullify' }),
+					autoSkip: true,
 				});
 
 				if (cards && cards.length > 0) {

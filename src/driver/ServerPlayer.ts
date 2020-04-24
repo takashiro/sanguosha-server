@@ -218,6 +218,10 @@ class ServerPlayer extends Player {
 			}
 		}
 
+		if (option.autoSkip && acceptableCards.length <= 0) {
+			return [];
+		}
+
 		try {
 			const args: CardOptionStruct = {
 				areas: areas.map((area) => area.toJSON()),
