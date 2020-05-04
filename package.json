@@ -41,6 +41,6 @@
   },
   "dependencies": {
     "@karuta/core": "^0.1.1",
-    "@karuta/sanguosha-core": "^0.1.1"
+    "@karuta/sanguosha-core": "^0.1.3"
   }
 }
