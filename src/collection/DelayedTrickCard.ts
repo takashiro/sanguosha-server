@@ -12,11 +12,11 @@ class DelayedTrickCard extends TrickCard {
 		return Subtype.DelayedTrick;
 	}
 
-	async targetFeasible(driver: GameDriver, selected: ServerPlayer[], source: ServerPlayer): Promise<boolean> {
+	async isFeasible(driver: GameDriver, selected: ServerPlayer[], source: ServerPlayer): Promise<boolean> {
 		return driver && selected.length === 1 && selected[0] !== source;
 	}
 
-	async targetFilter(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
+	async filterPlayer(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
 		if (selected.length > 0 || target === source) {
 			return false;
 		}

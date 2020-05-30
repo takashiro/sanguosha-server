@@ -26,8 +26,8 @@ class Snatch extends MonadicTrickCard {
 		return false;
 	}
 
-	async targetFilter(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
-		if (!super.targetFilter(driver, selected, target, source)) {
+	async filterPlayer(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
+		if (!super.filterPlayer(driver, selected, target, source)) {
 			return false;
 		}
 

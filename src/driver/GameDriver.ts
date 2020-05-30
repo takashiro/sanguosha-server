@@ -289,11 +289,11 @@ class GameDriver extends EventDriver<GameEvent> {
 		while (Date.now() < expiry) {
 			const candidates = [];
 			for (const target of players) {
-				if (await card.targetFilter(this, targets, target, source)) {
+				if (await card.filterPlayer(this, targets, target, source)) {
 					candidates.push(target.getSeat());
 				}
 			}
-			const feasible: boolean = await card.targetFeasible(this, targets, source);
+			const feasible: boolean = await card.isFeasible(this, targets, source);
 
 			let reply = null;
 			try {
@@ -325,7 +325,7 @@ class GameDriver extends EventDriver<GameEvent> {
 
 			const i = targets.indexOf(target);
 			if (reply.selected) {
-				if (!target || !await card.targetFilter(this, targets, target, source)) {
+				if (!target || !await card.filterPlayer(this, targets, target, source)) {
 					// Ends play phase
 					return false;
 				}
@@ -338,7 +338,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 
 		// Confirm the targets are feasible
-		if (!await card.targetFeasible(this, targets, source)) {
+		if (!await card.isFeasible(this, targets, source)) {
 			return false;
 		}
 

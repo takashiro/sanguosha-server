@@ -14,11 +14,11 @@ abstract class EquipCard extends Card {
 		return driver && source.isAlive();
 	}
 
-	async targetFeasible(driver: GameDriver, selected: ServerPlayer[], source: ServerPlayer): Promise<boolean> {
+	async isFeasible(driver: GameDriver, selected: ServerPlayer[], source: ServerPlayer): Promise<boolean> {
 		return driver && source && selected.length <= 0;
 	}
 
-	async targetFilter(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
+	async filterPlayer(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
 		return driver && selected.length <= 0 && !target && !source;
 	}
 

@@ -19,11 +19,11 @@ class Peach extends BasicCard {
 		return driver && source && source.getPhase() === Phase.Play && source.isWounded();
 	}
 
-	async targetFilter(): Promise<boolean> {
+	async filterPlayer(): Promise<boolean> {
 		return false;
 	}
 
-	async targetFeasible(): Promise<boolean> {
+	async isFeasible(): Promise<boolean> {
 		return true;
 	}
 

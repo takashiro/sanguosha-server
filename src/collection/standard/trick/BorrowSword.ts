@@ -38,11 +38,11 @@ class BorrowSword extends InstantTrickCard {
 		return false;
 	}
 
-	async targetFeasible(driver: GameDriver, selected: ServerPlayer[]): Promise<boolean> {
+	async isFeasible(driver: GameDriver, selected: ServerPlayer[]): Promise<boolean> {
 		return selected.length === 2;
 	}
 
-	async targetFilter(driver: GameDriver, selected: ServerPlayer[], toSelect: ServerPlayer, source: ServerPlayer): Promise<boolean> {
+	async filterPlayer(driver: GameDriver, selected: ServerPlayer[], toSelect: ServerPlayer, source: ServerPlayer): Promise<boolean> {
 		if (selected.length <= 0) {
 			if (toSelect === source) {
 				return false;

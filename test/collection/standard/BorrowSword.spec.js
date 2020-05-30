@@ -15,9 +15,9 @@ const driver = {
 
 describe('#targetFeasible()', () => {
 	it('accepts 2 players', async () => {
-		expect(await card.targetFeasible(driver, [])).toBe(false);
-		expect(await card.targetFeasible(driver, [1])).toBe(false);
-		expect(await card.targetFeasible(driver, [1, 2])).toBe(true);
+		expect(await card.isFeasible(driver, [])).toBe(false);
+		expect(await card.isFeasible(driver, [1])).toBe(false);
+		expect(await card.isFeasible(driver, [1, 2])).toBe(true);
 	});
 });
 
@@ -36,25 +36,25 @@ describe('#targetFilter()', () => {
 
 	it('can be used to others only', async () => {
 		const selected = [];
-		expect(await card.targetFilter(driver, selected, self, self)).toBe(false);
-		expect(await card.targetFilter(driver, selected, target1, self)).toBe(true);
-		expect(await card.targetFilter(driver, selected, target2, self)).toBe(false);
+		expect(await card.filterPlayer(driver, selected, self, self)).toBe(false);
+		expect(await card.filterPlayer(driver, selected, target1, self)).toBe(true);
+		expect(await card.filterPlayer(driver, selected, target2, self)).toBe(false);
 	});
 
 	it('requires an extra victim target', async () => {
 		const selected = [1];
 
-		expect(await card.targetFilter(driver, selected, target1, self)).toBe(false);
+		expect(await card.filterPlayer(driver, selected, target1, self)).toBe(false);
 		expect(driver.isInAttackRange).toBeCalledWith(selected[0], target1);
 
 		driver.isInAttackRange.mockResolvedValueOnce(true);
-		expect(await card.targetFilter(driver, selected, target2, self)).toBe(true);
+		expect(await card.filterPlayer(driver, selected, target2, self)).toBe(true);
 		expect(driver.isInAttackRange).toBeCalledWith(selected[0], target2);
 	});
 
 	it('requires <= 2 players', async () => {
 		const selected = [1, 2];
-		expect(await card.targetFilter(driver, selected, self, {})).toBe(false);
+		expect(await card.filterPlayer(driver, selected, self, {})).toBe(false);
 	});
 });
 

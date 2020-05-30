@@ -20,15 +20,14 @@ abstract class Card extends MetaCard {
 	}
 
 	/**
-	 * Check if the selected players are feasible
+	 * Check if this card can be used
 	 * @param driver game driver
-	 * @param selected Selected players
-	 * @param source The user using this card
-	 * @return Whether this selection is feasible
+	 * @param source The player using this card
+	 * @return Whether this card can be used
 	 */
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	async targetFeasible(driver: GameDriver, selected: ServerPlayer[], source: ServerPlayer): Promise<boolean> {
-		return true;
+	async isAvailable(driver: GameDriver, source: ServerPlayer): Promise<boolean> {
+		return false;
 	}
 
 	/**
@@ -40,19 +39,20 @@ abstract class Card extends MetaCard {
 	 * @return Whether the current player is selectable
 	 */
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	async targetFilter(driver: GameDriver, selected: ServerPlayer[], toSelect: ServerPlayer, source: ServerPlayer): Promise<boolean> {
+	async filterPlayer(driver: GameDriver, selected: ServerPlayer[], toSelect: ServerPlayer, source: ServerPlayer): Promise<boolean> {
 		return !!toSelect;
 	}
 
 	/**
-	 * Check if this card can be used
+	 * Check if the selected players are feasible
 	 * @param driver game driver
-	 * @param source The player using this card
-	 * @return Whether this card can be used
+	 * @param selected Selected players
+	 * @param source The user using this card
+	 * @return Whether this selection is feasible
 	 */
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	async isAvailable(driver: GameDriver, source: ServerPlayer): Promise<boolean> {
-		return false;
+	async isFeasible(driver: GameDriver, selected: ServerPlayer[], source: ServerPlayer): Promise<boolean> {
+		return true;
 	}
 
 	/**

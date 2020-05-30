@@ -19,7 +19,7 @@ class Strike extends BasicCard {
 		return driver && source && source.getPhase() === Phase.Play;
 	}
 
-	async targetFilter(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
+	async filterPlayer(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
 		if (selected.length > 0 || !target) {
 			return false;
 		}
@@ -32,7 +32,7 @@ class Strike extends BasicCard {
 		return inRange;
 	}
 
-	async targetFeasible(driver: GameDriver, selected: ServerPlayer[]): Promise<boolean> {
+	async isFeasible(driver: GameDriver, selected: ServerPlayer[]): Promise<boolean> {
 		return driver && selected.length === 1;
 	}
 

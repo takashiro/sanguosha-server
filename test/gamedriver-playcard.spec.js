@@ -24,14 +24,14 @@ describe('GameDriver', () => {
 	describe('#playCard()', () => {
 		const fakeCard = {
 			isAvailable() { return true; },
-			targetFilter: jest.fn(),
-			targetFeasible: jest.fn(),
+			filterPlayer: jest.fn(),
+			isFeasible: jest.fn(),
 		};
 
 		const someCard = {
 			isAvailable() { return true; },
-			targetFeasible() { return true; },
-			targetFilter() { return true; },
+			isFeasible() { return true; },
+			filterPlayer() { return true; },
 		};
 
 		it('should reject unavailable cards', async () => {
@@ -64,10 +64,10 @@ describe('GameDriver', () => {
 		it('should reject invalid card targets', async () => {
 			const card = {
 				isAvailable() { return true; },
-				targetFeasible(selected) {
+				isFeasible(selected) {
 					return selected.length === 1;
 				},
-				targetFilter(selected, target) {
+				filterPlayer(selected, target) {
 					return selected.length === 0 && target !== null;
 				},
 			};
@@ -88,8 +88,8 @@ describe('GameDriver', () => {
 		it('should stop if targets are not feasible', async () => {
 			const card = {
 				isAvailable() { return true; },
-				targetFeasible() { return false; },
-				targetFilter() { return true; },
+				isFeasible() { return false; },
+				filterPlayer() { return true; },
 			};
 
 			request.mockResolvedValue({ confirm: true });

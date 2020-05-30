@@ -15,8 +15,8 @@ class Duel extends MonadicTrickCard {
 		super('duel', suit, number);
 	}
 
-	async targetFilter(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
-		return super.targetFilter(driver, selected, target, source) && target !== source;
+	async filterPlayer(driver: GameDriver, selected: ServerPlayer[], target: ServerPlayer, source: ServerPlayer): Promise<boolean> {
+		return super.filterPlayer(driver, selected, target, source) && target !== source;
 	}
 
 	async onEffect(driver: GameDriver, effect: CardEffect): Promise<void> {
