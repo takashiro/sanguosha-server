@@ -72,6 +72,8 @@ class EventDriver<EventType> {
 		}
 
 		const listeners = eventListeners.filter((handler) => handler.isTriggerable(data));
+		listeners.sort((a, b) => b.getPriority() - a.getPriority());
+
 		for (const listener of listeners) {
 			const prevented = await listener.effect(data);
 			if (prevented) {

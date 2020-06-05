@@ -35,6 +35,13 @@ class EventListener<EventType, ParamType> {
 	}
 
 	/**
+	 * Gets the priority to trigger this event.
+	 */
+	getPriority(): number {
+		return 0;
+	}
+
+	/**
 	 * Execute effect.
 	 * @param target
 	 * @param data
