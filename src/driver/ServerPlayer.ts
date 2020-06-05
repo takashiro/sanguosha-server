@@ -352,7 +352,7 @@ class ServerPlayer extends Player {
 				return null;
 			}
 
-			const cardId = cards[0];
+			const [cardId] = cards;
 			if (!cardId || typeof cardId !== 'number') {
 				return null;
 			}
