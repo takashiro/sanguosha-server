@@ -66,18 +66,16 @@ class EventDriver<EventType> {
 			return false;
 		}
 
-		const listners = this.listeners.get(event);
-		if (!listners) {
+		const eventListeners = this.listeners.get(event);
+		if (!eventListeners) {
 			return false;
 		}
 
-		const triggerableListeners = listners.filter((handler) => handler.isTriggerable(data));
-		for (const listener of triggerableListeners) {
-			if (await listener.cost(data)) {
-				const prevented = await listener.effect(data);
-				if (prevented) {
-					return true;
-				}
+		const listeners = eventListeners.filter((handler) => handler.isTriggerable(data));
+		for (const listener of listeners) {
+			const prevented = await listener.effect(data);
+			if (prevented) {
+				return true;
 			}
 		}
 

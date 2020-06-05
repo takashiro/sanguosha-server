@@ -35,17 +35,6 @@ class EventListener<EventType, ParamType> {
 	}
 
 	/**
-	 * Execute cost.
-	 * @param target
-	 * @param data
-	 * @return Whether the cost is executed. If yes, the listener takes effect afterwards.
-	 */
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	async cost(data: ParamType): Promise<boolean> {
-		return false;
-	}
-
-	/**
 	 * Execute effect.
 	 * @param target
 	 * @param data

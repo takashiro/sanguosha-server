@@ -10,10 +10,6 @@ class GameRule<ParamType> extends EventListener<GameEvent, ParamType> {
 	isTriggerable(data: ParamType): boolean {
 		return !data;
 	}
-
-	async cost(): Promise<boolean> {
-		return true;
-	}
 }
 
 export default GameRule;
