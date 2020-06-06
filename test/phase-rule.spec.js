@@ -22,7 +22,7 @@ describe('Phase Rule', () => {
 		};
 		rule.setDriver(driver);
 
-		await rule.effect({
+		await rule.process({
 			to: Phase.Draw,
 			player,
 		});
@@ -56,7 +56,7 @@ describe('Phase Rule', () => {
 			clearUseLimit,
 		};
 
-		await rule.effect({
+		await rule.process({
 			to: Phase.Play,
 			player,
 		});
@@ -87,7 +87,7 @@ describe('Phase Rule', () => {
 		};
 		rule.setDriver(driver);
 
-		await rule.effect({
+		await rule.process({
 			player,
 			to: Phase.Discard,
 		});
@@ -96,6 +96,6 @@ describe('Phase Rule', () => {
 	});
 
 	it('does nothing by default', async () => {
-		await rule.effect({}, {});
+		await rule.process({}, {});
 	});
 });

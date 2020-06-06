@@ -8,7 +8,7 @@ class FakeTrigger extends EventListener {
 		this.priority = priority;
 	}
 
-	effect({ names }) {
+	process(names) {
 		names.push(this.name);
 	}
 
@@ -27,10 +27,9 @@ it('registers event listners', () => {
 });
 
 it('triggers events', async () => {
-	const target = { invoke: true };
 	const names = [];
 
-	await driver.trigger(2, { target, names });
+	await driver.trigger(2, names);
 	expect(names).toStrictEqual([
 		'test2-2',
 		'test2-1',

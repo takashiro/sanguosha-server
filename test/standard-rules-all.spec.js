@@ -138,6 +138,6 @@ describe('StandardRule', () => {
 		driver.users = [];
 		driver.players = [];
 		await rule.prepareRoles();
-		await rule.effect();
+		await rule.process();
 	});
 });

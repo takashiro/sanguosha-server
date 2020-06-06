@@ -30,7 +30,7 @@ class TrickEffectRule extends GameRule<CardEffect> {
 		return card && card.getType() === CardType.Trick;
 	}
 
-	async effect(effect: CardEffect): Promise<boolean> {
+	async process(effect: CardEffect): Promise<boolean> {
 		const driver = this.getDriver();
 
 		while (effect.isValid()) {

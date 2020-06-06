@@ -26,7 +26,7 @@ class StandardRule extends BasicRule {
 		this.candidateGeneralNum = 3;
 	}
 
-	async effect(): Promise<boolean> {
+	async process(): Promise<boolean> {
 		await this.preparePlayers();
 		await this.prepareRoles();
 		await this.prepareSeats();

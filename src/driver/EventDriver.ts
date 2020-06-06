@@ -75,7 +75,7 @@ class EventDriver<EventType> {
 		listeners.sort((a, b) => b.getPriority() - a.getPriority());
 
 		for (const listener of listeners) {
-			const prevented = await listener.effect(data);
+			const prevented = await listener.process(data);
 			if (prevented) {
 				return true;
 			}

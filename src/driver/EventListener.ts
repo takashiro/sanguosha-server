@@ -42,13 +42,13 @@ class EventListener<EventType, ParamType> {
 	}
 
 	/**
-	 * Execute effect.
+	 * Process the event with its data.
 	 * @param target
 	 * @param data
 	 * @return Whether to break following event listeners in the same chain.
 	 */
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	async effect(data: ParamType): Promise<boolean> {
+	async process(data: ParamType): Promise<boolean> {
 		return false;
 	}
 }

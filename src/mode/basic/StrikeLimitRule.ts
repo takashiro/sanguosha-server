@@ -14,7 +14,7 @@ export default class StrikeLimitRule extends AbstractStrikeRule<CardConstraint> 
 		return player.getPhase() === PlayerPhase.Play && this.isStrike(card);
 	}
 
-	async effect(constraint: CardConstraint): Promise<boolean> {
+	async process(constraint: CardConstraint): Promise<boolean> {
 		const { player } = constraint;
 		constraint.available = player.getUseCount('strike') < player.getUseLimit('strike');
 		return false;

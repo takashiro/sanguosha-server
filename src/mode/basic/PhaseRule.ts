@@ -18,7 +18,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 		return Boolean(this.driver && data && data.player);
 	}
 
-	async effect(data: PhaseChange): Promise<boolean> {
+	async process(data: PhaseChange): Promise<boolean> {
 		switch (data.to) {
 		case Phase.Judge:
 			await this.processJudgements(data.player);

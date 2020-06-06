@@ -30,7 +30,7 @@ class StrikeEffectRule extends AbstractStrikeRule<CardEffect> {
 		return to.isAlive();
 	}
 
-	async effect(effect: CardEffect): Promise<boolean> {
+	async process(effect: CardEffect): Promise<boolean> {
 		const { to } = effect;
 		if (!to || !to.isAlive()) {
 			return false;

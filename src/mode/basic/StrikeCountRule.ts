@@ -18,7 +18,7 @@ class StrikeCountRule extends AbstractStrikeRule<CardUse> {
 		return from.isAlive() && from.getPhase() === Phase.Play;
 	}
 
-	async effect(use: CardUse): Promise<boolean> {
+	async process(use: CardUse): Promise<boolean> {
 		const { from } = use;
 		from.addUseCount('strike', 1);
 		return false;
