@@ -5,6 +5,9 @@ import {
 	CardArea,
 	CardAreaType,
 	General,
+	Skill,
+	SkillChangeStruct,
+	SkillAreaType,
 } from '@karuta/sanguosha-core';
 
 import Action from '../core/Action';
@@ -598,6 +601,38 @@ class GameDriver extends EventDriver<GameEvent> {
 
 		const cards = judgement.cards.filter((carta) => processArea.has(carta));
 		await this.moveCards(cards, this.discardPile, { open: true });
+	}
+
+	addSkill(player: ServerPlayer, skill: Skill, areaType: SkillAreaType = SkillAreaType.HeadAcquired): boolean {
+		const area = player.findSkillArea(areaType);
+		if (!area.add(skill)) {
+			return false;
+		}
+
+		const change: SkillChangeStruct = {
+			name: skill.getName(),
+			tags: Array.from(skill.getTags()),
+			owner: player.getSeat(),
+			area: areaType,
+		};
+		this.room.broadcast(cmd.AddSkill, change);
+		return true;
+	}
+
+	removeSkill(player: ServerPlayer, skill: Skill, areaType: SkillAreaType = SkillAreaType.HeadAcquired): boolean {
+		const area = player.findSkillArea(areaType);
+		if (!area.remove(skill)) {
+			return false;
+		}
+
+		const change: SkillChangeStruct = {
+			name: skill.getName(),
+			tags: Array.from(skill.getTags()),
+			owner: player.getSeat(),
+			area: areaType,
+		};
+		this.room.broadcast(cmd.RemoveSkill, change);
+		return true;
 	}
 
 	protected createCards(): Card[] {

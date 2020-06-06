@@ -1,6 +1,8 @@
 import {
 	Command as cmd,
 	PlayerPhase as Phase,
+	SkillAreaType,
+	General,
 } from '@karuta/sanguosha-core';
 
 import GameRule from '../../driver/GameRule';
@@ -54,6 +56,28 @@ class BasicRule extends GameRule<void> {
 
 		for (const player of driver.getPlayers()) {
 			await driver.drawCards(player, 4);
+		}
+	}
+
+	prepareSkills(): void {
+		const driver = this.getDriver();
+		for (const player of driver.getPlayers()) {
+			const headGeneral = player.getHeadGeneral();
+			if (headGeneral) {
+				this.addGeneralSkills(player, headGeneral, SkillAreaType.Head);
+			}
+			const deputyGeneral = player.getDeputyGeneral();
+			if (deputyGeneral) {
+				this.addGeneralSkills(player, deputyGeneral, SkillAreaType.Deputy);
+			}
+		}
+	}
+
+	addGeneralSkills(player: ServerPlayer, general: General, areaType: SkillAreaType): void {
+		const driver = this.getDriver();
+		for (const SkillClass of general.getSkills()) {
+			const skill = new SkillClass();
+			driver.addSkill(player, skill, areaType);
 		}
 	}
 

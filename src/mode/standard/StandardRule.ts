@@ -27,11 +27,12 @@ class StandardRule extends BasicRule {
 	}
 
 	async process(): Promise<boolean> {
-		await this.preparePlayers();
-		await this.prepareRoles();
-		await this.prepareSeats();
+		this.preparePlayers();
+		this.prepareRoles();
+		this.prepareSeats();
 		await this.prepareGenerals();
-		await this.prepareBattleField();
+		this.prepareSkills();
+		this.prepareBattleField();
 		await this.prepareCards();
 		await this.proceed();
 		return false;

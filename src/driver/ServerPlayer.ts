@@ -12,6 +12,8 @@ import {
 	CardAreaType,
 	CardOptionStruct,
 	General,
+	SkillArea,
+	SkillAreaType,
 } from '@karuta/sanguosha-core';
 
 import CardOption from './CardOption';
@@ -39,6 +41,14 @@ interface PlayAction {
 class ServerPlayer extends Player {
 	protected user: User;
 
+	protected headSkillArea: SkillArea;
+
+	protected headAcquiredSkillArea: SkillArea;
+
+	protected deputySkillArea: SkillArea;
+
+	protected deputyAcquiredSkillArea: SkillArea;
+
 	protected handArea: CardArea;
 
 	protected equipArea: CardArea;
@@ -58,6 +68,11 @@ class ServerPlayer extends Player {
 	constructor(user: User) {
 		super();
 		this.user = user;
+
+		this.headSkillArea = new SkillArea(SkillAreaType.Head);
+		this.headAcquiredSkillArea = new SkillArea(SkillAreaType.HeadAcquired);
+		this.deputySkillArea = new SkillArea(SkillAreaType.Deputy);
+		this.deputyAcquiredSkillArea = new SkillArea(SkillAreaType.DeputyAcquired);
 
 		this.handArea = new CardArea(CardAreaType.Hand, this);
 		this.handArea.setOpen(false);
@@ -85,6 +100,45 @@ class ServerPlayer extends Player {
 
 	getRoom(): Room | null {
 		return this.user ? this.user.getRoom() : null;
+	}
+
+	getSkillArea(): SkillArea {
+		return this.headSkillArea;
+	}
+
+	getAcquiredSkillArea(): SkillArea {
+		return this.headAcquiredSkillArea;
+	}
+
+	getHeadSkillArea(): SkillArea {
+		return this.headSkillArea;
+	}
+
+	getHeadAcquiredSkillArea(): SkillArea {
+		return this.headAcquiredSkillArea;
+	}
+
+	getDeputySkillArea(): SkillArea {
+		return this.deputySkillArea;
+	}
+
+	getDeputyAcquiredSkillArea(): SkillArea {
+		return this.deputyAcquiredSkillArea;
+	}
+
+	findSkillArea(type: SkillAreaType): SkillArea {
+		switch (type) {
+		case SkillAreaType.Head:
+			return this.getHeadSkillArea();
+		case SkillAreaType.Deputy:
+			return this.getDeputySkillArea();
+		case SkillAreaType.HeadAcquired:
+			return this.getHeadAcquiredSkillArea();
+		case SkillAreaType.DeputyAcquired:
+			return this.getDeputyAcquiredSkillArea();
+		default:
+			return this.getHeadSkillArea();
+		}
 	}
 
 	getHandArea(): CardArea {
