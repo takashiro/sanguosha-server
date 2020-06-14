@@ -1,4 +1,4 @@
-Sanguosha Server (Node.js) [![Build Status](https://www.travis-ci.org/takashiro/sanguosha-server.svg?branch=dev)](https://www.travis-ci.org/takashiro/sanguosha-server)
+Sanguosha Server (Node.js) ![Node.js CI](https://github.com/takashiro/sanguosha-server/workflows/Node.js%20CI/badge.svg) [![Build Status](https://www.travis-ci.org/takashiro/sanguosha-server.svg?branch=dev)](https://www.travis-ci.org/takashiro/sanguosha-server)
 ==========
 
 | Example Page |  http://sgs.takashiro.cn     |
