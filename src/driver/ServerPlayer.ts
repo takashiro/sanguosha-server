@@ -12,6 +12,7 @@ import {
 	CardAreaType,
 	CardOptionStruct,
 	General,
+	Skill,
 	SkillArea,
 	SkillAreaType,
 } from '@karuta/sanguosha-core';
@@ -139,6 +140,19 @@ class ServerPlayer extends Player {
 		default:
 			return this.getHeadSkillArea();
 		}
+	}
+
+	getSkillAreas(): SkillArea[] {
+		return [
+			this.headSkillArea,
+			this.deputySkillArea,
+			this.headAcquiredSkillArea,
+			this.deputyAcquiredSkillArea,
+		];
+	}
+
+	hasSkill(skill: Skill): boolean {
+		return this.getSkillAreas().some((area) => area.has(skill));
 	}
 
 	getHandArea(): CardArea {
