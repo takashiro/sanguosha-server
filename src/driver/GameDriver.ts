@@ -34,6 +34,7 @@ import CardMove, { CardMoveOptions } from './CardMove';
 import Damage from './Damage';
 import Recover from './Recover';
 import Judgement from './Judgement';
+import DistanceVector from './DistanceVector';
 
 class GameDriver extends EventDriver<GameEvent> {
 	protected readonly room: Room;
@@ -513,9 +514,14 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 
 		const players = this.getAlivePlayers();
-		const maxDist = Math.floor(players.length / 2);
-		const dist = Math.abs(players.indexOf(from) - players.indexOf(to));
-		return dist <= maxDist ? dist : players.length - dist;
+		const maxDistance = Math.floor(players.length / 2);
+		const edge = Math.abs(players.indexOf(from) - players.indexOf(to));
+		const distance = edge <= maxDistance ? edge : players.length - edge;
+
+		const vector = new DistanceVector(from, to, distance);
+		await this.trigger(GameEvent.CalculatingDistance, vector);
+
+		return vector.distance;
 	}
 
 	/**

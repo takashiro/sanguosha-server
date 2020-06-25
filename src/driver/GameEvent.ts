@@ -29,6 +29,8 @@ const enum GameEvent {
 	Judging, // 判定时
 	BeforeIssuingJudgement, // 判定生效前
 	AfterIssuingJudgement, // 判定生效后
+
+	CalculatingDistance, // 计算距离时
 }
 
 export default GameEvent;
