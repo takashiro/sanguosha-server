@@ -22,6 +22,8 @@ Running Environment
 
 Build and Run
 -------------
-1. Clone karuta-node-server in the same parent directory.
-1. Create a symlink karuta-node-server/extension/sanguosha <----> sanguosha-server/dist
+1. Execute `npm link` in this repository.
+1. Clone `karuta-node-server` in the parent directory (the same folder as this repository).
+1. Execute `npm i && npm run build` to build `karuta-node-server`.
+1. Execute `npm link @karuta/sanguosha` in `karuta-node-server`.
 1. Click "Launch Program" in Visual Studio Code.
