@@ -1,10 +1,11 @@
 import {
 	Skill,
 	SkillTag as Tag,
+	SkillOwner,
 } from '@karuta/sanguosha-core';
 
 export default class JiuYuan extends Skill {
-	constructor() {
-		super('jiuyuan', [Tag.Lord, Tag.Compulsory]);
+	constructor(owner: SkillOwner) {
+		super(owner, 'jiuyuan', [Tag.Lord, Tag.Compulsory]);
 	}
 }

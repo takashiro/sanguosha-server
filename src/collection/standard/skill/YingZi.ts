@@ -1,7 +1,7 @@
-import { Skill } from '@karuta/sanguosha-core';
+import { Skill, SkillOwner } from '@karuta/sanguosha-core';
 
 export default class YingZi extends Skill {
-	constructor() {
-		super('yingzi');
+	constructor(owner: SkillOwner) {
+		super(owner, 'yingzi');
 	}
 }

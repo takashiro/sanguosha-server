@@ -75,8 +75,8 @@ class BasicRule extends GameRule<void> {
 
 	addGeneralSkills(player: ServerPlayer, general: General, areaType: SkillAreaType): void {
 		const driver = this.getDriver();
-		for (const SkillClass of general.getSkills()) {
-			const skill = new SkillClass();
+		for (const Skill of general.getSkills()) {
+			const skill = new Skill(player);
 			driver.addSkill(player, skill, areaType);
 		}
 	}

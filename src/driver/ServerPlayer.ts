@@ -15,6 +15,7 @@ import {
 	Skill,
 	SkillArea,
 	SkillAreaType,
+	SkillOwner,
 } from '@karuta/sanguosha-core';
 
 import CardOption from './CardOption';
@@ -39,7 +40,7 @@ interface PlayAction {
 	card?: Card;
 }
 
-class ServerPlayer extends Player {
+class ServerPlayer extends Player implements SkillOwner {
 	protected user: User;
 
 	protected headSkillArea: SkillArea;

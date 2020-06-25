@@ -1,7 +1,7 @@
-import { Skill } from '@karuta/sanguosha-core';
+import { Skill, SkillOwner } from '@karuta/sanguosha-core';
 
 export default class JianXiong extends Skill {
-	constructor() {
-		super('jianxiong');
+	constructor(owner: SkillOwner) {
+		super(owner, 'jianxiong');
 	}
 }
