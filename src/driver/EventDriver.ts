@@ -34,7 +34,7 @@ class EventDriver<EventType> {
 	}
 
 	/**
-	 * Register an listener.
+	 * Register a listener.
 	 * @param listener
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,6 +52,31 @@ class EventDriver<EventType> {
 
 		listener.setDriver(this);
 		handlers.push(listener);
+	}
+
+	/**
+	 * Unregister a listener.
+	 * @param listener
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	unregister(listener: EventListener<EventType, any>): void {
+		if (!listener.event) {
+			console.error('Failed to unregister undefined event handler');
+			return;
+		}
+
+		const handlers = this.listeners.get(listener.event);
+		if (!handlers) {
+			return;
+		}
+
+		const i = handlers.indexOf(listener);
+		if (i < 0) {
+			return;
+		}
+
+		handlers.splice(i, 1);
+		listener.setDriver(null);
 	}
 
 	/**
