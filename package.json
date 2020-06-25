@@ -23,6 +23,9 @@
     "url": "https://github.com/takashiro/sanguosha-server/issues"
   },
   "homepage": "https://github.com/takashiro/sanguosha-server#readme",
+  "files": [
+    "dist/**/*.js"
+  ],
   "devDependencies": {
     "@types/jest": "^25.2.3",
     "@types/node": "^12.12.44",
