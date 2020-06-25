@@ -3,7 +3,7 @@ import {
 	PlayerPhase as Phase,
 } from '@karuta/sanguosha-core';
 
-import DelayedTrickCard from '../../DelayedTrickCard';
+import DelayedTrickCard from '../../../base/DelayedTrickCard';
 import GameDriver from '../../../driver/GameDriver';
 import CardEffect from '../../../driver/CardEffect';
 import Judgement from '../../../driver/Judgement';

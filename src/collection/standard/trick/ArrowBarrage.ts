@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import AreaEffectTrickCard from '../../AreaEffectTrickCard';
+import AreaEffectTrickCard from '../../../base/AreaEffectTrickCard';
 import CardAction from '../../../core/CardAction';
 import CardPattern from '../../../core/CardPattern';
 

@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import InstantTrickCard from '../../InstantTrickCard';
+import InstantTrickCard from '../../../base/InstantTrickCard';
 
 class IronChain extends InstantTrickCard {
 	constructor(suit: Suit, number: number) {

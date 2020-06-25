@@ -3,7 +3,7 @@ import {
 	CardSuit as Suit,
 } from '@karuta/sanguosha-core';
 
-import InstantTrickCard from '../../InstantTrickCard';
+import InstantTrickCard from '../../../base/InstantTrickCard';
 import GameDriver from '../../../driver';
 import ServerPlayer from '../../../driver/ServerPlayer';
 import CardUse from '../../../driver/CardUse';

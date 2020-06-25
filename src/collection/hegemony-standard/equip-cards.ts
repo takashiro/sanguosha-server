@@ -7,8 +7,8 @@ import * as mnv from '../maneuvering/equip';
 
 import WuliuSword from './equip/WuliuSword';
 import Triblade from './equip/Triblade';
-import DefensiveHorseCard from '../DefensiveHorseCard';
-import OffensiveHorseCard from '../OffensiveHorseCard';
+import DefensiveHorseCard from '../../base/DefensiveHorseCard';
+import OffensiveHorseCard from '../../base/OffensiveHorseCard';
 
 export default function createEquipCards(): Card[] {
 	return [

@@ -6,7 +6,7 @@ import {
 import GameDriver from '../../../driver';
 import CardEffect from '../../../driver/CardEffect';
 
-import FixedTargetTrickCard from '../../FixedTargetTrickCard';
+import FixedTargetTrickCard from '../../../base/FixedTargetTrickCard';
 
 class Nullify extends FixedTargetTrickCard {
 	constructor(suit: Suit, number: number) {

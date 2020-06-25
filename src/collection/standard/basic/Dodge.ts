@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import BasicCard from '../../BasicCard';
+import BasicCard from '../../../base/BasicCard';
 import CardEffect from '../../../driver/CardEffect';
 import GameDriver from '../../../driver/GameDriver';
 

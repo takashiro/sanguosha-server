@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import MonadicTrickCard from '../../MonadicTrickCard';
+import MonadicTrickCard from '../../../base/MonadicTrickCard';
 
 class FireAttack extends MonadicTrickCard {
 	constructor(suit: Suit, number: number) {

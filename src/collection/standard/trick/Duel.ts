@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import MonadicTrickCard from '../../MonadicTrickCard';
+import MonadicTrickCard from '../../../base/MonadicTrickCard';
 import GameDriver from '../../../driver';
 import CardEffect from '../../../driver/CardEffect';
 import ServerPlayer from '../../../driver/ServerPlayer';

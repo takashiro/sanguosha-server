@@ -6,7 +6,7 @@ import GameDriver from '../../../driver';
 import CardEffect from '../../../driver/CardEffect';
 import CardUse from '../../../driver/CardUse';
 
-import GlobalEffectTrickCard from '../../GlobalEffectTrickCard';
+import GlobalEffectTrickCard from '../../../base/GlobalEffectTrickCard';
 
 class Harvest extends GlobalEffectTrickCard {
 	constructor(suit: Suit, number: number) {

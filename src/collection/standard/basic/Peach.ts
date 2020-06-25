@@ -3,7 +3,7 @@ import {
 	PlayerPhase as Phase,
 } from '@karuta/sanguosha-core';
 
-import BasicCard from '../../BasicCard';
+import BasicCard from '../../../base/BasicCard';
 import GameDriver from '../../../driver/GameDriver';
 import ServerPlayer from '../../../driver/ServerPlayer';
 import CardEffect from '../../../driver/CardEffect';

@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import FixedTargetTrickCard from '../../FixedTargetTrickCard';
+import FixedTargetTrickCard from '../../../base/FixedTargetTrickCard';
 
 class HegNullify extends FixedTargetTrickCard {
 	constructor(suit: Suit, number: number) {

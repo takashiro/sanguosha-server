@@ -3,8 +3,8 @@ import {
 } from '@karuta/sanguosha-core';
 
 import BorrowSword from '../../../src/collection/standard/trick/BorrowSword';
-import WeaponCard from '../../../src/collection/WeaponCard';
-import ArmorCard from '../../../src/collection/ArmorCard';
+import WeaponCard from '../../../src/base/WeaponCard';
+import ArmorCard from '../../../src/base/ArmorCard';
 
 const card = new BorrowSword(Suit.Club, 2);
 const driver = {

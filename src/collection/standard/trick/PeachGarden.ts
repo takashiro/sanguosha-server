@@ -1,6 +1,6 @@
 import { CardSuit as Suit } from '@karuta/sanguosha-core';
 
-import GlobalEffectTrickCard from '../../GlobalEffectTrickCard';
+import GlobalEffectTrickCard from '../../../base/GlobalEffectTrickCard';
 import GameDriver from '../../../driver';
 import CardEffect from '../../../driver/CardEffect';
 import Recover from '../../../driver/Recover';
