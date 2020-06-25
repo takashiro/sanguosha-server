@@ -23,6 +23,7 @@ import GameEvent from './GameEvent';
 import Card from './Card';
 import Collection from './Collection';
 import ServerPlayer from './ServerPlayer';
+import EventSkill from './Skill';
 
 import CardEffect from './CardEffect';
 import InstantCardEffect from './InstantCardEffect';
@@ -609,6 +610,13 @@ class GameDriver extends EventDriver<GameEvent> {
 			return false;
 		}
 
+		if (skill instanceof EventSkill) {
+			const effects = skill.getEffects();
+			for (const effect of effects) {
+				this.register(effect);
+			}
+		}
+
 		const change: SkillChangeStruct = {
 			name: skill.getName(),
 			tags: Array.from(skill.getTags()),
@@ -623,6 +631,13 @@ class GameDriver extends EventDriver<GameEvent> {
 		const area = player.findSkillArea(areaType);
 		if (!area.remove(skill)) {
 			return false;
+		}
+
+		if (skill instanceof EventSkill) {
+			const effects = skill.getEffects();
+			for (const effect of effects) {
+				this.unregister(effect);
+			}
 		}
 
 		const change: SkillChangeStruct = {

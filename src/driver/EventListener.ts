@@ -14,7 +14,7 @@ class EventListener<EventType, ParamType> {
 	 * Sets event driver.
 	 * @param driver
 	 */
-	setDriver(driver: EventDriver<EventType>): void {
+	setDriver(driver: EventDriver<EventType> | null): void {
 		this.driver = driver;
 	}
 
