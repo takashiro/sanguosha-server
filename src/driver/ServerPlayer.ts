@@ -437,6 +437,22 @@ class ServerPlayer extends Player implements SkillOwner {
 		// TO-DO: Invoke a proactive skill.
 		return null;
 	}
+
+	async invokeSkill(skills: string[]): Promise<number> {
+		let reply = -1;
+		try {
+			const res = await this.user.request(cmd.InvokeSkill, skills, this.requestTimeout);
+			reply = Number.parseInt(res, 10);
+		} catch (error) {
+			return -1;
+		}
+
+		if (!Number.isInteger(reply) || reply < 0 || reply >= skills.length) {
+			return -1;
+		}
+
+		return reply;
+	}
 }
 
 export default ServerPlayer;

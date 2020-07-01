@@ -23,7 +23,7 @@ import GameEvent from './GameEvent';
 import Card from './Card';
 import Collection from './Collection';
 import ServerPlayer from './ServerPlayer';
-import EventSkill from './Skill';
+import EventSkill from '../base/Skill';
 
 import CardEffect from './CardEffect';
 import InstantCardEffect from './InstantCardEffect';
@@ -101,7 +101,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	async start(): Promise<void> {
 		super.start();
 		this.room.broadcast(cmd.StartGame);
-		await this.trigger(GameEvent.StartingGame);
+		await this.trigger(GameEvent.StartingGame, null);
 	}
 
 	getRoom(): Room {

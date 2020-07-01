@@ -6,6 +6,11 @@ enum State {
 	Stopped,
 }
 
+interface PriorityListener<EventType, ParamType> {
+	listener: EventListener<EventType, ParamType>;
+	weight: number;
+}
+
 class EventDriver<EventType> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	protected listeners: Map<EventType, EventListener<EventType, any>[]>;
@@ -40,8 +45,7 @@ class EventDriver<EventType> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	register(listener: EventListener<EventType, any>): void {
 		if (!listener.event) {
-			console.error('Failed to register undefined event handler');
-			return;
+			throw new Error('Failed to register undefined event handler');
 		}
 
 		let handlers = this.listeners.get(listener.event);
@@ -61,8 +65,7 @@ class EventDriver<EventType> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	unregister(listener: EventListener<EventType, any>): void {
 		if (!listener.event) {
-			console.error('Failed to unregister undefined event handler');
-			return;
+			throw new Error('Failed to unregister undefined event handler');
 		}
 
 		const handlers = this.listeners.get(listener.event);
@@ -85,8 +88,7 @@ class EventDriver<EventType> {
 	 * @param event
 	 * @param data
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	async trigger(event: EventType, data: any = null): Promise<boolean> {
+	async trigger<ParamType>(event: EventType, data: ParamType): Promise<boolean> {
 		if (this.isStopped()) {
 			return false;
 		}
@@ -96,13 +98,49 @@ class EventDriver<EventType> {
 			return false;
 		}
 
-		const listeners = eventListeners.filter((handler) => handler.isTriggerable(data));
-		listeners.sort((a, b) => b.getPriority() - a.getPriority());
+		const listeners = eventListeners.filter((handler) => handler.isTriggerable(data)) as EventListener<EventType, ParamType>[];
+		if (listeners.length <= 0) {
+			return false;
+		}
 
-		for (const listener of listeners) {
-			const prevented = await listener.process(data);
-			if (prevented) {
-				return true;
+		if (listeners.length === 1) {
+			const [listener] = listeners;
+			if (listener.isCompulsory() || await listener.select(listeners, data) === 0) {
+				const prevented = await listener.process(data);
+				return prevented;
+			}
+			return false;
+		}
+
+		const listenerData: PriorityListener<EventType, ParamType>[] = listeners.map((listener) => ({
+			listener,
+			weight: listener.weigh(data),
+		}));
+		listenerData.sort((a, b) => a.weight - b.weight);
+
+		while (listenerData.length > 0) {
+			const { weight } = listenerData[0];
+			let j = 1;
+			while (j < listenerData.length && listenerData[j].weight === weight) {
+				j++;
+			}
+			let subset = listenerData.splice(0, j).map((d) => d.listener);
+			while (subset.length > 0) {
+				let selected = await subset[0].select(subset, data);
+				if (selected < 0 || selected >= subset.length) {
+					if (subset.some((sub) => !sub.isCompulsory())) {
+						subset = subset.filter((sub) => sub.isCompulsory());
+						continue;
+					} else {
+						selected = 0;
+					}
+				}
+				const listener = subset[selected];
+				const prevented = await listener.process(data);
+				if (prevented) {
+					return true;
+				}
+				subset.splice(selected, 1);
 			}
 		}
 

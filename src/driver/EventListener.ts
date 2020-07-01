@@ -1,13 +1,16 @@
 import EventDriver from './EventDriver';
 
-class EventListener<EventType, ParamType> {
+abstract class EventListener<EventType, ParamType> {
 	protected driver: EventDriver<EventType> | null;
 
 	readonly event: EventType;
 
+	protected compulsory: boolean;
+
 	constructor(event: EventType) {
 		this.driver = null;
 		this.event = event;
+		this.compulsory = false;
 	}
 
 	/**
@@ -25,6 +28,10 @@ class EventListener<EventType, ParamType> {
 		return this.driver;
 	}
 
+	isCompulsory(): boolean {
+		return this.compulsory;
+	}
+
 	/**
 	 * Check if the listener can be triggered.
 	 * @param target
@@ -35,14 +42,22 @@ class EventListener<EventType, ParamType> {
 	}
 
 	/**
-	 * Gets the priority to trigger this event.
+	 * Calculate the priority of the event listener.
 	 */
-	getPriority(): number {
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+	weigh(data: ParamType): number {
 		return 0;
 	}
 
 	/**
-	 * Process the event with its data.
+	 * Select a listener when multiple listeners are of the same priority.
+	 * @param listeners
+	 * @return Index of the selected listener
+	 */
+	abstract async select(listeners: EventListener<EventType, ParamType>[], data: ParamType): Promise<number>;
+
+	/**
+	 * Process the event.
 	 * @param target
 	 * @param data
 	 * @return Whether to break following event listeners in the same chain.
