@@ -110,10 +110,10 @@ describe('Basic Rule', () => {
 		driver.trigger = (event, data) => {
 			const { player } = data;
 			if (player === players[1]) {
-				if (event === GameEvent.StartingPhase && data.to === Phase.Draw) {
+				if (event === GameEvent.ChangingPhase && data.to === Phase.Draw) {
 					return true;
 				}
-				if (event === GameEvent.EndingPhase && data.to === Phase.End) {
+				if (event === GameEvent.ChangingPhase && data.to === Phase.End) {
 					driver.stop();
 					return true;
 				}
@@ -123,7 +123,7 @@ describe('Basic Rule', () => {
 
 		await rule.proceed();
 
-		const phases = [
+		const phases1 = [
 			Phase.Start,
 			Phase.Judge,
 			Phase.Draw,
@@ -132,15 +132,21 @@ describe('Basic Rule', () => {
 			Phase.End,
 			Phase.Inactive,
 		];
-		expect(players[0].setPhase).toBeCalledTimes(7);
-		for (let i = 0; i < 7; i++) {
-			expect(players[0].setPhase).nthCalledWith(i + 1, phases[i]);
+		expect(players[0].setPhase).toBeCalledTimes(phases1.length);
+		for (let i = 0; i < phases1.length; i++) {
+			expect(players[0].setPhase).nthCalledWith(i + 1, phases1[i]);
 		}
 
-		phases.splice(2, 1);
-		expect(players[1].setPhase).toBeCalledTimes(6);
-		for (let i = 0; i < 6; i++) {
-			expect(players[1].setPhase).nthCalledWith(i + 1, phases[i]);
+		const phases2 = [
+			Phase.Start,
+			Phase.Judge,
+			Phase.Play,
+			Phase.Discard,
+			Phase.Inactive,
+		];
+		expect(players[1].setPhase).toBeCalledTimes(phases2.length);
+		for (let i = 0; i < phases2.length; i++) {
+			expect(players[1].setPhase).nthCalledWith(i + 1, phases2[i]);
 		}
 	});
 });

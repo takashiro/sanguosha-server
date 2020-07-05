@@ -5,9 +5,10 @@ const enum GameEvent {
 	StartingGame,
 	EndingGame,
 
-	StartingPhase,
-	ProceedingPhase,
-	EndingPhase,
+	ChangingPhase, // 阶段间（可跳过阶段）
+	StartingPhase, // 阶段开始时
+	ProceedingPhase, // 阶段中
+	EndingPhase, // 阶段结束时
 
 	DrawingNCards,
 

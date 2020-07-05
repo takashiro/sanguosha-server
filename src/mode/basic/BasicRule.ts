@@ -99,14 +99,15 @@ class BasicRule extends GameRule<void> {
 			const phase = phases[i];
 
 			const data = new PhaseChange(player, player.getPhase(), phase);
-			if (await driver.trigger(GameEvent.StartingPhase, data)) {
+			if (await driver.trigger(GameEvent.ChangingPhase, data)) {
 				continue;
 			}
 
 			player.setPhase(data.to);
 			player.broadcastProperty('phase', data.to);
-			await driver.trigger(GameEvent.ProceedingPhase, data);
 
+			await driver.trigger(GameEvent.StartingPhase, data);
+			await driver.trigger(GameEvent.ProceedingPhase, data);
 			await driver.trigger(GameEvent.EndingPhase, data);
 
 			await delay(this.idle);
