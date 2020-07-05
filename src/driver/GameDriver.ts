@@ -628,12 +628,12 @@ class GameDriver extends EventDriver<GameEvent> {
 		this.room.broadcast(cmd.Judge, judgement.toJSON());
 
 		await this.trigger(GameEvent.BeforeIssuingJudgement, judgement);
-		await this.trigger(GameEvent.AfterIssuingJudgement, judgement);
-
 		judgement.execute();
-
-		const cards = judgement.cards.filter((carta) => processArea.has(carta));
-		await this.moveCards(cards, this.discardPile, { open: true });
+		const moved = await this.trigger(GameEvent.AfterIssuingJudgement, judgement);
+		if (!moved) {
+			const cards = judgement.cards.filter((carta) => processArea.has(carta));
+			await this.moveCards(cards, this.discardPile, { open: true });
+		}
 	}
 
 	addSkill(player: ServerPlayer, skill: Skill, areaType: SkillAreaType = SkillAreaType.HeadAcquired): boolean {
