@@ -31,7 +31,7 @@ class Indulge extends DelayedTrickCard {
 		const judgement = new Judgement(to, this, effectivePattern);
 		await driver.judge(judgement);
 
-		if (judgement.effective) {
+		if (judgement.isEffective()) {
 			to.skipPhase(Phase.Play);
 		}
 	}

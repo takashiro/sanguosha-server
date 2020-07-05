@@ -588,10 +588,10 @@ class GameDriver extends EventDriver<GameEvent> {
 				return;
 			}
 
-			judgement.card = card;
+			judgement.change(card);
 		}
 
-		const { card } = judgement;
+		const card = judgement.getCard();
 		if (!card) {
 			return;
 		}

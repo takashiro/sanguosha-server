@@ -14,13 +14,13 @@ export default class Judgement {
 
 	readonly pattern: CardPattern;
 
-	pending: boolean;
+	protected pending: boolean;
 
-	effective: boolean;
+	protected effective: boolean;
 
-	card?: Card;
+	protected card?: Card;
 
-	history: Card[];
+	protected history: Card[];
 
 	constructor(who: ServerPlayer, origin: Card | string, pattern: CardPattern) {
 		this.who = who;
@@ -29,6 +29,26 @@ export default class Judgement {
 		this.pending = true;
 		this.effective = false;
 		this.history = [];
+	}
+
+	isPending(): boolean {
+		return this.pending;
+	}
+
+	isEffective(): boolean {
+		return this.effective;
+	}
+
+	getCard(): Card | undefined {
+		return this.card;
+	}
+
+	getHistory(): Card[] {
+		return this.cards;
+	}
+
+	isExecuted(): boolean {
+		return Boolean(this.card);
 	}
 
 	change(card: Card): void {
