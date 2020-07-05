@@ -549,9 +549,35 @@ class GameDriver extends EventDriver<GameEvent> {
 			return false;
 		}
 
+		const preEvents = [
+			GameEvent.BeforeStartingDamage,
+			GameEvent.StartingDamage,
+			GameEvent.Damaging,
+			GameEvent.Damaged,
+		];
+		for (const event of preEvents) {
+			const prevented = await this.trigger(event, damage);
+			if (prevented) {
+				return false;
+			}
+		}
+
 		const hp = damage.to.getHp() - damage.num;
 		damage.to.setHp(hp);
 		damage.to.broadcastProperty('hp', hp);
+
+		const postEvents = [
+			GameEvent.AfterDamaging,
+			GameEvent.AfterDamaged,
+			GameEvent.EndingDamage,
+			GameEvent.AfterEndingDamage,
+		];
+		for (const event of postEvents) {
+			const prevented = await this.trigger(event, damage);
+			if (prevented) {
+				return false;
+			}
+		}
 
 		return true;
 	}

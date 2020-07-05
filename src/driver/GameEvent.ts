@@ -31,6 +31,15 @@ const enum GameEvent {
 	AfterIssuingJudgement, // 判定生效后
 
 	CalculatingDistance, // 计算距离时
+
+	BeforeStartingDamage, // 伤害结算开始前
+	StartingDamage, // 伤害结算开始时
+	Damaging, // 造成伤害时
+	Damaged, // 受到伤害时
+	AfterDamaging, // 造成伤害后
+	AfterDamaged, // 受到伤害后
+	EndingDamage, // 伤害结算结束时
+	AfterEndingDamage, // 伤害结算结束后
 }
 
 export default GameEvent;
