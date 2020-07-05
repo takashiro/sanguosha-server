@@ -8,7 +8,7 @@ import CardPattern from '../core/CardPattern';
 import ServerPlayer from './ServerPlayer';
 
 export default class Judgement {
-	readonly who: ServerPlayer;
+	readonly player: ServerPlayer;
 
 	readonly origin: Card | string;
 
@@ -22,8 +22,8 @@ export default class Judgement {
 
 	protected history: Card[];
 
-	constructor(who: ServerPlayer, origin: Card | string, pattern: CardPattern) {
-		this.who = who;
+	constructor(player: ServerPlayer, origin: Card | string, pattern: CardPattern) {
+		this.player = player;
 		this.origin = origin;
 		this.pattern = pattern;
 		this.pending = true;
@@ -72,7 +72,7 @@ export default class Judgement {
 
 	toJSON(): JudgementStruct {
 		return {
-			who: this.who.getSeat(),
+			who: this.player.getSeat(),
 			origin: typeof this.origin === 'string' ? this.origin : this.origin.toJSON(),
 			pending: this.pending,
 			effective: this.effective,

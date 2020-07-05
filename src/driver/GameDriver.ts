@@ -622,8 +622,8 @@ class GameDriver extends EventDriver<GameEvent> {
 			return;
 		}
 
-		const { who } = judgement;
-		const processArea = who.getProcessArea();
+		const { player } = judgement;
+		const processArea = player.getProcessArea();
 		await this.moveCards([card], processArea, { open: true });
 		this.room.broadcast(cmd.Judge, judgement.toJSON());
 
