@@ -215,7 +215,7 @@ class ServerPlayer extends Player implements SkillOwner {
 				})),
 			}, opt.timeout ? opt.timeout * 1000 : this.requestTimeout * 2);
 		} catch (error) {
-			console.error(error);
+			// Timeout
 		}
 
 		const chosenGenerals = [];
