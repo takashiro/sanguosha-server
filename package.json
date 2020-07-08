@@ -5,6 +5,7 @@
   "main": "dist",
   "scripts": {
     "build": "tsc",
+    "debug": "tsc --incremental",
     "test": "npm run lint && npm run jest",
     "lint": "eslint --ext ts,js .",
     "jest": "jest --no-cache"

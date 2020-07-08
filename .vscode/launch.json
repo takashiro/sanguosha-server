@@ -10,7 +10,7 @@
 			"name": "Rebuild & Launch",
 			"program": "${workspaceFolder}/../karuta-node-server/dist/app.js",
 			"cwd": "${workspaceFolder}/../karuta-node-server",
-			"preLaunchTask": "npm: build"
+			"preLaunchTask": "npm: debug"
 		},
 		{
 			"type": "node",
