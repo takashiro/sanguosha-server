@@ -94,6 +94,7 @@ class BasicRule extends GameRule<void> {
 		const driver = this.getDriver();
 		driver.setCurrentPlayer(player);
 
+		player.setRound(player.getRound() + 1);
 		player.setPhases(phases);
 		for (let i = 0; i < phases.length; i++) {
 			const phase = phases[i];

@@ -65,6 +65,8 @@ class ServerPlayer extends Player implements SkillOwner {
 
 	protected phases: Phase[];
 
+	protected round: number;
+
 	protected requestTimeout: number;
 
 	constructor(user: User) {
@@ -85,6 +87,7 @@ class ServerPlayer extends Player implements SkillOwner {
 		this.useCount = new Map();
 		this.useLimit = new Map();
 		this.phases = [];
+		this.round = 0;
 		this.requestTimeout = 15000;
 	}
 
@@ -187,6 +190,14 @@ class ServerPlayer extends Player implements SkillOwner {
 			}
 		}
 		return true;
+	}
+
+	getRound(): number {
+		return this.round;
+	}
+
+	setRound(round: number): void {
+		this.round = round;
 	}
 
 	setRequestTimeout(msecs: number): void {
