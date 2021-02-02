@@ -34,8 +34,6 @@ const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 	forced: true,
 };
 
-type PropertyValue = string | number | boolean | object | null;
-
 interface PlayAction {
 	card?: Card;
 }
@@ -349,7 +347,7 @@ class ServerPlayer extends Player implements SkillOwner {
 		return this.user.request(command, args, timeout === undefined ? this.requestTimeout : timeout);
 	}
 
-	updateProperty(prop: string, value: PropertyValue): void {
+	updateProperty(prop: string, value: unknown): void {
 		this.user.send(cmd.UpdatePlayer, {
 			uid: this.getId(),
 			prop,
@@ -357,7 +355,7 @@ class ServerPlayer extends Player implements SkillOwner {
 		});
 	}
 
-	broadcastProperty(prop: string, value: PropertyValue): void {
+	broadcastProperty(prop: string, value: unknown): void {
 		const room = this.getRoom();
 		if (!room) {
 			return;

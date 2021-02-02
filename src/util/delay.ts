@@ -1,4 +1,3 @@
-
 /**
  * Delay for N milliseconds
  * @param {number} msecs

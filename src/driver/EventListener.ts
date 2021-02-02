@@ -54,7 +54,7 @@ abstract class EventListener<EventType, ParamType> {
 	 * @param listeners
 	 * @return Index of the selected listener
 	 */
-	abstract async select(listeners: EventListener<EventType, ParamType>[], data: ParamType): Promise<number>;
+	abstract select(listeners: EventListener<EventType, ParamType>[], data: ParamType): Promise<number>;
 
 	/**
 	 * Process the event.

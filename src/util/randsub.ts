@@ -1,4 +1,3 @@
-
 function randsub<Element>(arr: Element[], num: number): Element[] {
 	if (num >= arr.length) {
 		return arr;
