@@ -1,5 +1,5 @@
 import { PlayerPhase as Phase } from '@karuta/sanguosha-core';
-import PhaseRule from '../src/mode/basic/PhaseRule';
+import PhaseRule from '../../../src/mode/basic/PhaseRule';
 
 describe('Phase Rule', () => {
 	const rule = new PhaseRule();

@@ -1,6 +1,6 @@
 import { EventType as GameEvent } from '@karuta/sanguosha-pack';
 
-import GameDriver from '../src/driver';
+import GameDriver from '../../src/driver';
 
 describe('GameDriver', () => {
 	const room = {

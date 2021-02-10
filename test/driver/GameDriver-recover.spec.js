@@ -1,4 +1,4 @@
-import GameDriver from '../src/driver/GameDriver';
+import GameDriver from '../../src/driver/GameDriver';
 
 const room = {};
 const driver = new GameDriver(room);

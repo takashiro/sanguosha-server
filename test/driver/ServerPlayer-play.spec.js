@@ -2,7 +2,7 @@ import {
 	Command as cmd,
 } from '@karuta/sanguosha-core';
 
-import ServerPlayer from '../src/driver/ServerPlayer';
+import ServerPlayer from '../../src/driver/ServerPlayer';
 
 describe('ServerPlayer: Play Cards', () => {
 	const user = {};

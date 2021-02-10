@@ -4,7 +4,7 @@ import {
 } from '@karuta/sanguosha-core';
 import { EventType as GameEvent } from '@karuta/sanguosha-pack';
 
-import BasicRule from '../src/mode/basic/BasicRule';
+import BasicRule from '../../../src/mode/basic/BasicRule';
 
 class MockUser {
 	constructor(room, id, name) {

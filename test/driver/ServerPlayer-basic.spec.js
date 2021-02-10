@@ -3,7 +3,7 @@ import {
 	CardAreaType,
 } from '@karuta/sanguosha-core';
 
-import ServerPlayer from '../src/driver/ServerPlayer';
+import ServerPlayer from '../../src/driver/ServerPlayer';
 
 describe('ServerPlayer', () => {
 	const player = new ServerPlayer();

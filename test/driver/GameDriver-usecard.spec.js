@@ -7,8 +7,8 @@ import {
 	CardUse,
 } from '@karuta/sanguosha-pack';
 
-import Player from '../src/driver/ServerPlayer';
-import GameDriver from '../src/driver';
+import Player from '../../src/driver/ServerPlayer';
+import GameDriver from '../../src/driver';
 
 describe('GameDriver: Use a Card', () => {
 	const room = {

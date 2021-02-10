@@ -1,5 +1,5 @@
-import GameDriver from '../src/driver/GameDriver';
-import ServerPlayer from '../src/driver/ServerPlayer';
+import GameDriver from '../../src/driver/GameDriver';
+import ServerPlayer from '../../src/driver/ServerPlayer';
 
 describe('GameDriver', () => {
 	const driver = new GameDriver();

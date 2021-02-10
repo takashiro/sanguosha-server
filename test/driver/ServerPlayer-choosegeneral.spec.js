@@ -3,7 +3,7 @@ import {
 	General,
 } from '@karuta/sanguosha-core';
 
-import ServerPlayer from '../src/driver/ServerPlayer';
+import ServerPlayer from '../../src/driver/ServerPlayer';
 
 describe('ServerPlayer: Choose Generals', () => {
 	const generals = [];
