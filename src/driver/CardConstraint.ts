@@ -1,14 +1,14 @@
 import { Card } from '@karuta/sanguosha-core';
-import ServerPlayer from './ServerPlayer';
+import { Player } from '@karuta/sanguosha-pack';
 
 export default class CardConstraint {
-	readonly player: ServerPlayer;
+	readonly player: Player;
 
 	readonly card: Card;
 
 	available: boolean;
 
-	constructor(player: ServerPlayer, card: Card) {
+	constructor(player: Player, card: Card) {
 		this.player = player;
 		this.card = card;
 		this.available = true;

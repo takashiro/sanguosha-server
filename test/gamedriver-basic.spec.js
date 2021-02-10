@@ -1,5 +1,6 @@
+import { EventType as GameEvent } from '@karuta/sanguosha-pack';
+
 import GameDriver from '../src/driver';
-import GameEvent from '../src/driver/GameEvent';
 
 describe('GameDriver', () => {
 	const room = {
@@ -7,8 +8,8 @@ describe('GameDriver', () => {
 	};
 	const driver = new GameDriver(room);
 
-	it('loads the standard collection', () => {
-		driver.loadCollection('standard');
+	it('loads the standard collection', async () => {
+		await driver.loadCollection('@karuta/sanguosha-standard');
 		expect(driver.collections).toHaveLength(1);
 
 		const [col] = driver.collections;

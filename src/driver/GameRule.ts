@@ -1,9 +1,12 @@
-import EventListener from './EventListener';
-import GameEvent from './GameEvent';
+import {
+	EventListener,
+	EventType,
+} from '@karuta/sanguosha-pack';
+
 import GameDriver from './GameDriver';
 
-class GameRule<ParamType> extends EventListener<GameEvent, ParamType> {
-	constructor(event: GameEvent) {
+class GameRule<ParamType> extends EventListener<ParamType> {
+	constructor(event: EventType) {
 		super(event);
 		this.compulsory = true;
 	}

@@ -1,17 +1,19 @@
 import { CardType } from '@karuta/sanguosha-core';
 
-import CardAction from '../../core/CardAction';
-import CardPattern from '../../core/CardPattern';
+import {
+	CardAction,
+	CardPattern,
+	Card,
+	CardEffect,
+	CardUse,
+	EventType as GameEvent,
+	Player,
+} from '@karuta/sanguosha-pack';
 
-import Card from '../../driver/Card';
-import CardEffect from '../../driver/CardEffect';
-import CardUse from '../../driver/CardUse';
-import GameEvent from '../../driver/GameEvent';
 import GameRule from '../../driver/GameRule';
-import ServerPlayer from '../../driver/ServerPlayer';
 
 interface Response {
-	player: ServerPlayer;
+	player: Player;
 	card: Card;
 }
 

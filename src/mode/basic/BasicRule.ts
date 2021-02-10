@@ -5,11 +5,14 @@ import {
 	General,
 } from '@karuta/sanguosha-core';
 
-import GameRule from '../../driver/GameRule';
+import {
+	EventType as GameEvent,
+	Player,
+	PhaseChange,
+} from '@karuta/sanguosha-pack';
 
-import GameEvent from '../../driver/GameEvent';
+import GameRule from '../../driver/GameRule';
 import ServerPlayer from '../../driver/ServerPlayer';
-import PhaseChange from '../../driver/PhaseChange';
 import delay from '../../util/delay';
 
 class BasicRule extends GameRule<void> {
@@ -73,7 +76,7 @@ class BasicRule extends GameRule<void> {
 		}
 	}
 
-	addGeneralSkills(player: ServerPlayer, general: General, areaType: SkillAreaType): void {
+	addGeneralSkills(player: Player, general: General, areaType: SkillAreaType): void {
 		const driver = this.getDriver();
 		for (const Skill of general.getSkills()) {
 			const skill = new Skill(player);
@@ -81,7 +84,7 @@ class BasicRule extends GameRule<void> {
 		}
 	}
 
-	async activatePlayer(player: ServerPlayer): Promise<void> {
+	async activatePlayer(player: Player): Promise<void> {
 		const phases = [
 			Phase.Start,
 			Phase.Judge,

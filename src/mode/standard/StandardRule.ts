@@ -3,9 +3,9 @@ import {
 	PlayerRole as Role,
 } from '@karuta/sanguosha-core';
 
-import BasicRule from '../basic/BasicRule';
+import { Player } from '@karuta/sanguosha-pack';
 
-import ServerPlayer from '../../driver/ServerPlayer';
+import BasicRule from '../basic/BasicRule';
 
 import shuffle from '../../util/shuffle';
 import randsub from '../../util/randsub';
@@ -69,7 +69,8 @@ class StandardRule extends BasicRule {
 	async prepareGenerals(): Promise<void> {
 		const driver = this.getDriver();
 
-		driver.loadCollection('standard');
+		// @TO-DO: Load configurable game packs
+		await driver.loadCollection('@karuta/sanguosha-standard');
 		const generals = driver.getGenerals();
 
 		// Set up the Emperor first
@@ -106,7 +107,7 @@ class StandardRule extends BasicRule {
 		}
 	}
 
-	async prepareEmperor(player: ServerPlayer, generals: General[]): Promise<General> {
+	async prepareEmperor(player: Player, generals: General[]): Promise<General> {
 		const candidates = generals.filter((general) => general.isEmperor());
 
 		const others = generals.filter((general) => !general.isEmperor());
@@ -125,7 +126,7 @@ class StandardRule extends BasicRule {
 		return general;
 	}
 
-	async prepareGeneral(player: ServerPlayer, generals: General[]): Promise<void> {
+	async prepareGeneral(player: Player, generals: General[]): Promise<void> {
 		const offset = this.candidateGeneralNum * (player.getSeat() - 2);
 		const candidates = generals.slice(offset, offset + this.candidateGeneralNum);
 		const res = await player.askForGeneral(candidates, { num: 1 });

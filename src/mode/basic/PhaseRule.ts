@@ -1,17 +1,20 @@
 import { PlayerPhase as Phase } from '@karuta/sanguosha-core';
 
-import Card from '../../driver/Card';
-import CardAction from '../../core/CardAction';
-import CardDraw from '../../driver/CardDraw';
-import DelayedCardEffect from '../../driver/DelayedCardEffect';
-import GameEvent from '../../driver/GameEvent';
+import {
+	Card,
+	CardAction,
+	CardDraw,
+	DelayedCardEffect,
+	EventType,
+	Player,
+	PhaseChange,
+} from '@karuta/sanguosha-pack';
+
 import GameRule from '../../driver/GameRule';
-import PhaseChange from '../../driver/PhaseChange';
-import ServerPlayer from '../../driver/ServerPlayer';
 
 class PhaseRule extends GameRule<PhaseChange> {
 	constructor() {
-		super(GameEvent.ProceedingPhase);
+		super(EventType.ProceedingPhase);
 	}
 
 	isTriggerable(data: PhaseChange): boolean {
@@ -38,7 +41,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 		return false;
 	}
 
-	async processJudgements(player: ServerPlayer): Promise<void> {
+	async processJudgements(player: Player): Promise<void> {
 		const driver = this.getDriver();
 		const judgeArea = player.getJudgeArea();
 		const processArea = player.getProcessArea();
@@ -59,14 +62,14 @@ class PhaseRule extends GameRule<PhaseChange> {
 		}
 	}
 
-	async drawCards(player: ServerPlayer): Promise<void> {
+	async drawCards(player: Player): Promise<void> {
 		const data = new CardDraw(player, 2);
 		const driver = this.getDriver();
-		await driver.trigger(GameEvent.DrawingNCards, data);
+		await driver.trigger(EventType.DrawingNCards, data);
 		await driver.drawCards(player, data.num);
 	}
 
-	async play(player: ServerPlayer): Promise<void> {
+	async play(player: Player): Promise<void> {
 		const driver = this.getDriver();
 		const handArea = player.getHandArea();
 		for (;;) {
@@ -95,7 +98,7 @@ class PhaseRule extends GameRule<PhaseChange> {
 		player.clearUseLimit();
 	}
 
-	async discardCards(player: ServerPlayer): Promise<void> {
+	async discardCards(player: Player): Promise<void> {
 		const handArea = player.getHandArea();
 		const discardNum = handArea.size - player.getHp();
 		if (discardNum > 0) {

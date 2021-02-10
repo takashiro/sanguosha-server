@@ -3,8 +3,9 @@ import {
 	PlayerRole as Role,
 } from '@karuta/sanguosha-core';
 
+import { EventType as GameEvent } from '@karuta/sanguosha-pack';
+
 import GameDriver from '../src/driver';
-import GameEvent from '../src/driver/GameEvent';
 
 import StandardRule from '../src/mode/standard/StandardRule';
 

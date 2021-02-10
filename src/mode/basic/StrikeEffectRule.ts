@@ -1,15 +1,17 @@
-import CardAction from '../../core/CardAction';
-import CardPattern from '../../core/CardPattern';
+import {
+	CardAction,
+	CardPattern,
+	Card,
+	EventType,
+	CardEffect,
+	CardUse,
+} from '@karuta/sanguosha-pack';
 
-import Card from '../../driver/Card';
-import GameEvent from '../../driver/GameEvent';
-import CardEffect from '../../driver/CardEffect';
-import CardUse from '../../driver/CardUse';
 import AbstractStrikeRule from './AbstractStrikeRule';
 
 class StrikeEffectRule extends AbstractStrikeRule<CardEffect> {
 	constructor() {
-		super(GameEvent.BeforeTakingCardEffect);
+		super(EventType.BeforeTakingCardEffect);
 	}
 
 	isTriggerable(effect: CardEffect): boolean {

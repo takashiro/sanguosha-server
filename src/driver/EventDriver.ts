@@ -1,4 +1,7 @@
-import EventListener from './EventListener';
+import {
+	EventType,
+	EventListener,
+} from '@karuta/sanguosha-pack';
 
 enum State {
 	Starting,
@@ -6,14 +9,13 @@ enum State {
 	Stopped,
 }
 
-interface PriorityListener<EventType, ParamType> {
-	listener: EventListener<EventType, ParamType>;
+interface PriorityListener<ParamType> {
+	listener: EventListener<ParamType>;
 	weight: number;
 }
 
-class EventDriver<EventType> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	protected listeners: Map<EventType, EventListener<EventType, any>[]>;
+class EventDriver {
+	protected listeners: Map<EventType, EventListener<unknown>[]>;
 
 	protected state: State;
 
@@ -42,8 +44,7 @@ class EventDriver<EventType> {
 	 * Register a listener.
 	 * @param listener
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	register(listener: EventListener<EventType, any>): void {
+	register(listener: EventListener<unknown>): void {
 		if (!listener.event) {
 			throw new Error('Failed to register undefined event handler');
 		}
@@ -62,8 +63,7 @@ class EventDriver<EventType> {
 	 * Unregister a listener.
 	 * @param listener
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	unregister(listener: EventListener<EventType, any>): void {
+	unregister(listener: EventListener<unknown>): void {
 		if (!listener.event) {
 			throw new Error('Failed to unregister undefined event handler');
 		}
@@ -78,8 +78,8 @@ class EventDriver<EventType> {
 			return;
 		}
 
+		listener.setDriver(undefined);
 		handlers.splice(i, 1);
-		listener.setDriver(null);
 	}
 
 	/**
@@ -98,7 +98,7 @@ class EventDriver<EventType> {
 			return false;
 		}
 
-		const listeners = eventListeners.filter((handler) => handler.isTriggerable(data)) as EventListener<EventType, ParamType>[];
+		const listeners = eventListeners.filter((handler) => handler.isTriggerable(data)) as EventListener<ParamType>[];
 		if (listeners.length <= 0) {
 			return false;
 		}
@@ -112,7 +112,7 @@ class EventDriver<EventType> {
 			return false;
 		}
 
-		const listenerData: PriorityListener<EventType, ParamType>[] = listeners.map((listener) => ({
+		const listenerData: PriorityListener<ParamType>[] = listeners.map((listener) => ({
 			listener,
 			weight: listener.weigh(data),
 		}));

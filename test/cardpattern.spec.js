@@ -1,5 +1,5 @@
 import { Card, CardSuit, CardColor } from '@karuta/sanguosha-core';
-import CardPattern from '../src/core/CardPattern';
+import { CardPattern } from '@karuta/sanguosha-pack';
 
 const strike = new Card('strike', CardSuit.Heart, 2);
 const peach = new Card('peach', CardSuit.Club, 3);

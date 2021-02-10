@@ -18,6 +18,11 @@ import {
 	SkillOwner,
 } from '@karuta/sanguosha-core';
 
+import {
+	PlayAction,
+	Player as AbstractPlayer,
+} from '@karuta/sanguosha-pack';
+
 import CardOption from './CardOption';
 
 interface ChooseGeneralOptions {
@@ -34,11 +39,7 @@ const CHOOSE_GENERAL_DEFAULT_OPTIONS = {
 	forced: true,
 };
 
-interface PlayAction {
-	card?: Card;
-}
-
-class ServerPlayer extends Player implements SkillOwner {
+class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 	protected user: User;
 
 	protected headSkillArea: SkillArea;
@@ -97,12 +98,12 @@ class ServerPlayer extends Player implements SkillOwner {
 		return this.user ? this.user.getId() : 0;
 	}
 
-	getName(): string | undefined {
-		return this.user ? this.user.getName() : undefined;
+	getName(): string {
+		return this.user?.getName() || '';
 	}
 
 	getRoom(): Room | null {
-		return this.user ? this.user.getRoom() : null;
+		return this.user?.getRoom();
 	}
 
 	getSkillArea(): SkillArea {
@@ -338,8 +339,7 @@ class ServerPlayer extends Player implements SkillOwner {
 		return selected;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	async request(command: number, args: any, timeout: number): Promise<any> {
+	async request(command: number, args: unknown, timeout?: number): Promise<unknown> {
 		if (!this.user) {
 			return null;
 		}
@@ -393,12 +393,20 @@ class ServerPlayer extends Player implements SkillOwner {
 		this.useLimit.set(name, limit);
 	}
 
+	resetUseLimit(name: string): void {
+		this.useLimit.delete(name);
+	}
+
 	clearUseLimit(): void {
 		this.useLimit.clear();
 	}
 
 	setPhases(phases: Phase[]): void {
-		this.phases = phases;
+		this.phases = [...phases];
+	}
+
+	getPhases(): Phase[] {
+		return [...this.phases];
 	}
 
 	skipPhase(phase: Phase): boolean {

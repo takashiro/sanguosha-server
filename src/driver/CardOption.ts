@@ -1,5 +1,7 @@
-import CardAction from '../core/CardAction';
-import CardPattern from '../core/CardPattern';
+import {
+	CardAction,
+	CardPattern,
+} from '@karuta/sanguosha-pack';
 
 interface CardOption {
 	action: CardAction;

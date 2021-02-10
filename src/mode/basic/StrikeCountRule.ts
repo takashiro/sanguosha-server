@@ -1,12 +1,15 @@
 import { PlayerPhase as Phase } from '@karuta/sanguosha-core';
 
-import CardUse from '../../driver/CardUse';
-import GameEvent from '../../driver/GameEvent';
+import {
+	CardUse,
+	EventType,
+} from '@karuta/sanguosha-pack';
+
 import AbstractStrikeRule from './AbstractStrikeRule';
 
 class StrikeCountRule extends AbstractStrikeRule<CardUse> {
 	constructor() {
-		super(GameEvent.SelectingCardTargets);
+		super(EventType.SelectingCardTargets);
 	}
 
 	isTriggerable(use: CardUse): boolean {

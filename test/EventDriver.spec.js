@@ -1,4 +1,4 @@
-import EventListener from '../src/driver/EventListener';
+import { EventListener } from '@karuta/sanguosha-pack';
 import EventDriver from '../src/driver/EventDriver';
 
 class FakeTrigger extends EventListener {

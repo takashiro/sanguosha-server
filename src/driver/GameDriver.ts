@@ -4,44 +4,48 @@ import {
 	Card as MetaCard,
 	CardArea,
 	CardAreaType,
+	GameConfig,
 	General,
 	Skill,
 	SkillChangeStruct,
 	SkillAreaType,
 } from '@karuta/sanguosha-core';
 
-import Action from '../core/Action';
-import Config from '../core/Config';
+import {
+	Card,
+	CardEffect,
+	CardExpense,
+	CardUse,
+	CardMove,
+	CardMoveOptions,
+	InstantCardEffect,
+	Collection,
+	EventType as GameEvent,
+	GameDriver as Driver,
+	Skill as EventSkill,
+	Damage,
+	Recover,
+	Player,
+	Judgement,
+	DistanceVector,
+} from '@karuta/sanguosha-pack';
 
-import shuffle from '../util/shuffle';
+import CardConstraint from './CardConstraint';
 
 import { ActionMap } from '../cmd';
-import CollectionMap from '../collection';
+import Action from '../core/Action';
+import shuffle from '../util/shuffle';
 
 import EventDriver from './EventDriver';
-import GameEvent from './GameEvent';
-import Card from './Card';
-import Collection from './Collection';
 import ServerPlayer from './ServerPlayer';
-import EventSkill from '../base/Skill';
+import { loader as collectionLoader } from './CollectionLoader';
 
-import CardEffect from './CardEffect';
-import InstantCardEffect from './InstantCardEffect';
-import CardExpense from './CardExpense';
-import CardConstraint from './CardConstraint';
-import CardUse from './CardUse';
-import CardMove, { CardMoveOptions } from './CardMove';
-import Damage from './Damage';
-import Recover from './Recover';
-import Judgement from './Judgement';
-import DistanceVector from './DistanceVector';
-
-class GameDriver extends EventDriver<GameEvent> {
+class GameDriver extends EventDriver implements Driver {
 	protected readonly room: Room;
 
-	protected players: ServerPlayer[];
+	protected players: Player[];
 
-	protected config: Config;
+	protected config: GameConfig;
 
 	protected collections: Collection[];
 
@@ -51,7 +55,7 @@ class GameDriver extends EventDriver<GameEvent> {
 
 	protected wuguArea: CardArea;
 
-	protected currentPlayer: ServerPlayer | null;
+	protected currentPlayer: Player | null;
 
 	constructor(room: Room) {
 		super();
@@ -79,7 +83,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		return 'sanguosha';
 	}
 
-	setConfig(config: Config): void {
+	setConfig(config: GameConfig): void {
 		if (config.mode) {
 			this.config.mode = config.mode;
 		}
@@ -89,7 +93,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 	}
 
-	getConfig(): Config {
+	getConfig(): GameConfig {
 		return this.config;
 	}
 
@@ -112,32 +116,33 @@ class GameDriver extends EventDriver<GameEvent> {
 		return this.room.getUsers();
 	}
 
-	getPlayers(): ServerPlayer[] {
+	getPlayers(): Player[] {
 		return this.players;
 	}
 
-	setPlayers(players: ServerPlayer[]): void {
+	setPlayers(players: Player[]): void {
 		this.players = players;
 	}
 
-	findPlayer(seat: number): ServerPlayer | undefined {
+	findPlayer(seat: number): Player | undefined {
 		return this.players.find((player) => player.getSeat() === seat);
 	}
 
-	getAlivePlayers(): ServerPlayer[] {
+	getAlivePlayers(): Player[] {
 		return this.players.filter((player) => player.isAlive());
 	}
 
-	getAlivePlayersExcept(except: ServerPlayer): ServerPlayer[] {
+	getAlivePlayersExcept(except: Player): Player[] {
 		return this.players.filter((player) => player.isAlive() && player !== except);
 	}
 
-	loadCollection(name: string): void {
-		const collection = CollectionMap.get(name);
-		if (!collection) {
+	async loadCollection(name: string): Promise<void> {
+		const CollectionCreator = await collectionLoader.get(name);
+		if (!CollectionCreator) {
 			return;
 		}
-		this.collections.push(collection);
+		const col = new CollectionCreator();
+		this.collections.push(col);
 	}
 
 	getGenerals(): General[] {
@@ -195,12 +200,12 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param player
 	 * @param num
 	 */
-	async drawCards(player: ServerPlayer, num: number): Promise<void> {
+	async drawCards(player: Player, num: number): Promise<void> {
 		const cards = this.getCardsFromDrawPile(num);
 		await this.moveCards(cards, player.getHandArea(), { openTo: [player] });
 	}
 
-	async summonCard(player: ServerPlayer, cardName: string): Promise<void> {
+	async summonCard(player: Player, cardName: string): Promise<void> {
 		const cards = this.drawPile.getCards();
 		const card = cards.find((c) => c.getName() === cardName);
 		if (card) {
@@ -250,7 +255,7 @@ class GameDriver extends EventDriver<GameEvent> {
 				}
 
 				move.to.add(card);
-				card.setLocation(move.to);
+				(card as Card).setLocation(move.to);
 				moved.push(card);
 			}
 			move.cards = moved;
@@ -265,7 +270,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param player
 	 * @param card
 	 */
-	async isCardAvailable(player: ServerPlayer, card: Card): Promise<boolean> {
+	async isCardAvailable(player: Player, card: Card): Promise<boolean> {
 		if (!await card.isAvailable(this, player)) {
 			return false;
 		}
@@ -281,7 +286,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param card
 	 * @return Whether the card takes effect.
 	 */
-	async playCard(source: ServerPlayer, card: Card): Promise<boolean> {
+	async playCard(source: Player, card: Card): Promise<boolean> {
 		if (!await card.isAvailable(this, source)) {
 			return false;
 		}
@@ -364,7 +369,7 @@ class GameDriver extends EventDriver<GameEvent> {
 			return false;
 		}
 
-		const { card } = use;
+		const card = use.card as Card;
 		await card.onUse(this, use);
 
 		if (!use.from) {
@@ -428,7 +433,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		await this.trigger(GameEvent.BeforeTakingCardEffect, effect);
 		if (effect.isValid()) {
 			await this.trigger(GameEvent.TakingCardEffect, effect);
-			const { card } = effect;
+			const card = effect.card as Card;
 			await card.onEffect(this, effect);
 			await card.effect(this, effect);
 		}
@@ -456,7 +461,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	/**
 	 * @return current player.
 	 */
-	getCurrentPlayer(): ServerPlayer | null {
+	getCurrentPlayer(): Player | null {
 		return this.currentPlayer;
 	}
 
@@ -464,7 +469,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * Set current player.
 	 * @param player
 	 */
-	setCurrentPlayer(player: ServerPlayer | null): void {
+	setCurrentPlayer(player: Player | null): void {
 		this.currentPlayer = player;
 	}
 
@@ -472,7 +477,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * Sort players by action order
 	 * @param players
 	 */
-	sortPlayersByActionOrder(players: ServerPlayer[]): void {
+	sortPlayersByActionOrder(players: Player[]): void {
 		if (!this.currentPlayer) {
 			return;
 		}
@@ -486,10 +491,10 @@ class GameDriver extends EventDriver<GameEvent> {
 
 	/**
 	 * Get a player seat number relative to the current player.
-	 * @param {ServerPlayer} player
+	 * @param {Player} player
 	 * @return {number}
 	 */
-	getRelativeSeat(player: ServerPlayer): number {
+	getRelativeSeat(player: Player): number {
 		if (!this.currentPlayer) {
 			return NaN;
 		}
@@ -508,7 +513,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param to
 	 * @return distance between the 2 players
 	 */
-	async getDistance(from: ServerPlayer, to: ServerPlayer): Promise<number> {
+	async getDistance(from: Player, to: Player): Promise<number> {
 		if (from.isDead() || to.isDead()) {
 			return Infinity;
 		}
@@ -529,7 +534,7 @@ class GameDriver extends EventDriver<GameEvent> {
 	 * @param source
 	 * @param target
 	 */
-	async isInAttackRange(source: ServerPlayer, target: ServerPlayer): Promise<boolean> {
+	async isInAttackRange(source: Player, target: Player): Promise<boolean> {
 		if (source === target) {
 			return false;
 		}
@@ -636,7 +641,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		}
 	}
 
-	addSkill(player: ServerPlayer, skill: Skill, areaType: SkillAreaType = SkillAreaType.HeadAcquired): boolean {
+	addSkill(player: Player, skill: Skill, areaType: SkillAreaType = SkillAreaType.HeadAcquired): boolean {
 		const area = player.findSkillArea(areaType);
 		if (!area.add(skill)) {
 			return false;
@@ -659,7 +664,7 @@ class GameDriver extends EventDriver<GameEvent> {
 		return true;
 	}
 
-	removeSkill(player: ServerPlayer, skill: Skill, areaType: SkillAreaType = SkillAreaType.HeadAcquired): boolean {
+	removeSkill(player: Player, skill: Skill, areaType: SkillAreaType = SkillAreaType.HeadAcquired): boolean {
 		const area = player.findSkillArea(areaType);
 		if (!area.remove(skill)) {
 			return false;
@@ -705,14 +710,14 @@ class GameDriver extends EventDriver<GameEvent> {
 				this.room.broadcast(cmd.MoveCards, move.toJSON(true));
 			} else if (options.openTo) {
 				for (const openTo of options.openTo) {
-					const user = openTo.getUser();
+					const user = (openTo as ServerPlayer).getUser();
 					user.send(cmd.MoveCards, move.toJSON(true));
 				}
 				for (const player of this.players) {
 					if (options.openTo.includes(player)) {
 						continue;
 					}
-					const user = player.getUser();
+					const user = (player as ServerPlayer).getUser();
 					user.send(cmd.MoveCards, move.toJSON(false));
 				}
 			} else {

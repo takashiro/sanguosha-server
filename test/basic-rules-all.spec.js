@@ -2,8 +2,8 @@ import {
 	Command as cmd,
 	PlayerPhase as Phase,
 } from '@karuta/sanguosha-core';
+import { EventType as GameEvent } from '@karuta/sanguosha-pack';
 
-import GameEvent from '../src/driver/GameEvent';
 import BasicRule from '../src/mode/basic/BasicRule';
 
 class MockUser {
