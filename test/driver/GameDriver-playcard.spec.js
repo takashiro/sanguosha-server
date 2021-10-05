@@ -1,3 +1,4 @@
+import { ReplyType } from '@karuta/sanguosha-core';
 import GameDriver from '../../src/driver/GameDriver';
 import ServerPlayer from '../../src/driver/ServerPlayer';
 
@@ -15,9 +16,9 @@ describe('GameDriver', () => {
 
 	const useCard = jest.spyOn(driver, 'useCard');
 
-	const request = jest.fn();
+	const get = jest.fn();
 	const user = {
-		request,
+		get,
 	};
 	const player = new ServerPlayer(user);
 
@@ -43,21 +44,21 @@ describe('GameDriver', () => {
 		});
 
 		it('should handle timeout error', async () => {
-			request.mockImplementation(() => {
+			get.mockImplementation(() => {
 				throw new Error('timeout');
 			});
 			expect(await driver.playCard(player, fakeCard)).toBe(false);
 		});
 
 		it('should handle cancel command', async () => {
-			request.mockResolvedValue({ cancel: true });
+			get.mockResolvedValue({ type: ReplyType.Cancel });
 			expect(await driver.playCard(player, fakeCard)).toBe(true);
-			request.mockResolvedValue(null);
+			get.mockResolvedValue(null);
 			expect(await driver.playCard(player, fakeCard)).toBe(true);
 		});
 
 		it('should handle non-existing player', async function () {
-			request.mockResolvedValue({ player: 100 });
+			get.mockResolvedValue({ data: [100] });
 			expect(await driver.playCard(player, fakeCard)).toBe(false);
 		});
 
@@ -72,16 +73,15 @@ describe('GameDriver', () => {
 				},
 			};
 
-			request.mockResolvedValue(null)
-				.mockResolvedValueOnce({ player: 1, selected: false })
-				.mockRejectedValueOnce({ player: 1, selected: true })
-				.mockRejectedValueOnce({ player: 1, selected: true });
+			get.mockResolvedValue(null)
+				.mockResolvedValueOnce({ player: 1 })
+				.mockRejectedValueOnce({ player: 1 });
 
 			expect(await driver.playCard(player, card)).toBe(false);
 		});
 
 		it('should stop if no confirm or selection command is received', async () => {
-			request.mockResolvedValue({});
+			get.mockResolvedValue({});
 			expect(await driver.playCard(player, someCard)).toBe(false);
 		});
 
@@ -92,19 +92,14 @@ describe('GameDriver', () => {
 				filterPlayer() { return true; },
 			};
 
-			request.mockResolvedValue({ confirm: true });
+			get.mockResolvedValue({ type: ReplyType.Confirm });
 			expect(await driver.playCard(player, card)).toBe(false);
 		});
 
-		it('should handle duplicate add or removal', async () => {
+		it('should use a card', async () => {
 			useCard.mockResolvedValue();
-			request.mockResolvedValue(null)
-				.mockResolvedValueOnce({ player: 1, selected: true })
-				.mockResolvedValueOnce({ player: 1, selected: true })
-				.mockResolvedValueOnce({ player: 2, selected: true })
-				.mockResolvedValueOnce({ player: 2, selected: false })
-				.mockResolvedValueOnce({ player: 2, selected: false })
-				.mockResolvedValueOnce({ confirm: true });
+			get.mockResolvedValueOnce({ data: [1] })
+				.mockResolvedValueOnce({ type: ReplyType.Confirm });
 
 			expect(await driver.playCard(player, someCard)).toBe(true);
 			const [use] = useCard.mock.calls[0];

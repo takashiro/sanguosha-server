@@ -1,6 +1,5 @@
-import {
-	Command as cmd,
-} from '@karuta/sanguosha-core';
+import { Method } from '@karuta/core';
+import { Context } from '@karuta/sanguosha-core';
 
 import {
 	Card,
@@ -30,7 +29,7 @@ describe('GameDriver: Use a Card', () => {
 		await driver.useCard(use);
 
 		expect(card.onUse).toBeCalledWith(driver, use);
-		expect(room.broadcast).toBeCalledWith(cmd.UseCard, use.toJSON());
+		expect(room.broadcast).toBeCalledWith(Method.Post, Context.CardUse, use.toJSON());
 		expect(card.use).toBeCalledWith(driver, use);
 	});
 });

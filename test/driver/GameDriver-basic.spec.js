@@ -1,4 +1,5 @@
-import { EventType as GameEvent } from '@karuta/sanguosha-pack';
+import { Method } from '@karuta/core';
+import { Context } from '@karuta/sanguosha-core';
 
 import GameDriver from '../../src/driver';
 
@@ -39,7 +40,7 @@ describe('GameDriver', () => {
 
 	it('starts game', async () => {
 		await driver.start();
-		expect(room.broadcast).toBeCalledWith(GameEvent.StartingGame);
+		expect(room.broadcast).toBeCalledWith(Method.Post, Context.Game);
 	});
 
 	describe('#getDistance()', () => {

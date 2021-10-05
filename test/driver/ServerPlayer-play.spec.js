@@ -1,11 +1,12 @@
-import {
-	Command as cmd,
-} from '@karuta/sanguosha-core';
+import { Context } from '@karuta/sanguosha-core';
 
 import ServerPlayer from '../../src/driver/ServerPlayer';
 
 describe('ServerPlayer: Play Cards', () => {
-	const user = {};
+	const get = jest.fn();
+	const user = {
+		get,
+	};
 	const player = new ServerPlayer(user);
 
 	it('records use counts of cards', () => {
@@ -46,39 +47,36 @@ describe('ServerPlayer: Play Cards', () => {
 
 		const availableCards = [card1, card2];
 		const cards = [card1.getId(), card2.getId()];
-		const requestTimeout = player.getRequestTimeout();
 
 		const handArea = player.getHandArea();
 		handArea.add(card1);
 		handArea.add(card2);
 
-		const request = jest.fn();
-		user.request = request;
 		beforeEach(() => {
-			request.mockClear();
+			get.mockClear();
 		});
 
 		it('handles timeout error', async () => {
-			request.mockImplementation(() => {
+			get.mockImplementation(() => {
 				throw new Error('timeout');
 			});
 
 			const res = await player.play(availableCards);
 			expect(res).toBeNull();
-			expect(request).toBeCalledWith(cmd.Play, { cards }, requestTimeout);
+			expect(get).toBeCalledWith(Context.Play, { cards });
 		});
 
 		it('handles invalid card id from user response', async function () {
-			request.mockReturnValue(null);
+			get.mockReturnValue(null);
 			expect(await player.play(availableCards)).toBeNull();
 
-			request.mockReturnValue({ cards: [] });
+			get.mockReturnValue({ cards: [] });
 			expect(await player.play(availableCards)).toBeNull();
 
-			request.mockReturnValue({ cards: ['test', 'wer'] });
+			get.mockReturnValue({ cards: ['test', 'wer'] });
 			expect(await player.play(availableCards)).toBeNull();
 
-			request.mockReturnValue({ cards: [3] });
+			get.mockReturnValue({ cards: [3] });
 			expect(await player.play(availableCards)).toBeNull();
 		});
 
@@ -87,7 +85,7 @@ describe('ServerPlayer: Play Cards', () => {
 				useCard: jest.fn(),
 			};
 			user.getDriver = jest.fn().mockReturnValue(driver);
-			request.mockResolvedValue({ cards: [card1.getId()] });
+			get.mockResolvedValue({ cards: [card1.getId()] });
 
 			const action = await player.play(availableCards);
 			expect(action).toBeTruthy();

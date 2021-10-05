@@ -51,9 +51,4 @@ describe('ServerPlayer', () => {
 		player.setRequestTimeout(timeout);
 		expect(player.getRequestTimeout()).toEqual(timeout);
 	});
-
-	it('generates null reply if no user is connected', async () => {
-		player.user = null;
-		expect(await player.request()).toBeNull();
-	});
 });

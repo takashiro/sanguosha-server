@@ -1,11 +1,20 @@
-import { Room, User } from '@karuta/core';
 import {
-	Command as cmd,
+	Method,
+	ContextListener,
+	Driver as KarutaDriver,
+	DriverProfile,
+	Room,
+	User,
+} from '@karuta/core';
+import {
+	Context,
 	Card as MetaCard,
 	CardArea,
 	CardAreaType,
 	GameConfig,
 	General,
+	Reply,
+	ReplyType,
 	Skill,
 	SkillChangeStruct,
 	SkillAreaType,
@@ -21,7 +30,7 @@ import {
 	InstantCardEffect,
 	Collection,
 	EventType as GameEvent,
-	GameDriver as Driver,
+	GameDriver as SanguoshaDriver,
 	Skill as EventSkill,
 	Damage,
 	Recover,
@@ -32,51 +41,50 @@ import {
 
 import CardConstraint from './CardConstraint';
 
-import { ActionMap } from '../cmd';
-import Action from '../core/Action';
+import actions from '../cmd';
 import shuffle from '../util/shuffle';
 
 import EventDriver from './EventDriver';
-import ServerPlayer from './ServerPlayer';
 import { loader as collectionLoader } from './CollectionLoader';
 
-class GameDriver extends EventDriver implements Driver {
+class GameDriver extends EventDriver implements KarutaDriver<GameConfig>, SanguoshaDriver {
 	protected readonly room: Room;
 
-	protected players: Player[];
+	protected players: Player[] = [];
 
-	protected config: GameConfig;
+	protected config: GameConfig = {
+		mode: 'standard',
+		capacity: 8,
+		requestTimeout: 24 * 3600 * 3600,
+	};
 
-	protected collections: Collection[];
+	protected collections: Collection[] = [];
 
-	protected drawPile: CardArea;
+	protected drawPile = new CardArea(CardAreaType.DrawPile);
 
-	protected discardPile: CardArea;
+	protected discardPile = new CardArea(CardAreaType.DiscardPile);
 
-	protected wuguArea: CardArea;
+	protected wuguArea = new CardArea(CardAreaType.Wugu);
 
-	protected currentPlayer: Player | null;
+	protected currentPlayer?: Player;
 
 	constructor(room: Room) {
 		super();
 
 		this.room = room;
-		this.players = [];
-
-		this.config = {
-			mode: 'standard',
-			capacity: 8,
-			requestTimeout: 24 * 3600 * 3600,
-		};
-
-		this.collections = [];
-
-		this.drawPile = new CardArea(CardAreaType.DrawPile);
 		this.drawPile.setOpen(false);
-		this.discardPile = new CardArea(CardAreaType.DiscardPile);
-		this.wuguArea = new CardArea(CardAreaType.Wugu);
+	}
 
-		this.currentPlayer = null;
+	getProfile(): DriverProfile<GameConfig> {
+		throw new Error('Method not implemented.');
+	}
+
+	updateConfig(config: GameConfig): void {
+		Object.assign(this.config, config);
+	}
+
+	createContextListeners(user: User): ContextListener[] {
+		return actions.map((Action) => new Action(this, user));
 	}
 
 	getName(): string {
@@ -97,15 +105,10 @@ class GameDriver extends EventDriver implements Driver {
 		return this.config;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	getAction(command: number): Action<any, any> | undefined {
-		return ActionMap.get(command);
-	}
-
 	async start(): Promise<void> {
 		super.start();
-		this.room.broadcast(cmd.StartGame);
-		await this.trigger(GameEvent.StartingGame, null);
+		this.room.broadcast(Method.Post, Context.Game);
+		await this.trigger<void>(GameEvent.StartingGame, undefined);
 	}
 
 	getRoom(): Room {
@@ -297,52 +300,51 @@ class GameDriver extends EventDriver implements Driver {
 		// Request to choose card targets
 		const expiry = Date.now() + source.getRequestTimeout();
 		while (Date.now() < expiry) {
-			const candidates = [];
+			const candidates: Player[] = [];
 			for (const target of players) {
 				if (await card.filterPlayer(this, targets, target, source)) {
-					candidates.push(target.getSeat());
+					candidates.push(target);
 				}
 			}
 			const feasible: boolean = await card.isFeasible(this, targets, source);
 
-			let reply = null;
+			let reply: Reply<number[]>;
 			try {
-				reply = await source.request(cmd.ChoosePlayer, {
-					candidates,
+				reply = await source.askForPlayers(candidates, {
+					minNum: 1,
+					maxNum: 1,
 					feasible,
-				}, expiry - Date.now());
+				});
 			} catch (error) {
 				// Timed out. Ends play phase.
 				return false;
 			}
 
-			if (!reply || reply.cancel) {
+			if (!reply || reply.type === ReplyType.Cancel) {
 				// Cancel using the card
 				return true;
 			}
-			if (reply.confirm) {
+			if (reply.type === ReplyType.Confirm) {
 				break;
 			}
 
-			if (!reply.player) {
+			if (!reply.data || reply.data.length !== 1) {
 				return false;
 			}
 
-			const target = this.findPlayer(reply.player);
+			const target = this.findPlayer(reply.data[0]);
 			if (!target) {
 				return false;
 			}
 
 			const i = targets.indexOf(target);
-			if (reply.selected) {
-				if (!target || !await card.filterPlayer(this, targets, target, source)) {
-					// Ends play phase
-					return false;
-				}
-				if (i < 0) {
+			if (i < 0) {
+				// To select a player
+				if (await card.filterPlayer(this, targets, target, source)) {
 					targets.push(target);
 				}
-			} else if (i >= 0) {
+			} else {
+				// To unselect a player
 				targets.splice(i, 1);
 			}
 		}
@@ -376,7 +378,7 @@ class GameDriver extends EventDriver implements Driver {
 			return false;
 		}
 
-		this.room.broadcast(cmd.UseCard, use.toJSON());
+		this.room.broadcast(Method.Post, Context.CardUse, use.toJSON());
 		await this.trigger(GameEvent.SelectingCardTargets, use);
 
 		const instant = await card.use(this, use);
@@ -444,7 +446,7 @@ class GameDriver extends EventDriver implements Driver {
 			return false;
 		}
 
-		this.room.broadcast(cmd.ExpendCard, expense.toJSON());
+		this.room.broadcast(Method.Post, Context.CardExpense, expense.toJSON());
 
 		const processArea = expense.player.getProcessArea();
 		const cards = [expense.card];
@@ -461,7 +463,7 @@ class GameDriver extends EventDriver implements Driver {
 	/**
 	 * @return current player.
 	 */
-	getCurrentPlayer(): Player | null {
+	getCurrentPlayer(): Player | undefined {
 		return this.currentPlayer;
 	}
 
@@ -469,7 +471,7 @@ class GameDriver extends EventDriver implements Driver {
 	 * Set current player.
 	 * @param player
 	 */
-	setCurrentPlayer(player: Player | null): void {
+	setCurrentPlayer(player?: Player): void {
 		this.currentPlayer = player;
 	}
 
@@ -630,7 +632,7 @@ class GameDriver extends EventDriver implements Driver {
 		const { player } = judgement;
 		const processArea = player.getProcessArea();
 		await this.moveCards([card], processArea, { open: true });
-		this.room.broadcast(cmd.Judge, judgement.toJSON());
+		this.room.broadcast(Method.Post, Context.Judge, judgement.toJSON());
 
 		await this.trigger(GameEvent.BeforeIssuingJudgement, judgement);
 		judgement.execute();
@@ -660,7 +662,7 @@ class GameDriver extends EventDriver implements Driver {
 			owner: player.getSeat(),
 			area: areaType,
 		};
-		this.room.broadcast(cmd.AddSkill, change);
+		this.room.broadcast(Method.Put, Context.Skill, change);
 		return true;
 	}
 
@@ -683,7 +685,7 @@ class GameDriver extends EventDriver implements Driver {
 			owner: player.getSeat(),
 			area: areaType,
 		};
-		this.room.broadcast(cmd.RemoveSkill, change);
+		this.room.broadcast(Method.Delete, Context.Skill, change);
 		return true;
 	}
 
@@ -707,21 +709,21 @@ class GameDriver extends EventDriver implements Driver {
 
 		for (const move of moves) {
 			if (options.open || move.from.isOpen() || move.to.isOpen()) {
-				this.room.broadcast(cmd.MoveCards, move.toJSON(true));
+				this.room.broadcast(Method.Post, Context.CardLocation, move.toJSON(true));
 			} else if (options.openTo) {
 				for (const openTo of options.openTo) {
-					const user = (openTo as ServerPlayer).getUser();
-					user.send(cmd.MoveCards, move.toJSON(true));
+					const user = Reflect.get(openTo, 'user') as User;
+					user.post(Context.CardLocation, move.toJSON(true));
 				}
 				for (const player of this.players) {
 					if (options.openTo.includes(player)) {
 						continue;
 					}
-					const user = (player as ServerPlayer).getUser();
-					user.send(cmd.MoveCards, move.toJSON(false));
+					const user = Reflect.get(player, 'user') as User;
+					user.post(Context.CardLocation, move.toJSON(false));
 				}
 			} else {
-				this.room.broadcast(cmd.MoveCards, move.toJSON(false));
+				this.room.broadcast(Method.Post, Context.CardLocation, move.toJSON(false));
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 import {
-	Command as cmd,
+	Context,
 	PlayerRole as Role,
 } from '@karuta/sanguosha-core';
 
@@ -32,25 +32,25 @@ describe('StandardRule', () => {
 
 	const candidateDuplicates = [];
 
-	function request(command, args) {
-		if (command === cmd.ChooseGeneral) {
+	function patch(command, args) {
+		if (command === Context.General) {
 			candidateDuplicates.push(...args.generals.map((general) => general.name));
 			return Math.floor(Math.random() * args.generals.length);
 		}
-		if (command === cmd.MoveCards) {
+		if (command === Context.CardLocation) {
 			console.log(args);
 		}
 		return null;
 	}
-	const send = jest.fn();
+	const post = jest.fn();
 
 	for (let i = 1; i <= 8; i++) {
 		users.push({
 			getId() { return i; },
 			getName() { return `user${i}`; },
 			getRoom() { return room; },
-			send,
-			request,
+			post,
+			patch,
 		});
 	}
 

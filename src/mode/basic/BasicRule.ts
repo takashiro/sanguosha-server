@@ -1,8 +1,9 @@
+import { Method } from '@karuta/core';
 import {
-	Command as cmd,
 	PlayerPhase as Phase,
 	SkillAreaType,
 	General,
+	Context,
 } from '@karuta/sanguosha-core';
 
 import {
@@ -46,7 +47,7 @@ class BasicRule extends GameRule<void> {
 		}
 
 		const room = driver.getRoom();
-		room.broadcast(cmd.ArrangeSeats, players.map((player) => ({
+		room.broadcast(Method.Put, Context.Players, players.map((player) => ({
 			uid: player.getId(),
 			seat: player.getSeat(),
 			name: player.getName(),
@@ -120,13 +121,13 @@ class BasicRule extends GameRule<void> {
 		player.setPhase(Phase.Inactive);
 		player.broadcastProperty('phase', Phase.Inactive);
 
-		driver.setCurrentPlayer(null);
+		driver.setCurrentPlayer();
 	}
 
 	prepareBattleField(): void {
 		const driver = this.getDriver();
 		const room = driver.getRoom();
-		room.broadcast(cmd.ToBattle);
+		room.broadcast(Method.Post, Context.Game);
 	}
 
 	async proceed(): Promise<void> {

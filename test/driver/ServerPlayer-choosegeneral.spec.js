@@ -1,5 +1,5 @@
 import {
-	Command as cmd,
+	Context,
 	General,
 } from '@karuta/sanguosha-core';
 
@@ -18,13 +18,13 @@ describe('ServerPlayer: Choose Generals', () => {
 
 	const user = {
 		id: 1,
-		request: jest.fn(),
+		get: jest.fn(),
 	};
 
 	const player = new ServerPlayer(user);
 
 	afterEach(() => {
-		user.request.mockClear();
+		user.get.mockClear();
 	});
 
 	it('asks for 1 general', async () => {
@@ -32,11 +32,11 @@ describe('ServerPlayer: Choose Generals', () => {
 
 		expect(chosen).toHaveLength(1);
 		expect(generals).toContain(chosen[0]);
-		expect(user.request).toBeCalledWith(cmd.ChooseGeneral, {
+		expect(user.get).toBeCalledWith(Context.General, {
 			generals: metaGenerals,
 			num: 1,
 			sameKingdom: false,
-		}, 40000);
+		});
 	});
 
 	it('asks for 2 generals', async () => {
@@ -47,23 +47,23 @@ describe('ServerPlayer: Choose Generals', () => {
 			expect(generals).toContain(general);
 		}
 
-		expect(user.request).toBeCalledTimes(1);
-		expect(user.request).toBeCalledWith(cmd.ChooseGeneral, {
+		expect(user.get).toBeCalledTimes(1);
+		expect(user.get).toBeCalledWith(Context.General, {
 			generals: metaGenerals,
 			num: 1,
 			sameKingdom: false,
-		}, 40000);
+		});
 	});
 
 	it('asks for 1 general (not required)', async () => {
 		const chosen = await player.askForGeneral(generals, { forced: false });
 
 		expect(chosen).toHaveLength(0);
-		expect(user.request).toBeCalledTimes(1);
-		expect(user.request).toBeCalledWith(cmd.ChooseGeneral, {
+		expect(user.get).toBeCalledTimes(1);
+		expect(user.get).toBeCalledWith(Context.General, {
 			generals: metaGenerals,
 			num: 1,
 			sameKingdom: false,
-		}, 40000);
+		});
 	});
 });

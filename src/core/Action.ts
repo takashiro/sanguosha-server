@@ -1,18 +1,20 @@
-import { Action as ActionInterface, User } from '@karuta/core';
-import { Command } from '@karuta/sanguosha-core';
+import {
+	ContextListener,
+	User,
+} from '@karuta/core';
+import { Context } from '@karuta/sanguosha-core';
+import { GameDriver } from '@karuta/sanguosha-pack';
 
-abstract class Action<Request, Response> implements ActionInterface<Request, Response> {
-	command: Command;
+export default abstract class Action implements ContextListener {
+	context: Context;
 
-	constructor(command: Command) {
-		this.command = command;
+	protected driver: GameDriver;
+
+	protected user: User;
+
+	constructor(context: Context, driver: GameDriver, user: User) {
+		this.context = context;
+		this.driver = driver;
+		this.user = user;
 	}
-
-	getCommand(): Command {
-		return this.command;
-	}
-
-	abstract process(user: User, req: Request): Promise<Response>;
 }
-
-export default Action;

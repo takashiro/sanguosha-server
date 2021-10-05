@@ -1,16 +1,14 @@
-import { Action } from '@karuta/core';
-import { Command } from '@karuta/sanguosha-core';
+import { User } from '@karuta/core';
+import { GameDriver } from '@karuta/sanguosha-pack';
+
+import Action from '../core/Action';
 
 import StartGame from './StartGame';
 
-const actions: Action<unknown, unknown>[] = [
-	new StartGame(),
+type ActionCreator = new(driver: GameDriver, user: User) => Action;
+
+const actions: ActionCreator[] = [
+	StartGame,
 ];
 
-export const ActionMap = new Map<Command, Action<unknown, unknown>>();
-
-for (const action of actions) {
-	ActionMap.set(action.getCommand(), action);
-}
-
-export default ActionMap;
+export default actions;

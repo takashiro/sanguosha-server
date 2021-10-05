@@ -1,10 +1,11 @@
 import {
 	User,
 	Room,
+	Method,
 } from '@karuta/core';
 
 import {
-	Command as cmd,
+	Context,
 	Player,
 	PlayerPhase as Phase,
 	Card,
@@ -16,9 +17,11 @@ import {
 	SkillArea,
 	SkillAreaType,
 	SkillOwner,
+	Reply,
 } from '@karuta/sanguosha-core';
 
 import {
+	ChoosePlayerOptions,
 	PlayAction,
 	Player as AbstractPlayer,
 } from '@karuta/sanguosha-pack';
@@ -102,7 +105,7 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 		return this.user?.getName() || '';
 	}
 
-	getRoom(): Room | null {
+	getRoom(): Room | undefined {
 		return this.user?.getRoom();
 	}
 
@@ -213,9 +216,9 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 			...options,
 		};
 
-		let reply = [];
+		let reply: unknown;
 		try {
-			reply = await this.user.request(cmd.ChooseGeneral, {
+			reply = await this.user.get(Context.General, {
 				sameKingdom: !!opt.sameKingdom,
 				num: opt.num || 1,
 				generals: generals.map((general, i) => ({
@@ -223,7 +226,7 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 					kingdom: general.getKingdom(),
 					name: general.getName(),
 				})),
-			}, opt.timeout ? opt.timeout * 1000 : this.requestTimeout * 2);
+			});
 		} catch (error) {
 			// Timeout
 		}
@@ -308,7 +311,7 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 				maxNum: option.maxNum,
 				cards: pattern ? acceptableCards.map((card) => card.getId()) : undefined,
 			};
-			reply = await this.user.request(cmd.ChooseCards, args, this.requestTimeout);
+			reply = await this.user.get(Context.CardSelection, args);
 		} catch (error) {
 			// No response from client
 		}
@@ -339,16 +342,13 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 		return selected;
 	}
 
-	async request(command: number, args: unknown, timeout?: number): Promise<unknown> {
-		if (!this.user) {
-			return null;
-		}
-
-		return this.user.request(command, args, timeout === undefined ? this.requestTimeout : timeout);
+	async askForPlayers(players: AbstractPlayer[], options: ChoosePlayerOptions): Promise<Reply<number[]>> {
+		const reply = await this.user.get(Context.PlayerSelection, { players, options });
+		return reply as Reply<number[]>;
 	}
 
 	updateProperty(prop: string, value: unknown): void {
-		this.user.send(cmd.UpdatePlayer, {
+		this.user.patch(Context.Player, {
 			uid: this.getId(),
 			prop,
 			value,
@@ -361,7 +361,7 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 			return;
 		}
 
-		room.broadcast(cmd.UpdatePlayer, {
+		room.broadcast(Method.Patch, Context.Player, {
 			uid: this.getId(),
 			prop,
 			value,
@@ -420,21 +420,22 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 	}
 
 	async play(availableCards: Card[]): Promise<PlayAction | null> {
-		let reply = null;
+		let reply: unknown;
 		try {
-			reply = await this.user.request(cmd.Play, {
+			reply = await this.user.get(Context.Play, {
 				cards: availableCards.map((card) => card.getId()),
-			}, this.requestTimeout);
+			});
 		} catch (error) {
 			return null;
 		}
-		if (!reply) {
+		if (!reply || typeof reply !== 'object') {
 			return null;
 		}
 
-		if (!reply.skill) {
-			const { cards } = reply;
-			if (!cards) {
+		const res = reply as Record<string, unknown>;
+		if (!res.skill) {
+			const { cards } = res;
+			if (!Array.isArray(cards)) {
 				return null;
 			}
 
@@ -458,8 +459,7 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 	async invokeSkill(skills: string[]): Promise<number> {
 		let reply = -1;
 		try {
-			const res = await this.user.request(cmd.InvokeSkill, skills, this.requestTimeout);
-			reply = Number.parseInt(res, 10);
+			reply = await this.user.post(Context.Skill, skills) as number;
 		} catch (error) {
 			return -1;
 		}

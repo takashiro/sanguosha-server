@@ -1,5 +1,6 @@
+import { Method } from '@karuta/core';
 import {
-	Command as cmd,
+	Context,
 	PlayerPhase as Phase,
 } from '@karuta/sanguosha-core';
 import { EventType as GameEvent } from '@karuta/sanguosha-pack';
@@ -84,7 +85,7 @@ describe('Basic Rule', () => {
 			seat: player.getSeat(),
 			name: player.getName(),
 		}));
-		expect(room.broadcast).toBeCalledWith(cmd.ArrangeSeats, players);
+		expect(room.broadcast).toBeCalledWith(Method.Put, Context.Players, players);
 	});
 
 	it('activates a player', async () => {

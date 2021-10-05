@@ -1,32 +1,25 @@
 import { User } from '@karuta/core';
-import { Command } from '@karuta/sanguosha-core';
+import { Context } from '@karuta/sanguosha-core';
+import { GameDriver } from '@karuta/sanguosha-pack';
 
 import Action from '../core/Action';
-import GameDriver from '../driver';
-
 import ModeMap from '../mode';
 
-class StartGame extends Action<void, void> {
-	constructor() {
-		super(Command.StartGame);
+class StartGame extends Action {
+	constructor(driver: GameDriver, user: User) {
+		super(Context.Game, driver, user);
 	}
 
-	async process(user: User): Promise<void> {
-		const driver = user.getDriver() as GameDriver;
-		if (!driver) {
-			return;
-		}
-
-		const config = driver.getConfig();
-		const { mode = 'standard' } = config;
+	async put(): Promise<void> {
+		const mode = 'standard';
 		const rules = ModeMap.get(mode);
 		if (rules) {
 			for (const RuleClass of rules) {
-				driver.register(new RuleClass());
+				this.driver.register(new RuleClass());
 			}
 		}
 
-		driver.start();
+		this.driver.start();
 	}
 }
 
