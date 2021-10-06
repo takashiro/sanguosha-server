@@ -17,7 +17,9 @@ describe('Phase Rule', () => {
 	it('draws 2 cards', async () => {
 		const player = {};
 		const driver = {
-			trigger() {},
+			trigger() {
+				// do nothing
+			},
 			drawCards: jest.fn(),
 		};
 		rule.setDriver(driver);

@@ -56,7 +56,9 @@ describe('Basic Rule', () => {
 		isRunning() {
 			return !this.finished;
 		},
-		trigger() {},
+		trigger() {
+			// do nothing
+		},
 	};
 
 	const rule = new BasicRule();

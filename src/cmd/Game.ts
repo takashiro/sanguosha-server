@@ -1,17 +1,19 @@
 import { User } from '@karuta/core';
-import { Context } from '@karuta/sanguosha-core';
+import { Context, GameConfig } from '@karuta/sanguosha-core';
 import { GameDriver } from '@karuta/sanguosha-pack';
 
 import Action from '../core/Action';
 import ModeMap from '../mode';
 
-class StartGame extends Action {
+class Game extends Action {
 	constructor(driver: GameDriver, user: User) {
 		super(Context.Game, driver, user);
 	}
 
-	async put(): Promise<void> {
-		const mode = 'standard';
+	async put(params: Partial<GameConfig> = {}): Promise<void> {
+		const {
+			mode = 'standard',
+		} = params;
 		const rules = ModeMap.get(mode);
 		if (rules) {
 			for (const RuleClass of rules) {
@@ -23,4 +25,4 @@ class StartGame extends Action {
 	}
 }
 
-export default StartGame;
+export default Game;

@@ -23,8 +23,12 @@ describe('StandardRule', () => {
 	const users = [];
 
 	const room = {
-		broadcast() {},
-		broadcastExcept() {},
+		broadcast() {
+			// do nothing
+		},
+		broadcastExcept() {
+			// do nothing
+		},
 		getUsers() { return users; },
 	};
 

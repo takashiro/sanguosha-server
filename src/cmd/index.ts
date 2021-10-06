@@ -3,12 +3,12 @@ import { GameDriver } from '@karuta/sanguosha-pack';
 
 import Action from '../core/Action';
 
-import StartGame from './StartGame';
+import Game from './Game';
 
-type ActionCreator = new(driver: GameDriver, user: User) => Action;
+type ContextHandler = new(driver: GameDriver, user: User) => Action;
 
-const actions: ActionCreator[] = [
-	StartGame,
+const handlers: ContextHandler[] = [
+	Game,
 ];
 
-export default actions;
+export default handlers;

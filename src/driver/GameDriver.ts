@@ -41,7 +41,7 @@ import {
 
 import CardConstraint from './CardConstraint';
 
-import actions from '../cmd';
+import handlers from '../cmd';
 import shuffle from '../util/shuffle';
 
 import EventDriver from './EventDriver';
@@ -84,7 +84,7 @@ class GameDriver extends EventDriver implements KarutaDriver<GameConfig>, Sanguo
 	}
 
 	createContextListeners(user: User): ContextListener[] {
-		return actions.map((Action) => new Action(this, user));
+		return handlers.map((Action) => new Action(this, user));
 	}
 
 	getName(): string {
