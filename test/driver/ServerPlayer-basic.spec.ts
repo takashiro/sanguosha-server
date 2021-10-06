@@ -6,7 +6,7 @@ import {
 import ServerPlayer from '../../src/driver/ServerPlayer';
 
 describe('ServerPlayer', () => {
-	const player = new ServerPlayer();
+	const player = Reflect.construct(ServerPlayer, []);
 
 	it('has user id', () => {
 		expect(player.getId()).toBe(0);

@@ -1,4 +1,5 @@
-import { Context } from '@karuta/sanguosha-core';
+import { User } from '@karuta/core';
+import { Card, Context } from '@karuta/sanguosha-core';
 
 import ServerPlayer from '../../src/driver/ServerPlayer';
 
@@ -6,7 +7,7 @@ describe('ServerPlayer: Play Cards', () => {
 	const get = jest.fn();
 	const user = {
 		get,
-	};
+	} as unknown as User;
 	const player = new ServerPlayer(user);
 
 	it('records use counts of cards', () => {
@@ -38,12 +39,12 @@ describe('ServerPlayer: Play Cards', () => {
 			getId() {
 				return 1;
 			},
-		};
+		} as unknown as Card;
 		const card2 = {
 			getId() {
 				return 2;
 			},
-		};
+		} as unknown as Card;
 
 		const availableCards = [card1, card2];
 		const cards = [card1.getId(), card2.getId()];

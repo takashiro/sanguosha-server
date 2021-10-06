@@ -1,3 +1,4 @@
+import { User } from '@karuta/core';
 import {
 	Context,
 	General,
@@ -6,7 +7,7 @@ import {
 import ServerPlayer from '../../src/driver/ServerPlayer';
 
 describe('ServerPlayer: Choose Generals', () => {
-	const generals = [];
+	const generals: General[] = [];
 	for (let i = 0; i < 10; i++) {
 		const kingdom = (i % 4) + 1;
 		const gender = (i % 2) + 1;
@@ -16,15 +17,16 @@ describe('ServerPlayer: Choose Generals', () => {
 
 	const metaGenerals = generals.map((general, id) => ({ ...general.toJSON(), id }));
 
+	const get = jest.fn();
 	const user = {
 		id: 1,
-		get: jest.fn(),
-	};
+		get,
+	} as unknown as User;
 
 	const player = new ServerPlayer(user);
 
 	afterEach(() => {
-		user.get.mockClear();
+		get.mockClear();
 	});
 
 	it('asks for 1 general', async () => {
