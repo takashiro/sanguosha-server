@@ -37,7 +37,7 @@ describe('StandardRule', () => {
 			candidateDuplicates.push(...args.generals.map((general) => general.name));
 			return Math.floor(Math.random() * args.generals.length);
 		}
-		if (command === Context.CardLocation) {
+		if (command === Context.CardMove) {
 			console.log(args);
 		}
 		return null;

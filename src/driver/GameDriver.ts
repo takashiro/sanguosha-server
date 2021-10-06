@@ -709,21 +709,21 @@ class GameDriver extends EventDriver implements KarutaDriver<GameConfig>, Sanguo
 
 		for (const move of moves) {
 			if (options.open || move.from.isOpen() || move.to.isOpen()) {
-				this.room.broadcast(Method.Post, Context.CardLocation, move.toJSON(true));
+				this.room.broadcast(Method.Post, Context.CardMove, move.toJSON(true));
 			} else if (options.openTo) {
 				for (const openTo of options.openTo) {
 					const user = Reflect.get(openTo, 'user') as User;
-					user.post(Context.CardLocation, move.toJSON(true));
+					user.post(Context.CardMove, move.toJSON(true));
 				}
 				for (const player of this.players) {
 					if (options.openTo.includes(player)) {
 						continue;
 					}
 					const user = Reflect.get(player, 'user') as User;
-					user.post(Context.CardLocation, move.toJSON(false));
+					user.post(Context.CardMove, move.toJSON(false));
 				}
 			} else {
-				this.room.broadcast(Method.Post, Context.CardLocation, move.toJSON(false));
+				this.room.broadcast(Method.Post, Context.CardMove, move.toJSON(false));
 			}
 		}
 	}
