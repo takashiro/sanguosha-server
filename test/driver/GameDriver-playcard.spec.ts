@@ -1,25 +1,27 @@
+import { Room, User } from '@karuta/core';
 import { ReplyType } from '@karuta/sanguosha-core';
+import { Card, Player } from '@karuta/sanguosha-pack';
+
 import GameDriver from '../../src/driver/GameDriver';
 import ServerPlayer from '../../src/driver/ServerPlayer';
 
 describe('GameDriver', () => {
-	const driver = new GameDriver();
-	driver.players = [
-		new ServerPlayer(),
-		new ServerPlayer(),
-		new ServerPlayer(),
-		new ServerPlayer(),
-	];
+	const room = {} as unknown as Room;
+	const driver = new GameDriver(room);
+	const players: ServerPlayer[] = new Array(4);
 	for (let i = 1; i <= 4; i++) {
-		driver.players[i - 1].setSeat(i);
+		const player = new ServerPlayer({} as unknown as User);
+		player.setSeat(i);
+		players[i - 1] = player;
 	}
+	driver.setPlayers(players);
 
 	const useCard = jest.spyOn(driver, 'useCard');
 
 	const get = jest.fn();
 	const user = {
 		get,
-	};
+	} as unknown as User;
 	const player = new ServerPlayer(user);
 
 	describe('#playCard()', () => {
@@ -27,20 +29,21 @@ describe('GameDriver', () => {
 			isAvailable() { return true; },
 			filterPlayer: jest.fn(),
 			isFeasible: jest.fn(),
-		};
+		} as unknown as Card;
 
 		const someCard = {
 			isAvailable() { return true; },
 			isFeasible() { return true; },
 			filterPlayer() { return true; },
-		};
+		} as unknown as Card;
 
 		it('should reject unavailable cards', async () => {
+			const isAvailable = jest.fn().mockReturnValue(false);
 			const card = {
-				isAvailable: jest.fn().mockReturnValue(false),
-			};
+				isAvailable,
+			} as unknown as Card;
 			expect(await driver.playCard(player, card)).toBe(false);
-			expect(card.isAvailable).toBeCalledWith(driver, player);
+			expect(isAvailable).toBeCalledWith(driver, player);
 		});
 
 		it('should handle timeout error', async () => {
@@ -65,13 +68,13 @@ describe('GameDriver', () => {
 		it('should reject invalid card targets', async () => {
 			const card = {
 				isAvailable() { return true; },
-				isFeasible(selected) {
+				isFeasible(selected: Player[]): boolean {
 					return selected.length === 1;
 				},
-				filterPlayer(selected, target) {
+				filterPlayer(selected: Player[], target: Player): boolean {
 					return selected.length === 0 && target !== null;
 				},
-			};
+			} as unknown as Card;
 
 			get.mockResolvedValue(null)
 				.mockResolvedValueOnce({ player: 1 })
@@ -90,14 +93,14 @@ describe('GameDriver', () => {
 				isAvailable() { return true; },
 				isFeasible() { return false; },
 				filterPlayer() { return true; },
-			};
+			} as unknown as Card;
 
 			get.mockResolvedValue({ type: ReplyType.Confirm });
 			expect(await driver.playCard(player, card)).toBe(false);
 		});
 
 		it('should use a card', async () => {
-			useCard.mockResolvedValue();
+			useCard.mockResolvedValue(false);
 			get.mockResolvedValueOnce({ data: [1] })
 				.mockResolvedValueOnce({ type: ReplyType.Confirm });
 
@@ -105,7 +108,7 @@ describe('GameDriver', () => {
 			const [use] = useCard.mock.calls[0];
 			expect(use.to).toHaveLength(1);
 			expect(use.from).toBe(player);
-			expect(use.to[0]).toBe(driver.players[0]);
+			expect(use.to[0]).toBe(players[0]);
 			expect(use.card).toBe(someCard);
 		});
 	});

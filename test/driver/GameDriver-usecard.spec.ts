@@ -1,4 +1,4 @@
-import { Method } from '@karuta/core';
+import { Method, Room } from '@karuta/core';
 import { Context } from '@karuta/sanguosha-core';
 
 import {
@@ -12,20 +12,20 @@ import GameDriver from '../../src/driver';
 describe('GameDriver: Use a Card', () => {
 	const room = {
 		broadcast: jest.fn(),
-	};
+	} as unknown as Room;
 	const driver = new GameDriver(room);
 
 	it('accepts invalid parameter', async () => {
-		const use = new CardUse();
+		const use = Reflect.construct(CardUse, []);
 		expect(await driver.useCard(use)).toBe(false);
 	});
 
 	it('proceed card effects', async () => {
-		const card = new Card();
+		const card = Reflect.construct(Card, []);
 		card.onUse = jest.fn();
 		card.use = jest.fn();
 
-		const use = new CardUse(new Player(), card);
+		const use = new CardUse(Reflect.construct(Player, []), card);
 		await driver.useCard(use);
 
 		expect(card.onUse).toBeCalledWith(driver, use);
