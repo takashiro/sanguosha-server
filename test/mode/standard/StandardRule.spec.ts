@@ -1,5 +1,7 @@
+import { Room, User } from '@karuta/core';
 import {
 	Context,
+	GeneralProfile,
 	PlayerRole as Role,
 } from '@karuta/sanguosha-core';
 
@@ -9,7 +11,7 @@ import GameDriver from '../../../src/driver';
 
 import StandardRule from '../../../src/mode/standard/StandardRule';
 
-function countArray(arr, condition) {
+function countArray<T>(arr: T[], condition: (e: T) => boolean): number {
 	let count = 0;
 	for (const a of arr) {
 		if (condition(a)) {
@@ -20,26 +22,27 @@ function countArray(arr, condition) {
 }
 
 describe('StandardRule', () => {
-	const users = [];
+	const users: User[] = [];
 
 	const room = {
-		broadcast() {
+		broadcast(): void {
 			// do nothing
 		},
-		broadcastExcept() {
+		broadcastExcept(): void {
 			// do nothing
 		},
-		getUsers() { return users; },
-	};
+		getUsers(): User[] { return users; },
+	} as unknown as Room;
 
 	const driver = new GameDriver(room);
 
-	const candidateDuplicates = [];
+	const candidateDuplicates: string[] = [];
 
-	function patch(command, args) {
+	function patch(command: number, args: Record<string, unknown>): number | null {
 		if (command === Context.General) {
-			candidateDuplicates.push(...args.generals.map((general) => general.name));
-			return Math.floor(Math.random() * args.generals.length);
+			const generals = args.generals as GeneralProfile[];
+			candidateDuplicates.push(...generals.map((general) => general.name));
+			return Math.floor(Math.random() * generals.length);
 		}
 		if (command === Context.CardMove) {
 			console.log(args);
@@ -49,13 +52,14 @@ describe('StandardRule', () => {
 	const notify = jest.fn();
 
 	for (let i = 1; i <= 8; i++) {
-		users.push({
+		const user = {
 			getId() { return i; },
 			getName() { return `user${i}`; },
 			getRoom() { return room; },
 			notify,
 			patch,
-		});
+		} as unknown as User;
+		users.push(user);
 	}
 
 	const rule = new StandardRule();
@@ -75,7 +79,7 @@ describe('StandardRule', () => {
 		it('prepares roles', () => {
 			rule.prepareRoles();
 
-			const { players } = driver;
+			const players = driver.getPlayers();
 			expect(players[0].getRole()).toBe(Role.Emperor);
 
 			const rebelNum = countArray(players, (player) => player.getRole() === Role.Rebel);
@@ -97,7 +101,7 @@ describe('StandardRule', () => {
 			rule.prepareSeats();
 
 			const seats = [];
-			for (const player of driver.players) {
+			for (const player of driver.getPlayers()) {
 				seats.push(player.getSeat());
 				expect(player.getSeat()).toBeGreaterThan(0);
 			}
@@ -112,7 +116,7 @@ describe('StandardRule', () => {
 	describe('#prepareGenerals()', () => {
 		it('prepares generals', async () => {
 			await rule.prepareGenerals();
-			for (const player of driver.players) {
+			for (const player of driver.getPlayers()) {
 				const general = player.getGeneral();
 				expect(general).toBeTruthy();
 			}
@@ -133,15 +137,15 @@ describe('StandardRule', () => {
 		it('prepares cards', async () => {
 			await rule.prepareCards();
 
-			for (const player of driver.players) {
+			for (const player of driver.getPlayers()) {
 				expect(player.getHandArea().size).toBe(4);
 			}
 		});
 	});
 
 	it('handles invalid values', async () => {
-		driver.users = [];
-		driver.players = [];
+		Reflect.set(driver, 'users', []);
+		driver.setPlayers([]);
 		await rule.prepareRoles();
 		await rule.process();
 	});

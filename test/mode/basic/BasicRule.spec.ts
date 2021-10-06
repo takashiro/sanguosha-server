@@ -1,28 +1,33 @@
-import { Method } from '@karuta/core';
+import { Method, Room } from '@karuta/core';
 import {
 	Context,
+	Player,
 	PlayerPhase as Phase,
 } from '@karuta/sanguosha-core';
-import { EventType as GameEvent } from '@karuta/sanguosha-pack';
+import {
+	GameDriver,
+	EventType as GameEvent,
+	PhaseChange,
+} from '@karuta/sanguosha-pack';
 
 import BasicRule from '../../../src/mode/basic/BasicRule';
 
 class MockUser {
-	constructor(room, id, name) {
+	constructor(protected room: Room, protected id: number, protected name: string) {
 		this.room = room;
 		this.id = id;
 		this.name = name;
 	}
 
-	getRoom() {
+	getRoom(): Room {
 		return this.room;
 	}
 
-	getId() {
+	getId(): number {
 		return this.id;
 	}
 
-	getName() {
+	getName(): string {
 		return this.name;
 	}
 }
@@ -30,7 +35,7 @@ class MockUser {
 describe('Basic Rule', () => {
 	const room = {
 		broadcast: jest.fn(),
-	};
+	} as unknown as Room;
 
 	const users = [
 		new MockUser(room, 1, 'user1'),
@@ -38,32 +43,32 @@ describe('Basic Rule', () => {
 	];
 
 	const driver = {
-		getConfig() { return {}; },
-		getRoom() {
+		getConfig(): unknown { return {}; },
+		getRoom(): Room {
 			return room;
 		},
 		setCurrentPlayer: jest.fn(),
-		setPlayers(players) {
-			this.players = players;
+		setPlayers(players: Player[]): void {
+			Reflect.set(driver, 'players', players);
 		},
-		getPlayers() {
-			return this.players;
+		getPlayers(): Player[] {
+			return Reflect.get(driver, 'players');
 		},
-		getUsers() { return users; },
-		stop() {
-			this.finished = true;
+		getUsers(): MockUser[] { return users; },
+		stop(): void {
+			Reflect.set(driver, 'finished', true);
 		},
-		isRunning() {
-			return !this.finished;
+		isRunning(): boolean {
+			return !Reflect.get(driver, 'finished');
 		},
-		trigger() {
+		trigger(): void {
 			// do nothing
 		},
-	};
+	} as unknown as GameDriver;
 
 	const rule = new BasicRule();
 	rule.setDriver(driver);
-	rule.idle = 0;
+	Reflect.set(rule, 'idle', 0);
 
 	it('binds to start event', () => {
 		expect(rule.event).toBe(GameEvent.StartingGame);
@@ -75,8 +80,8 @@ describe('Basic Rule', () => {
 		const players = driver.getPlayers();
 		expect(players.length).toBe(users.length);
 		for (let i = 0; i < players.length; i++) {
-			expect(players[i].getId()).toBe(users[i].id);
-			expect(players[i].getName()).toBe(users[i].name);
+			expect(players[i].getId()).toBe(users[i].getId());
+			expect(players[i].getName()).toBe(users[i].getName());
 		}
 	});
 
@@ -110,7 +115,7 @@ describe('Basic Rule', () => {
 			player.setPhase = jest.fn();
 		}
 
-		driver.trigger = (event, data) => {
+		Reflect.set(driver, 'trigger', (event: number, data: PhaseChange): boolean => {
 			const { player } = data;
 			if (player === players[1]) {
 				if (event === GameEvent.ChangingPhase && data.to === Phase.Draw) {
@@ -122,7 +127,7 @@ describe('Basic Rule', () => {
 				}
 			}
 			return false;
-		};
+		});
 
 		await rule.proceed();
 

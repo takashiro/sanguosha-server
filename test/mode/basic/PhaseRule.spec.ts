@@ -1,33 +1,39 @@
 import { PlayerPhase as Phase } from '@karuta/sanguosha-core';
+import {
+	Player,
+	GameDriver,
+	PhaseChange,
+} from '@karuta/sanguosha-pack';
+
 import PhaseRule from '../../../src/mode/basic/PhaseRule';
 
 describe('Phase Rule', () => {
 	const rule = new PhaseRule();
 
 	it('checks driver and target', () => {
-		rule.setDriver(null);
-		expect(rule.isTriggerable(null)).toBe(false);
-		expect(rule.isTriggerable({})).toBe(false);
+		rule.setDriver();
+		expect(rule.isTriggerable(null as unknown as PhaseChange)).toBe(false);
+		expect(Reflect.apply(rule.isTriggerable, rule, [{}])).toBe(false);
 
-		rule.setDriver({});
-		expect(rule.isTriggerable(null)).toBe(false);
-		expect(rule.isTriggerable({ player: 1 })).toBe(true);
+		Reflect.apply(rule.setDriver, rule, [{}]);
+		expect(rule.isTriggerable(null as unknown as PhaseChange)).toBe(false);
+		expect(rule.isTriggerable({ player: 1 } as unknown as PhaseChange)).toBe(true);
 	});
 
 	it('draws 2 cards', async () => {
-		const player = {};
+		const player = {} as unknown as Player;
 		const driver = {
-			trigger() {
+			trigger(): void {
 				// do nothing
 			},
 			drawCards: jest.fn(),
-		};
+		} as unknown as GameDriver;
 		rule.setDriver(driver);
 
 		await rule.process({
 			to: Phase.Draw,
 			player,
-		});
+		} as unknown as PhaseChange);
 
 		expect(driver.drawCards).toBeCalledWith(player, 2);
 	});
@@ -61,7 +67,7 @@ describe('Phase Rule', () => {
 		await rule.process({
 			to: Phase.Play,
 			player,
-		});
+		} as unknown as PhaseChange);
 
 		expect(play).toBeCalledTimes(3);
 		expect(setUseLimit).toBeCalledWith('strike', 1);
@@ -86,18 +92,18 @@ describe('Phase Rule', () => {
 			getDiscardPile: () => discardPile,
 			trigger: jest.fn(),
 			moveCards: jest.fn(),
-		};
+		} as unknown as GameDriver;
 		rule.setDriver(driver);
 
 		await rule.process({
 			player,
 			to: Phase.Discard,
-		});
+		} as unknown as PhaseChange);
 
 		expect(driver.moveCards).toBeCalledWith(selected, discardPile, { open: true });
 	});
 
 	it('does nothing by default', async () => {
-		await rule.process({}, {});
+		await rule.process({} as unknown as PhaseChange);
 	});
 });
