@@ -7,33 +7,23 @@ type CollectionCreator = new() => Collection;
 export default class CollectionLoader {
 	protected collections: Map<string, CollectionCreator> = new Map();
 
-	async get(name: string): Promise<CollectionCreator | undefined> {
+	async get(name: string): Promise<CollectionCreator> {
 		let col = this.collections.get(name);
 		if (col) {
 			return col;
 		}
 
-		try {
-			col = await this.load(name);
-		} catch (error) {
-			// Ignore
-		}
+		col = await this.load(name);
+		this.collections.set(name, col);
+
 		return col;
 	}
 
 	protected async load(name: string): Promise<CollectionCreator> {
 		let modulePath = require.resolve(name);
-		if (!modulePath) {
-			throw new Error(`${name} cannot be resolved`);
-		}
 
-		const moduleName = path.basename(name);
-		while (path.basename(modulePath) !== moduleName) {
-			const newPath = path.dirname(modulePath);
-			if (newPath === modulePath) {
-				throw new Error(`Failed to find module path of ${moduleName}`);
-			}
-			modulePath = newPath;
+		while (!fs.existsSync(path.join(modulePath, 'package.json'))) {
+			modulePath = path.dirname(modulePath);
 		}
 
 		const pkgPath = path.join(modulePath, 'package.json');

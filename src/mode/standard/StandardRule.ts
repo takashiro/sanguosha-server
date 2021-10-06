@@ -71,6 +71,7 @@ class StandardRule extends BasicRule {
 
 		// @TO-DO: Load configurable game packs
 		await driver.loadCollection('@karuta/sanguosha-standard');
+
 		const generals = driver.getGenerals();
 
 		// Set up the Emperor first

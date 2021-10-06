@@ -141,9 +141,6 @@ class GameDriver extends EventDriver implements KarutaDriver<GameConfig>, Sanguo
 
 	async loadCollection(name: string): Promise<void> {
 		const CollectionCreator = await collectionLoader.get(name);
-		if (!CollectionCreator) {
-			return;
-		}
 		const col = new CollectionCreator();
 		this.collections.push(col);
 	}
