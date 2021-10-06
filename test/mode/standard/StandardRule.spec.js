@@ -42,14 +42,14 @@ describe('StandardRule', () => {
 		}
 		return null;
 	}
-	const post = jest.fn();
+	const notify = jest.fn();
 
 	for (let i = 1; i <= 8; i++) {
 		users.push({
 			getId() { return i; },
 			getName() { return `user${i}`; },
 			getRoom() { return room; },
-			post,
+			notify,
 			patch,
 		});
 	}

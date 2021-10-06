@@ -470,6 +470,10 @@ class ServerPlayer extends Player implements AbstractPlayer, SkillOwner {
 
 		return reply;
 	}
+
+	notify(method: number, context: number, params?: unknown): void {
+		this.user.notify(method, context, params);
+	}
 }
 
 export default ServerPlayer;
