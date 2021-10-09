@@ -76,7 +76,10 @@ class GameDriver extends EventDriver implements KarutaDriver<GameConfig>, Sanguo
 	}
 
 	getProfile(): DriverProfile<GameConfig> {
-		throw new Error('Method not implemented.');
+		return {
+			name: this.getName(),
+			config: { ...this.config },
+		};
 	}
 
 	updateConfig(config: GameConfig): void {
@@ -89,16 +92,6 @@ class GameDriver extends EventDriver implements KarutaDriver<GameConfig>, Sanguo
 
 	getName(): string {
 		return 'sanguosha';
-	}
-
-	setConfig(config: GameConfig): void {
-		if (config.mode) {
-			this.config.mode = config.mode;
-		}
-
-		if (config.capacity) {
-			this.config.capacity = config.capacity;
-		}
 	}
 
 	getConfig(): GameConfig {

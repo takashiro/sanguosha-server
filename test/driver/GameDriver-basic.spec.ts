@@ -1,4 +1,4 @@
-import { Method, Room } from '@karuta/core';
+import { Method, Room, User } from '@karuta/core';
 import { Card, Context } from '@karuta/sanguosha-core';
 import { Player } from '@karuta/sanguosha-pack';
 
@@ -9,6 +9,30 @@ describe('GameDriver', () => {
 		broadcast: jest.fn(),
 	} as unknown as Room;
 	const driver = new GameDriver(room);
+
+	it('returns a descriptive profile', () => {
+		const profile = driver.getProfile();
+		expect(profile.name).toBe('sanguosha');
+		expect(profile.config.mode).toBe('standard');
+		expect(profile.config.capacity).toBeGreaterThan(0);
+		expect(profile.config.requestTimeout).toBeGreaterThan(0);
+		expect(profile.config.packs).toBeUndefined();
+	});
+
+	it('updates game configuration', () => {
+		driver.updateConfig({
+			mode: 'standard',
+			capacity: 2,
+			packs: ['@karuta/sanguosha-standard'],
+			requestTimeout: 15 * 1000,
+		});
+	});
+
+	it('binds actions to a user', () => {
+		const user = {} as unknown as User;
+		const actions = driver.createContextListeners(user);
+		expect(actions).toHaveLength(1);
+	});
 
 	it('loads the standard collection', async () => {
 		await driver.loadCollection('@karuta/sanguosha-standard');
