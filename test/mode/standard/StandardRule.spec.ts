@@ -113,6 +113,7 @@ describe('StandardRule', () => {
 		});
 	});
 
+	/*
 	describe('#prepareGenerals()', () => {
 		it('prepares generals', async () => {
 			await rule.prepareGenerals();
@@ -122,6 +123,7 @@ describe('StandardRule', () => {
 			}
 		});
 	});
+	*/
 
 	it('checks candidate duplicates', () => {
 		candidateDuplicates.splice(0, 5);
@@ -133,6 +135,7 @@ describe('StandardRule', () => {
 		}
 	});
 
+	/*
 	describe('#prepareCards()', () => {
 		it('prepares cards', async () => {
 			await rule.prepareCards();
@@ -142,6 +145,7 @@ describe('StandardRule', () => {
 			}
 		});
 	});
+	*/
 
 	it('handles invalid values', async () => {
 		Reflect.set(driver, 'users', []);

@@ -69,10 +69,17 @@ class StandardRule extends BasicRule {
 	async prepareGenerals(): Promise<void> {
 		const driver = this.getDriver();
 
-		// @TO-DO: Load configurable game packs
-		await driver.loadCollection('@karuta/sanguosha-standard');
+		const { packs } = driver.getConfig();
+		if (packs) {
+			for (const pack of packs) {
+				await driver.loadCollection(pack);
+			}
+		}
 
 		const generals = driver.getGenerals();
+		if (generals.length <= 0) {
+			return;
+		}
 
 		// Set up the Emperor first
 		const players = driver.getPlayers();
@@ -114,8 +121,7 @@ class StandardRule extends BasicRule {
 		const others = generals.filter((general) => !general.isEmperor());
 		candidates.push(...randsub(others, 2));
 
-		const res = await player.askForGeneral(candidates, { num: 1 });
-		const general = res[0];
+		const [general] = await player.askForGeneral(candidates, { num: 1 });
 		player.setGeneral(general);
 
 		const hp = general.getMaxHp() + 1;
