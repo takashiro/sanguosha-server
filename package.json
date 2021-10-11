@@ -9,7 +9,7 @@
     "debug": "tsc --incremental --sourceMap",
     "test": "npm run lint && npm run jest",
     "lint": "eslint --ext ts,js .",
-    "jest": "jest --no-cache"
+    "jest": "jest"
   },
   "repository": {
     "type": "git",
