@@ -17,13 +17,7 @@ function fillArray<Element>(arr: Element[], value: Element, n: number): void {
 }
 
 class StandardRule extends BasicRule {
-	private candidateGeneralNum: number;
-
-	constructor() {
-		super();
-
-		this.candidateGeneralNum = 3;
-	}
+	private candidateGeneralNum = 3;
 
 	async process(): Promise<boolean> {
 		this.preparePlayers();
@@ -33,7 +27,7 @@ class StandardRule extends BasicRule {
 		this.prepareSkills();
 		this.prepareBattleField();
 		await this.prepareCards();
-		await this.proceed();
+		this.proceed();
 		return false;
 	}
 
@@ -101,6 +95,11 @@ class StandardRule extends BasicRule {
 			}
 		}
 
+		const maxGeneralNum = Math.floor(generals.length / players.length);
+		if (this.candidateGeneralNum > maxGeneralNum) {
+			this.candidateGeneralNum = maxGeneralNum;
+		}
+
 		// Shuffle and set up others' generals
 		shuffle(generals);
 		const others = players.filter((player) => player.getRole() !== Role.Emperor);
@@ -136,9 +135,8 @@ class StandardRule extends BasicRule {
 	async prepareGeneral(player: Player, generals: General[]): Promise<void> {
 		const offset = this.candidateGeneralNum * (player.getSeat() - 2);
 		const candidates = generals.slice(offset, offset + this.candidateGeneralNum);
-		const res = await player.askForGeneral(candidates, { num: 1 });
 
-		const general = res[0];
+		const [general] = await player.askForGeneral(candidates, { num: 1 });
 		player.setGeneral(general);
 
 		const hp = general.getMaxHp();

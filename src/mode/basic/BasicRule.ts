@@ -17,11 +17,8 @@ import ServerPlayer from '../../driver/ServerPlayer';
 import delay from '../../util/delay';
 
 class BasicRule extends GameRule<void> {
-	protected idle: number;
-
 	constructor() {
 		super(GameEvent.StartingGame);
-		this.idle = 1000;
 	}
 
 	preparePlayers(): void {

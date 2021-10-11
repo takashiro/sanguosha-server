@@ -6,9 +6,19 @@ import {
 import GameDriver from './GameDriver';
 
 class GameRule<ParamType> extends EventListener<ParamType> {
+	protected idle = 1000;
+
 	constructor(event: EventType) {
 		super(event);
 		this.compulsory = true;
+	}
+
+	getIdle(): number {
+		return this.idle;
+	}
+
+	setIdle(idle: number): void {
+		this.idle = idle;
 	}
 
 	getDriver(): GameDriver {

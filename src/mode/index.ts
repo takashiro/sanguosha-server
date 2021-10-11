@@ -1,6 +1,10 @@
+import GameRule from '../driver/GameRule';
+
 import StandardRules from './standard';
 
-const ModeMap = new Map();
+type GameRuleCreator = new() => GameRule<unknown>;
+
+const ModeMap = new Map<string, GameRuleCreator[]>();
 ModeMap.set('standard', StandardRules);
 
 export default ModeMap;
