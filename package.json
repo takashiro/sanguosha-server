@@ -4,6 +4,7 @@
   "description": "Sanguosha (Karuta Extension)",
   "main": "dist",
   "scripts": {
+    "start": "karuta-server",
     "build": "tsc",
     "debug": "tsc --incremental --sourceMap",
     "test": "npm run lint && npm run jest",
@@ -33,6 +34,7 @@
     "@karuta/sanguosha-pack": "^0.3.0"
   },
   "devDependencies": {
+    "@karuta/server": "^0.2.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^14.14.22",
     "@typescript-eslint/eslint-plugin": "^4.33.0",

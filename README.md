@@ -16,14 +16,15 @@ It provides connections via WebSocket.
 
 Running Environment
 -------------------
-1. Node.js v10 or later versions
-1. [karuta-node-server](https://github.com/takashiro/karuta-node-server)
-2. Client application [sanguosha-react](https://github.com/takashiro/sanguosha-react)
+1. Node.js v12.x or later versions
 
 Build and Run
 -------------
-1. Execute `npm link` in this repository.
-1. Clone `karuta-node-server` in the parent directory (the same folder as this repository).
-1. Execute `npm i && npm run build` to build `karuta-node-server`.
-1. Execute `npm link @karuta/sanguosha` in `karuta-node-server`.
-1. Click "Launch Program" in Visual Studio Code.
+1. Execute `npm i` to install dependencies.
+1. Execute `npm run build` to build the project.
+1. Execute `npm start` to run the project, or click "Launch" in Visual Studio Code (debugging).
+
+Related Projects
+----------------
+1. [Game Lobby](https://github.com/takashiro/karuta/node-server)
+1. [Client](https://github.com/takashiro/sanguosha-react)

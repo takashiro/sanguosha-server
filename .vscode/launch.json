@@ -8,16 +8,14 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Rebuild & Launch",
-			"program": "${workspaceFolder}/../karuta-node-server/dist/app.js",
-			"cwd": "${workspaceFolder}/../karuta-node-server",
+			"program": "${workspaceFolder}/node_modules/@karuta/server/dist/cli.js",
 			"preLaunchTask": "npm: debug"
 		},
 		{
 			"type": "node",
 			"request": "launch",
 			"name": "Launch",
-			"program": "${workspaceFolder}/../karuta-node-server/dist/app.js",
-			"cwd": "${workspaceFolder}/../karuta-node-server"
+			"program": "${workspaceFolder}/node_modules/@karuta/server/dist/cli.js"
 		},
 		{
 			"name": "Debug Current Test",
