@@ -75,6 +75,16 @@ it('finds a player', () => {
 	expect(driver.getPlayers()).toContain(p2);
 });
 
+it('filters alive players', () => {
+	const p1 = driver.findPlayer(1);
+	p1.setAlive(false);
+	const p2 = driver.findPlayer(2);
+	const others = driver.getAlivePlayersExcept(p2);
+	expect(others).toHaveLength(3);
+	expect(others).not.toContain(p1);
+	expect(others).not.toContain(p2);
+});
+
 describe('#getDistance()', () => {
 	beforeAll(() => {
 		driver.findPlayer(1)?.setDead(true);

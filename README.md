@@ -26,5 +26,5 @@ Build and Run
 
 Related Projects
 ----------------
-1. [Game Lobby](https://github.com/takashiro/karuta/node-server)
+1. [Game Lobby](https://github.com/takashiro/karuta-node-server)
 1. [Client](https://github.com/takashiro/sanguosha-react)
